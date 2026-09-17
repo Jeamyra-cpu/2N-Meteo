@@ -1,0 +1,34 @@
+{
+  "name": "2n-meteo",
+  "version": "1.0.0",
+  "description": "2N-Meteo Project \u0000 \u0000",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jeamyra-cpu/2N-Meteo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Jeamyra-cpu/2N-Meteo/issues"
+  },
+  "homepage": "https://github.com/Jeamyra-cpu/2N-Meteo#readme",
+  "dependencies": {
+    "bootstrap": "^5.3.8",
+    "i18next": "^26.4.2",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "react-i18next": "^17.0.14"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.1.1",
+    "vite": "^8.3.0"
+  }
+}
