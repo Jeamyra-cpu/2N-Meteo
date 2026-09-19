@@ -60,6 +60,13 @@ function Accueil() {
                             Politique de confidentialité
                         </button>
                     </li>
+
+                    <li>
+                        <button onClick={() => setMenuOuvert(false)}>
+                            Changer de Langue
+                        </button>
+                    </li>
+
                 </ul>
             </nav>
 
