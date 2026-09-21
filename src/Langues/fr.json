@@ -35,6 +35,17 @@
         "app-name": "2N-Météo",
         "home": "Accueil",
         "about": "À propos",
-        "privacy": "Politique & Confidentialité"
+        "privacy": "Politique & Confidentialité",
+        "language": "Langue",
+        "theme": "Thème",
+        "light": "Clair",
+        "dark": "Sombre"
+    },
+
+    "home": {
+        "title": "Le ciel, sans le bruit.",
+        "subtitle": "Une prévision claire pour votre ville, lisible en trois secondes. Sans publicité, sans compte à créer, sans traceur.",
+        "cta": "Voir ma ville",
+        "source": "Données Météo-France et modèles ouverts européens."
     }
 }

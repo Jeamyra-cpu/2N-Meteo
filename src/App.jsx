@@ -6,6 +6,7 @@ import viteLogo from './assets/vite.svg'
 import './App.css'
 import APropos from './Pages/Apropos.jsx'
 import Politique from './Pages/PolitiqueConfidentialite.jsx'
+import Accueil from './Pages/Accueil.jsx'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -16,6 +17,7 @@ function App() {
         <Route path="/" element={<APropos />} />
         <Route path="/a-propos" element={<APropos />} />
         <Route path="/politique-confidentialite" element={<Politique />} />
+        <Route path="/accueil" element={<Accueil />} />
       </Routes>
     </BrowserRouter>
   )
