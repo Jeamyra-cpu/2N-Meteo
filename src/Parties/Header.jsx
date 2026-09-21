@@ -65,7 +65,7 @@ function Header() {
                         </Link>
                     </li>
                     <li>
-                        <Link to="../Pages/PolitiqueConfidentialite" onClick={() => setMenuOuvert(false)}>
+                        <Link to="/politique-confidentialite" onClick={() => setMenuOuvert(false)}>
                             {t('header.privacy', 'Politique & Confidentialité')}
                         </Link>
                     </li>
