@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import "./style.css";
+import "./Accueil.css";
 import logo from "../Images/logo.png";
 
 
@@ -23,6 +23,7 @@ function Accueil() {
                     <span></span>
                     <span></span>
                     <span></span>
+                    
                 </button>
             </header>
 
