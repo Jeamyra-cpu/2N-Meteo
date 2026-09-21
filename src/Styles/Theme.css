@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+:root {
+  --sky-deep: #16406B;
+  --sky-mid: #4A8FD1;
+  --sky-warm: #F6B963;
+  --cloud-white: #FBFCFE;
+  --ink: #22344A;
+  --mist: #7C8CA0;
+  --hairline: rgba(22, 64, 107, 0.12);
+
+  --font-display: 'Quicksand', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--sky-mid);
+  outline-offset: 3px;
+}

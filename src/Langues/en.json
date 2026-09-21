@@ -1,0 +1,37 @@
+{
+  "about-us": {
+    "title": "About Us",
+    "description": "Welcome to our weather forecasting application for France. We are committed to providing accurate and reliable weather information to help you plan your daily activities. Our team is passionate about meteorology and strives to offer you the best user experience."
+  },
+
+  "privacy-policy": {
+    "title": "Privacy Policy",
+    "introduction": "Privacy Policy",
+    "content": "Welcome to our weather forecasting application for France. Protecting your personal data is a priority. This privacy policy explains how we collect, use, and safeguard your information.",
+    "data-collected": "Data Collected",
+    "data-collected-content": "As part of using our service, we may collect your email address as well as system preferences stored locally on your device (including default theme and display language).",
+    "localisation": "Location Data",
+    "localisation-content": "To provide accurate weather forecasts, we process your location data. We also save the history of locations searched within the application to make future lookups easier for you.",
+    "meteo-data": "Use of Weather Data",
+    "meteo-data-content": "Weather and location data are strictly used to display personalized weather reports. We firmly pledge never to sell, rent, or disclose your data to third parties.",
+    "other-services": "Third-Party Services",
+    "other-services-content": "We do not share your information with any third-party service for commercial or advertising purposes.",
+    "cookies": "Device Recognition and Local Storage",
+    "cookies-content": "We use local storage or technical identifiers to remember your device on future logins. This prevents you from having to reconfigure your preferences on every visit.",
+    "data-retention": "Data Retention",
+    "data-retention-content": "Your personal data and preferences are retained only as long as necessary to provide our services and can be deleted at any time upon simple request.",
+    "security": "Data Security",
+    "security-content": "We implement appropriate technical and organizational security measures to protect your data against unauthorized access, alteration, or leaks.",
+    "rights": "Your Rights",
+    "rights-content": "In accordance with applicable regulations (GDPR), you have the right to access, rectify, delete, and object to the processing of your personal data. You can exercise these rights by contacting us through the application."
+  },
+
+  "footer": {
+        "copyright": " 2N-Meteo. All rights reserved.",
+        "app-name": "2N-Meteo"
+    },
+
+    "header": {
+        "app-name": "2N-Meteo"
+    }
+}
