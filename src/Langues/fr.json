@@ -1,0 +1,37 @@
+{
+    "about-us": {
+        "title": "À propos de nous",
+        "description": "Bienvenue sur notre application de prévisions météorologiques en France. Nous nous engageons à fournir des informations météorologiques précises et fiables pour vous aider à planifier vos activités quotidiennes. Notre équipe est passionnée par la météo et s'efforce de vous offrir une expérience utilisateur optimale."
+    },
+
+    "privacy-policy" : {
+        "title": "Politique et Confidentialité",
+        "introduction": "Politique de confidentialité",
+        "content": "Bienvenue sur notre application de prévisions météorologiques en France. La protection de vos données personnelles est une priorité. Cette politique de confidentialité explique comment nous collectons, utilisons et protégeons vos informations.",
+        "data-collected": "Données collectées",
+        "data-collected-content": "Dans le cadre de l'utilisation de notre service, nous pouvons collecter votre adresse e-mail ainsi que des préférences système stockées localement sur votre appareil (notamment le thème par défaut et la langue d'affichage).",
+        "localisation": "Données de géolocalisation",
+        "localisation-content": "Afin de vous fournir des prévisions météo précises, nous traitons vos données de localisation. Nous sauvegardons également l'historique des localisations recherchées dans l'application pour faciliter vos prochaines consultations.",
+        "meteo-data": "Utilisation des données météo",
+        "meteo-data-content": "Les données météo et de localisation sont strictement utilisées pour afficher des bulletins météorologiques personnalisés. Nous nous engageons fermement à ne jamais vendre, louer ou divulguer vos données à des tiers.",
+        "other-services": "Services tiers",
+        "other-services-content": "Nous n'échangeons vos informations avec aucun service tiers à des fins commerciales ou publicitaires.",
+        "cookies": "Reconnaissance de l'appareil et stockage local",
+        "cookies-content": "Nous utilisons le stockage local ou des identifiants techniques pour mémoriser votre appareil lors de vos prochaines connexions. Cela vous évite de devoir reconfigurer vos préférences à chaque visite.",
+        "data-retention": "Conservation des données",
+        "data-retention-content": "Vos données personnelles et vos préférences sont conservées uniquement le temps nécessaire à la fourniture de nos services et peuvent être supprimées à tout moment sur simple demande.",
+        "security": "Sécurité des données",
+        "security-content": "Nous mettons en œuvre des mesures de sécurité techniques et organisationnelles appropriées pour protéger vos données contre tout accès non autorisé, altération ou fuite.",
+        "rights": "Vos droits",
+        "rights-content": "Conformément à la réglementation en vigueur (RGPD), vous disposez d'un droit d'accès, de rectification, de suppression et d'opposition concernant vos données personnelles. Vous pouvez exercer ces droits en nous contactant via l'application."
+    },
+
+    "footer": {
+        "copyright": " 2N-Météo. Tous droits réservés.",
+        "app-name": "2N-Météo"
+    },
+
+    "header": {
+        "app-name": "2N-Météo"
+    }
+}
