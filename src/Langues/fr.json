@@ -32,6 +32,9 @@
     },
 
     "header": {
-        "app-name": "2N-Météo"
+        "app-name": "2N-Météo",
+        "home": "Accueil",
+        "about": "À propos",
+        "privacy": "Politique & Confidentialité"
     }
 }
