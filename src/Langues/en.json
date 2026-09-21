@@ -35,6 +35,17 @@
         "app-name": "2N-Meteo",
         "home": "Home",
         "about": "About",
-        "privacy": "Privacy Policy"
+        "privacy": "Privacy Policy",
+        "language": "Language",
+        "theme": "Theme",
+        "light": "Light",
+        "dark": "Dark"
+    },
+
+    "home": {
+        "title": "The sky, without the noise.",
+        "subtitle": "A clear forecast for your city, readable in three seconds. No ads, no account creation, no trackers.",
+        "cta": "See my city",
+        "source": "Data from Météo-France and open European models."
     }
 }

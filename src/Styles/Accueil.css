@@ -1,0 +1,102 @@
+/* --- Page Accueil (Styles isolés) --- */
+
+.accueil-page {
+  /* Utilisation du système de variables globales de ton projet */
+  background: var(--cloud-white);
+  color: var(--ink);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Section Hero */
+.accueil-heros {
+  min-height: calc(100vh - 70px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 80px 1.5rem 64px;
+  color: var(--cloud-white);
+  
+  /* Dégradé météo harmonisé avec ton :root */
+  background: linear-gradient(160deg, var(--sky-deep) 0%, #1a4b7c 50%, var(--sky-mid) 80%, #d89b4e 100%);
+}
+
+.accueil-heros h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  max-width: 18ch;
+  margin: 0 0 1rem;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+}
+
+.accueil-heros p.description {
+  max-width: 48ch;
+  color: rgba(251, 252, 254, 0.9);
+  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  line-height: 1.6;
+  margin: 0 0 2.5rem;
+}
+
+/* Actions & Boutons */
+.accueil-action {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.accueil-bouton {
+  appearance: none;
+  border: none;
+  cursor: pointer;
+  background: var(--sky-warm);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1rem;
+  padding: 0.9rem 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.accueil-bouton:hover {
+  transform: translateY(-2px);
+  background: #f7c478;
+}
+
+.accueil-bouton.creux {
+  background: transparent;
+  color: var(--cloud-white);
+  border: 1px solid rgba(251, 252, 254, 0.4);
+}
+
+.accueil-bouton.creux:hover {
+  background: rgba(251, 252, 254, 0.1);
+}
+
+/* Mention bas de Hero */
+.accueil-mention {
+  margin-top: 3.5rem;
+  color: var(--mist);
+  font-size: 0.88rem;
+  opacity: 0.9;
+}
+
+/* Optionnel : Logo */
+.accueil-logo {
+  margin-top: 2rem;
+}
+
+.accueil-logo img {
+  width: 120px;
+  height: auto;
+}

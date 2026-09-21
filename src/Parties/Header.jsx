@@ -36,10 +36,9 @@ function Header() {
                     <span></span>
                     <span></span>
                 </button>
-                <h2 className="header-title">{t('header.app-name', '2N-Météo')}</h2>
+                <h2 className="header-title">{t('header.app-name')}</h2>
             </header>
 
-            {/* Overlay sombre pour fermer le menu en cliquant à l'extérieur */}
             {menuOuvert && (
                 <div 
                     className="menu-overlay" 
@@ -47,7 +46,6 @@ function Header() {
                 />
             )}
 
-            {/* Navbar latérale glissante */}
             <nav id="menu" className={`navbar-drawer ${menuOuvert ? 'open' : ''}`}>
                 <div className="drawer-header">
                     <h3>Menu</h3>
@@ -62,21 +60,30 @@ function Header() {
 
                 <ul className="nav-links">
                     <li>
-                        <Link to="/" onClick={() => setMenuOuvert(false)}>
-                            {t('header.home', 'Accueil')}
+                        <Link to="/accueil" onClick={() => setMenuOuvert(false)}>
+                            {t('header.home')}
                         </Link>
                     </li>
-                    <li>
-                        <Link to="/politique-confidentialite" onClick={() => setMenuOuvert(false)}>
-                            {t('header.privacy', 'Politique & Confidentialité')}
-                        </Link>
-                    </li>
+                    {location.pathname !== '/politique-confidentialite' && (
+                        <li>
+                            <Link to="/politique-confidentialite" onClick={() => setMenuOuvert(false)}>
+                                {t('header.privacy')}
+                            </Link>
+                        </li>
+                    )}
+                    
+                    {location.pathname !== '/a-propos' && (
+                        <li>
+                            <Link to="/a-propos" onClick={() => setMenuOuvert(false)}>
+                                {t('header.about')}
+                            </Link>
+                        </li>
+                    )}
                 </ul>
 
                 <div className="drawer-actions">
-                    {/* Selecteur de Langue */}
                     <div className="action-item">
-                        <span>{t('header.language', 'Langue')} :</span>
+                        <span>{t('header.language')} :</span>
                         <div className="lang-buttons">
                             <button 
                                 className={i18n.language === 'fr' ? 'active' : ''} 
@@ -93,11 +100,10 @@ function Header() {
                         </div>
                     </div>
 
-                    {/* Toggle Thème (Clair / Sombre) */}
                     <div className="action-item">
-                        <span>{t('header.theme', 'Thème')} :</span>
+                        <span>{t('header.theme')} :</span>
                         <button className="btn-theme" onClick={basculerTheme}>
-                            {themeSombre ? '☀️ Clair' : '🌙 Sombre'}
+                            {themeSombre ? '☀️' + t('header.light') : '🌙' + t('header.dark')}
                         </button>
                     </div>
                 </div>
