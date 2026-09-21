@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link } from 'react-router-dom' // Ou des '<a>' si tu n'utilises pas react-router
+import { Link, useLocation } from 'react-router-dom' 
 import '../Styles/Header.css'
 
 function Header() {
     const { t, i18n } = useTranslation()
     const [menuOuvert, setMenuOuvert] = useState(false)
     const [themeSombre, setThemeSombre] = useState(false)
+
+    const location = useLocation()
 
     // Changer la langue
     const changerLangue = (langue) => {
