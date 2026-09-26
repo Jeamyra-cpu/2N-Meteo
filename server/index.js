@@ -82,13 +82,15 @@ async function trouverCoordonnes(ville){
 
 
 const URL_PREVISION = "https://api.open-meteo.com/v1/forecast"; // URL de l'API de prévision d'Open-Meteo
-/**fonction de recupération de météo par nom de ville */
+
+
+/**fonction de recupération de météo par nom de ville,prevsion sur 4 jours */
 async function recupererPrevision(ville,latitude,longitude,modele){
 
   const param = new URLSearchParams({  // les parametres de la requete à l'API de prévision necessaire pour une prevision appropriée
     latitude: latitude,
     longitude: longitude,
-    daily: "temperature_2m_max,temperature_2m_min,precipitation_sum,weather_code,apparent_temperature_max,apparent_temperature_min,wind_speed_10m_max", // car on veut les temperatures max et min et la somme des precipitations
+    daily: "temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,precipitation_sum,weather_code,wind_speed_10m_max", // car on veut les temperatures max et min et la somme des precipitations
     hourly: "relative_humidity_2m,cloud_cover", 
     models: modele,   // le modele de prevision a utiliser (AROME, ICON, ARPEGE)
     timezone: "Europe/Paris", 
@@ -99,7 +101,8 @@ async function recupererPrevision(ville,latitude,longitude,modele){
   var donnees = await response.json();
 
   if(!donnees.daily) {
-    console.log(`Aucune donnée de prévision trouvée pour ${ville} de coordonnées : ${latitude}, ${longitude}`);
+    console.log(`Erreur fonction recuperationPrevision`);
+    console.log(`Aucune donnée de prévision trouvée pour ${ville} `);
     return null ;
   }
 
@@ -110,6 +113,38 @@ async function recupererPrevision(ville,latitude,longitude,modele){
     unites_valeurs2: donnees.hourly_units,
   } // on renvoie les donnees de prévision et les unités de mesure
 
+}
+
+/**fonction de récupération de météo pour une ville , pour un jour d'une date données 
+ * date au format : AAAA-MM-JJ
+*/
+async function recuperationPrevisionJour(ville,latitude,longitude,modele,date){   
+  const param = new URLSearchParams({
+    latitude: latitude,
+    longitude: longitude,
+    daily: "temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,precipitation_sum,weather_code,wind_speed_10m_max", // car on veut les temperatures max et min et la somme des precipitations
+    hourly: "temperature_2m,apparent_temperature,,precipitation,weather_code,cloud_cover,wind_speed_10m",
+    models: modele,
+    timezone: "Europe/Paris",
+    start_date: date,
+    end_date: date,
+  });
+
+  const response = await fetch(`${URL_PREVISION}?${param}`);
+  var donnees = await response.json();
+
+  if(!donnees.daily) {
+    console.log(`Erreur fonction recuperationPrevisionJour `);
+    console.log(`Aucune donnée de prévision trouvée pour ${ville} pour la date : ${date}`);
+    return null ;
+  }
+
+  return{
+    valeur_jour: donnees.daily,
+    unites_valeur_jour: donnees.daily_units,
+    valeur_heure: donnees.hourly,
+    unites_valeur_heure: donnees.hourly_units,
+  }
 }
 
 
@@ -138,6 +173,32 @@ app.get("/api/meteo/:ville", async (req, res) => { //async pour une attente mm d
   
   
 }); 
+
+
+app.get("/api/meteo/:ville/:date",async (req,res)=>{ // ,date au format AAAA-MM-JJ
+  const nomville = req.params.ville;
+  const date = req.params.date ;
+
+  const ville = await trouverCoordonnes(nomville); // on attend la reponse de la fonction trouverCoordonnes
+
+  if (!ville) {
+    return res.status(404).json({ error: "Ville non trouvée" });
+  }
+
+  const prevision = await recuperationPrevisionJour(nomville, ville.latitude, ville.longitude, "meteofrance_seamless", date); // on attend la reponse de la fonction recuperationPrevisionJour
+
+  if (!prevision) {
+    return res.status(404).json({ error: "Prévision non trouvée lors de l'appel pour la date : " + date });
+  }
+  
+  res.json({
+    ville: ville.nom,
+    latitude: ville.latitude,
+    longitude: ville.longitude,
+    previson: prevision,
+  })
+  
+});
 
 const PORT = 3001;
 app.listen(PORT, () => {
