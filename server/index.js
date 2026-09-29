@@ -91,7 +91,7 @@ async function recupererPrevision(ville,latitude,longitude,modele){
     latitude: latitude,
     longitude: longitude,
     daily: "temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,precipitation_sum,weather_code,wind_speed_10m_max", // car on veut les temperatures max et min et la somme des precipitations
-    hourly: "relative_humidity_2m,cloud_cover", 
+    hourly: "temperature_2m,apparent_temperature,precipitation,relative_humidity_2m,weather_code,cloud_cover,wind_speed_10m,snowfall",
     models: modele,   // le modele de prevision a utiliser (AROME, ICON, ARPEGE)
     timezone: "Europe/Paris", 
     forecast_days: "7", // on veut une prevision pour 7 jours  , mais le modele ne se limite qu'à 4 jours
@@ -107,10 +107,10 @@ async function recupererPrevision(ville,latitude,longitude,modele){
   }
 
   return {
-    valeurs1: donnees.daily,
-    unites_valeurs1: donnees.daily_units,
-    valeurs2: donnees.hourly,
-    unites_valeurs2: donnees.hourly_units,
+    valeurs_par_jour: donnees.daily,
+    unites_valeurs_par_jour: donnees.daily_units,
+    valeurs_par_heure: donnees.hourly,
+    unites_valeurs_par_heure: donnees.hourly_units,
   } // on renvoie les donnees de prévision et les unités de mesure
 
 }
@@ -123,7 +123,7 @@ async function recuperationPrevisionJour(ville,latitude,longitude,modele,date){
     latitude: latitude,
     longitude: longitude,
     daily: "temperature_2m_max,temperature_2m_min,apparent_temperature_max,apparent_temperature_min,precipitation_sum,weather_code,wind_speed_10m_max", // car on veut les temperatures max et min et la somme des precipitations
-    hourly: "temperature_2m,apparent_temperature,,precipitation,weather_code,cloud_cover,wind_speed_10m",
+    hourly: "temperature_2m,apparent_temperature,precipitation,relative_humidity_2m,weather_code,cloud_cover,wind_speed_10m,snowfall",
     models: modele,
     timezone: "Europe/Paris",
     start_date: date,
@@ -142,8 +142,8 @@ async function recuperationPrevisionJour(ville,latitude,longitude,modele,date){
   return{
     valeur_jour: donnees.daily,
     unites_valeur_jour: donnees.daily_units,
-    valeur_heure: donnees.hourly,
-    unites_valeur_heure: donnees.hourly_units,
+    valeur_par_heure: donnees.hourly,
+    unites_valeur_par_heure: donnees.hourly_units,
   }
 }
 
@@ -195,7 +195,7 @@ app.get("/api/meteo/:ville/:date",async (req,res)=>{ // ,date au format AAAA-MM-
     ville: ville.nom,
     latitude: ville.latitude,
     longitude: ville.longitude,
-    previson: prevision,
+    prevision: prevision,
   })
   
 });
