@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
-import "./conseils.css";
+import "../Styles/conseils.css";
 
 const CONDITIONS = {
   soleil: { nom: "Ensoleillé" },
