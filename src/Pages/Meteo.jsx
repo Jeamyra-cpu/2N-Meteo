@@ -1,3 +1,4 @@
+import "../Styles/Meteo.css";
 import { useEffect, useRef, useState } from 'react';
 import {
   ArrowRight, CalendarDays, Check, Cloud, CloudDrizzle, CloudFog, CloudLightning,
@@ -5,6 +6,9 @@ import {
   LocateFixed, MapPin, Moon, Search, Snowflake, Sun, Sunrise, Sunset,
   Thermometer, Wind, X,
 } from 'lucide-react';
+
+import { Link } from "react-router-dom";
+
 
 const LIMOGES = { name: 'Limoges', country: 'France', latitude: 45.8315, longitude: 1.2578, timezone: 'Europe/Paris' };
 const POPULAR = [

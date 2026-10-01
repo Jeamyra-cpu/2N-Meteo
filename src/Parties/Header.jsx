@@ -70,8 +70,14 @@ function Header() {
                                 {t('header.privacy')}
                             </Link>
                         </li>
-                    )}
-                    
+                    )}          
+                    {location.pathname !== '/meteo' && (
+                        <li>
+                            <Link to="/meteo" onClick={() => setMenuOuvert(false)}>
+                                {t('header.meteo')}
+                            </Link>
+                        </li>
+                    )}              
                     {location.pathname !== '/a-propos' && (
                         <li>
                             <Link to="/a-propos" onClick={() => setMenuOuvert(false)}>

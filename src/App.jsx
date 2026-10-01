@@ -7,6 +7,7 @@ import './App.css'
 import APropos from './Pages/Apropos.jsx'
 import Politique from './Pages/PolitiqueConfidentialite.jsx'
 import Accueil from './Pages/Accueil.jsx'
+import Meteo from "./Pages/Meteo.jsx"
 
 function App() {
   const [count, setCount] = useState(0)
@@ -18,9 +19,10 @@ function App() {
         <Route path="/a-propos" element={<APropos />} />
         <Route path="/politique-confidentialite" element={<Politique />} />
         <Route path="/accueil" element={<Accueil />} />
+        <Route path="/meteo" element={<Meteo />} />
       </Routes>
     </BrowserRouter>
-  )
+  );
 }
 
 export default App
