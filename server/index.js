@@ -38,11 +38,7 @@ import express from 'express';
 import cors from 'cors';
 
 const app = express();  // création d'une instance de serveur express et on le fait ecouter sur le port 3001
-<<<<<<< HEAD
 app.use(cors({origin:true , credentials:true})); // app represente donc notre serveur express
-=======
-app.use(cors()); // app represente donc notre serveur express
->>>>>>> 3c44c4e418e0e196a3db4decf0bc7d8c3e769639
 // app.use(cors()); utorise React (origine http://localhost:5173) à faire des requêtes vers ce serveur (origine http://localhost:3001)
 // sans ca le navigateur bloque les reponses du serveur 
 
@@ -206,7 +202,6 @@ async function recuperationHistorique(latitude, longitude, date, modele) {
   };
 }
 
-<<<<<<< HEAD
 
 /** Fonction de recupération de nom de ville */
 
@@ -238,21 +233,10 @@ async function recuperationNomVille(latitude,longitude){
  * 
  ***************************************************************************************************************************************************/
 
-=======
-/*************************************************************************************************************************************************
- * 
- *   Routes de l'api  
- * 
- ***************************************************************************************************************************************************/
-
-
-/*definition des routes */
->>>>>>> 3c44c4e418e0e196a3db4decf0bc7d8c3e769639
 app.get("/api/test", (req, res) => {   // une fonction qui recoit deux parametres req et res (requete recu et response que l'on va renvoyer)
   res.json({ message: "L'API demarre normalement 😁😁 !" });
 });
 
-<<<<<<< HEAD
 /*recherche d'une ville avec la latitude et la longitude  */
 app.get("/api/ville/:latitude/:longitude", async (req, res) => { //async pour une attente mm des reponses longues 
   const latitude = req.params.latitude;
@@ -273,8 +257,6 @@ app.get("/api/ville/:latitude/:longitude", async (req, res) => { //async pour un
 
 });
 
-=======
->>>>>>> 3c44c4e418e0e196a3db4decf0bc7d8c3e769639
 /*recherche meteo avec le nom d'une ville  */
 app.get("/api/meteo/:ville", async (req, res) => { //async pour une attente mm des reponses longues 
   const nomville = req.params.ville;
@@ -301,10 +283,6 @@ app.get("/api/meteo/:ville", async (req, res) => { //async pour une attente mm d
 
 });
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 3c44c4e418e0e196a3db4decf0bc7d8c3e769639
 app.get("/api/meteo/:ville/:date", async (req, res) => { // ,date au format AAAA-MM-JJ
   const nomville = req.params.ville;
   const date = req.params.date;
