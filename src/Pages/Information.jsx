@@ -57,6 +57,7 @@ function Information() {
                     if (!response.ok) {
                         throw new Error("Impossible de récupérer la ville.");
                     }
+                    localStorage.setItem("deja_vu", "true");
 
                     const data = await response.json();
 
