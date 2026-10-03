@@ -47,14 +47,14 @@
     "home": {
         "title": "The sky, without the noise.",
         "subtitle": "A clear forecast for your city, readable in three seconds. No ads, no account creation, no trackers.",
-        "cta": "See my city",
+        "cta": "See my weather",
         "source": "Data from Météo-France and open European models."
     },
 
     "information": {
         "title": "Some information about you before continuing",
         "subtitle": "Do these details suit you?",
-        "cta": "View my city",
+        "cta": "View my weather",
         "source": "Data from Météo-France and open European models.",
         "titre_formulaire": "your Location",
         "sous_titre_formulaire": "We need your location to provide you with accurate weather forecasts tailored to your area.",

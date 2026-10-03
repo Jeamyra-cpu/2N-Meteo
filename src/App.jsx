@@ -8,6 +8,7 @@ import APropos from './Pages/Apropos.jsx'
 import Politique from './Pages/PolitiqueConfidentialite.jsx'
 import Accueil from './Pages/Accueil.jsx'
 import Information from './Pages/Information.jsx'
+import Alerte from './Pages/Alerte.jsx'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -15,11 +16,12 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<APropos />} />
+        <Route path="/" element={<Accueil />} />
         <Route path="/a-propos" element={<APropos />} />
         <Route path="/politique-confidentialite" element={<Politique />} />
         <Route path="/accueil" element={<Accueil />} />
-        <Route path="/information" element={<Information />} />
+        <Route path="/Information" element={<Information />} />
+        <Route path="/Alerte" element={<Alerte />} />
       </Routes>
     </BrowserRouter>
   )

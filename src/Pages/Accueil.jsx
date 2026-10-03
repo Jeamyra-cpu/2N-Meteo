@@ -21,7 +21,7 @@ function Accueil() {
                 <div className="accueil-action">
                     {
                         localStorage.getItem('deja_vu') && (
-                            <button className="accueil-bouton" onClick={() => window.location.href = '/'}>
+                            <button className="accueil-bouton" onClick={() => window.location.href = '/a-propos'}>
                                 {t('home.cta')} 
                             </button>
                         )

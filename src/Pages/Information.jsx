@@ -269,7 +269,7 @@ function Information() {
                                 disabled={chargement || ville.trim() === ""}
                                 
                                 onClick={() => {
-                                    window.location.href = '/Accueil';
+                                    window.location.href = '/Alerte';
                                 }}
                             >
                                 {t('information.bouton1')}
@@ -295,7 +295,7 @@ function Information() {
                             {t('information.fin_formulaire')}
                         </p>
 
-                    </section>
+                    </section> 
 
                 </div>
 

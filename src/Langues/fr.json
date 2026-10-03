@@ -42,13 +42,13 @@
     "home": {
         "title": "Le ciel, sans le bruit.",
         "subtitle": "Une prévision claire pour votre ville, lisible en trois secondes. Sans publicité, sans compte à créer, sans traceur.",
-        "cta": "Voir ma ville",
+        "cta": "Voir ma méteo",
         "source": "Données Météo-France et modèles ouverts européens."
     },
     "information": {
         "title": "Quelques informations sur vous avant de continuer",
         "subtitle": "Ces informations vous conviennent-elles ?",
-        "cta": "Voir ma ville",
+        "cta": "Voir ma méteo",
         "source": "Données Météo-France et modèles ouverts européens.",
         "titre_formulaire": "votre Localisation",
         "sous_titre_formulaire": "Nous avons besoin de votre localisation pour vous fournir des prévisions météorologiques précisess et adaptées à votre localisation.",
