@@ -1,0 +1,72 @@
+{
+  "about-us": {
+    "title": "About Us",
+    "description": "Welcome to our weather forecasting application for France. We are committed to providing accurate and reliable weather information to help you plan your daily activities. Our team is passionate about meteorology and strives to offer you the best user experience."
+  },
+
+  "privacy-policy": {
+    "title": "Privacy Policy",
+    "introduction": "Privacy Policy",
+    "content": "Welcome to our weather forecasting application for France. Protecting your personal data is a priority. This privacy policy explains how we collect, use, and safeguard your information.",
+    "data-collected": "Data Collected",
+    "data-collected-content": "As part of using our service, we may collect your email address as well as system preferences stored locally on your device (including default theme and display language).",
+    "localisation": "Location Data",
+    "localisation-content": "To provide accurate weather forecasts, we process your location data. We also save the history of locations searched within the application to make future lookups easier for you.",
+    "meteo-data": "Use of Weather Data",
+    "meteo-data-content": "Weather and location data are strictly used to display personalized weather reports. We firmly pledge never to sell, rent, or disclose your data to third parties.",
+    "other-services": "Third-Party Services",
+    "other-services-content": "We do not share your information with any third-party service for commercial or advertising purposes.",
+    "cookies": "Device Recognition and Local Storage",
+    "cookies-content": "We use local storage or technical identifiers to remember your device on future logins. This prevents you from having to reconfigure your preferences on every visit.",
+    "data-retention": "Data Retention",
+    "data-retention-content": "Your personal data and preferences are retained only as long as necessary to provide our services and can be deleted at any time upon simple request.",
+    "security": "Data Security",
+    "security-content": "We implement appropriate technical and organizational security measures to protect your data against unauthorized access, alteration, or leaks.",
+    "rights": "Your Rights",
+    "rights-content": "In accordance with applicable regulations (GDPR), you have the right to access, rectify, delete, and object to the processing of your personal data. You can exercise these rights by contacting us through the application."
+  },
+
+  "footer": {
+        "copyright": " 2N-Meteo. All rights reserved.",
+        "app-name": "2N-Meteo"
+    },
+
+    "header": {
+        "app-name": "2N-Meteo",
+        "home": "Home",
+        "about": "About",
+        
+        "privacy": "Privacy Policy",
+        "language": "Language",
+        "theme": "Theme",
+        "light": "Light",
+        "dark": "Dark",
+        "information": "Information"
+    },
+
+    "home": {
+        "title": "The sky, without the noise.",
+        "subtitle": "A clear forecast for your city, readable in three seconds. No ads, no account creation, no trackers.",
+        "cta": "See my city",
+        "source": "Data from Météo-France and open European models."
+    },
+
+    "information": {
+        "title": "Some information about you before continuing",
+        "subtitle": "Do these details suit you?",
+        "cta": "View my city",
+        "source": "Data from Météo-France and open European models.",
+        "titre_formulaire": "your Location",
+        "sous_titre_formulaire": "We need your location to provide you with accurate weather forecasts tailored to your area.",
+        "placeholder": "Your city",
+        "label1": "YOUR LOCATION",
+        "bouton1": "Validate My Location",
+        "bouton2": "Detect My Location",
+        "fin_formulaire": "Your location is used solely to determine the city corresponding to your position and provide you with tailored weather forecasts. You can correct it if it does not match your actual location.",
+        "detection": "Detecting Your Location ... ",
+        "error": "An error occurred while retrieving your location. Please check your location settings and try again.",
+        "erreur1": "Geolocation is not supported by your browser. Please enter your city manually.",
+        "erreur2": "An error occurred while retrieving your location. Please check your location settings and try again.",
+        "confirmation": "Location saved"
+    }
+}
