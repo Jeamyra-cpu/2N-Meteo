@@ -9,8 +9,6 @@ function Accueil() {
 
     return (
         <div className="accueil-page">
-            <Header />
-
             <main className="accueil-heros">
                 <h1>{t('home.title')}</h1>
                 
@@ -28,7 +26,6 @@ function Accueil() {
                     {t('home.source')}
                 </p>
             </main>
-
         </div>
     );
 }

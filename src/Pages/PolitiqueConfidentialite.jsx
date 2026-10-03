@@ -20,7 +20,6 @@ function Politique() {
 
     return (
         <div className="privacy-policy-page">
-            <Header />
             <main>
                 <section className="privacy-hero">
                     <h1 className="privacy-hero__title">{t('privacy-policy.title')}</h1>
@@ -47,7 +46,6 @@ function Politique() {
                     </article>
                 </div>
             </main>
-            <Footer />
         </div>
     )
 }

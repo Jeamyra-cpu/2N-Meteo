@@ -8,7 +8,6 @@ function APropos() {
 
     return (
         <div className="about-page">
-            <Header />
             <main>
                 <section className="about-hero">
                     <h1 className="about-hero__title">{t('about-us.title')}</h1>
@@ -28,7 +27,6 @@ function APropos() {
                     <p className="about-content__text">{t('about-us.description')}</p>
                 </section>
             </main>
-            <Footer />
         </div>
     )
 }
