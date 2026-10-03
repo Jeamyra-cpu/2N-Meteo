@@ -7,8 +7,6 @@ import {
   Thermometer, Wind, X,
 } from 'lucide-react';
 
-import { Link } from "react-router-dom";
-
 
 const LIMOGES = { name: 'Limoges', country: 'France', latitude: 45.8315, longitude: 1.2578, timezone: 'Europe/Paris' };
 const POPULAR = [
@@ -33,8 +31,10 @@ function condition(code, isDay = true) {
 }
 
 function temp(value, unit) {
-  return value === undefined ? '—°' : `${Math.round(unit === 'C' ? value : value * 9 / 5 + 32)}°`;
-}
+  if (value == null) return '-°';
+
+  return `${Math.round( unit === 'C' ? value : value *9/5 + 32)} °`;
+} 
 
 function dateLabel(date, options) {
   return new Intl.DateTimeFormat('fr-FR', { timeZone: 'UTC', ...options }).format(new Date(`${date.slice(0, 10)}T12:00:00Z`));
@@ -50,6 +50,9 @@ async function findCities(query, signal) {
 }
 
 function WeatherIcon({ code, size = 26, isDay = true, className = '' }) {
+  if (code == null){
+    return <Cloud size={size} strokeWidth={1.7} className={className} aria-hidden="true" />;
+  }
   const Icon = condition(code, isDay).icon;
   return <Icon size={size} strokeWidth={1.7} className={className} aria-hidden="true" />;
 }
@@ -58,7 +61,7 @@ function Metric({ icon: Icon, label, value, detail, tone }) {
   return <div className="metric-card"><div className={`metric-icon ${tone}`}><Icon size={23} strokeWidth={1.8} /></div><span className="metric-label">{label}</span><strong className="metric-value">{value}</strong><span className="metric-detail">{detail}</span></div>;
 }
 
-export default function App() {
+export default function Meteo() {
   const [city, setCity] = useState(LIMOGES);
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -75,20 +78,17 @@ export default function App() {
   // Recharge la météo quand la ville change ; annule l'ancienne requête si nécessaire.
   useEffect(() => {
     const controller = new AbortController();
-    setLoading(true);
-    setError('');
-    setWeather(null);
-    const params = new URLSearchParams({
-      latitude: String(city.latitude), longitude: String(city.longitude),
-      current: 'temperature_2m,apparent_temperature,relative_humidity_2m,precipitation,snowfall,weather_code,cloud_cover,pressure_msl,wind_speed_10m,wind_direction_10m,is_day',
-      hourly: 'temperature_2m,precipitation_probability,weather_code',
-      daily: 'weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,snowfall_sum,sunrise,sunset,uv_index_max',
-      forecast_days: '7', timezone: city.timezone || 'auto',
-    });
-    fetch(`https://api.open-meteo.com/v1/forecast?${params}`, { signal: controller.signal })
-      .then((response) => { if (!response.ok) throw new Error('Météo indisponible'); return response.json(); })
-      .then((data) => { setWeather(data); setSelectedDay(0); setLoading(false); })
-      .catch((cause) => { if (cause.name !== 'AbortError') { setError('Impossible de charger les données météo. Vérifiez votre connexion et réessayez.'); setLoading(false); } });
+    setLoading(true);       //Indiquer à React que les données sont en cours de chargement
+    setError('');           //On efface l'ancienne erreur
+    setWeather(null);       //On efface les anciennes données météo pendant le chargement
+
+    const ville = encodeURIComponent(city.name);
+    
+    //On appelle notre serveur Express
+    fetch(`http://localhost:3001/api/meteo/${ville}`,{signal: controller.signal})
+      .then((response) => {if (!response.ok) {throw new Error('Méteo indisponible');} return response.json();})
+      .then((data) => { setWeather(data.prevision); setSelectedDay(0); setLoading(false);})
+      .catch((cause) => {if (cause.name === 'AbortError') { return;} setError('Impossible de charger les données météo. Vérifiez que le serveur est démarré et réessayez'); setLoading(false);});
     return () => controller.abort();
   }, [city]);
 
@@ -130,20 +130,62 @@ export default function App() {
     finally { setSearching(false); }
   }
 
+  /*  J'ai remplacé, à intervertir après si on recupere les coordonnées au lieu du nom de la ville
   function locate() {
     if (!navigator.geolocation) { setSearchError('La géolocalisation n’est pas disponible.'); setSearchOpen(true); return; }
     navigator.geolocation.getCurrentPosition(({ coords }) => {
       chooseCity({ name: 'Ma position', country: '', latitude: coords.latitude, longitude: coords.longitude });
     }, () => { setSearchError('Autorisez la localisation ou recherchez une ville.'); setSearchOpen(true); });
   }
+*/
 
-  const current = weather?.current;
-  const daily = weather?.daily;
-  const firstHour = weather ? Math.max(0, weather.hourly.time.findIndex((hour) => hour >= weather.current.time.slice(0, 13) + ':00')) : 0;
-  const hours = weather ? weather.hourly.time.slice(firstHour, firstHour + 8).map((time, offset) => ({
-    time, temperature: weather.hourly.temperature_2m[firstHour + offset],
-    rain: weather.hourly.precipitation_probability[firstHour + offset], code: weather.hourly.weather_code[firstHour + offset],
-  })) : [];
+  function locate(){
+    setSearchError('La géolocalisation sera disponible prochainement');
+    setSearchOpen(true);
+  }
+
+  const daily = weather?.valeurs_par_jour;    //Data quotidiennes
+  const hourly = weather?.valeurs_par_heure;  //-- horaires
+  const now = new Date();                     //Heure actuelle
+
+  const currentHourString = 
+    `${now.getFullYear()}-` +
+    `${String(now.getMonth() +1).padStart(2,'0')}-` +
+    `${String(now.getDate()).padStart(2, '0')}T` +
+    `${String(now.getHours()).padStart(2, '0')}:00`;
+  
+  const currentHourIndex = hourly   //Index de l'heure actuelle
+    ? hourly.time.findIndex((time) => time === currentHourString)
+    : -1;
+  
+    //Données meteo actuelles
+  const current = hourly && currentHourIndex !== -1 ? {
+      time: hourly.time[currentHourIndex],
+      temperature_2m: hourly.temperature_2m?.[currentHourIndex],
+      apparent_temperature: hourly.apparent_temperature?.[currentHourIndex],
+      precipitation: hourly.precipitation?.[currentHourIndex],
+      relative_humidity_2m: hourly.relative_humidity_2m?.[currentHourIndex],
+      weather_code: hourly.weather_code?.[currentHourIndex],
+      cloud_cover: hourly.cloud_cover?.[currentHourIndex],
+      wind_speed_10m: hourly.wind_speed_10m?.[currentHourIndex],
+      snowfall: hourly.snowfall?.[currentHourIndex],
+    }: null;
+
+  //Premiere heure à afficher dans les previsions horaires
+  const firstHour = hourly
+    ? Math.max(0, hourly.time.findIndex((hour) => hour >= current?.time))
+    :0;
+  
+  //Les 8 prochaines heures
+  const hours = hourly ? hourly.time.slice(firstHour,firstHour + 8).map((time,offset) => ({
+    time,
+    temperature: hourly.temperature_2m[firstHour + offset],
+    rain: hourly.precipitation[firstHour + offset],
+    code: hourly.weather_code[firstHour + offset],
+  }))
+  : [];
+
+
   const mapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${city.longitude - 0.09}%2C${city.latitude - 0.055}%2C${city.longitude + 0.09}%2C${city.latitude + 0.055}&layer=mapnik&marker=${city.latitude}%2C${city.longitude}`;
   const osmUrl = `https://www.openstreetmap.org/?mlat=${city.latitude}&mlon=${city.longitude}#map=12/${city.latitude}/${city.longitude}`;
   const degrees = current?.temperature_2m ?? 16;
@@ -170,14 +212,14 @@ export default function App() {
         <div className="top-grid">
           <section className="current-card" aria-label="Conditions météo actuelles">
             <div className="current-card-top"><span className="live-pill"><span /> MÉTÉO ACTUELLE</span><span className="updated-at">{current ? `Mis à jour à ${timeLabel(current.time)}` : loading ? 'Chargement...' : 'Indisponible'}</span></div>
-            <div className="current-card-content"><div className="current-location"><MapPin size={19} />{city.name}{city.country && <span>, {city.country}</span>}</div><div className="current-reading"><div className="big-temperature">{temp(current?.temperature_2m, unit)}<span>{unit}</span></div><WeatherIcon code={current?.weather_code ?? 2} isDay={current?.is_day !== 0} size={80} className="big-weather-icon" /></div><div className="current-description">{current ? condition(current.weather_code, current.is_day !== 0).label : loading ? 'La météo arrive...' : 'Données indisponibles'}</div><p className="current-feels">Ressenti {temp(current?.apparent_temperature, unit)} <span>·</span> Max {temp(daily?.temperature_2m_max[0], unit)} / Min {temp(daily?.temperature_2m_min[0], unit)}</p></div>
-            <div className="current-card-bottom"><div><Sunrise size={19} /><span>Lever du soleil</span><strong>{daily ? timeLabel(daily.sunrise[0]) : '—:—'}</strong></div><div><Sunset size={19} /><span>Coucher du soleil</span><strong>{daily ? timeLabel(daily.sunset[0]) : '—:—'}</strong></div><div><Gauge size={19} /><span>Pression</span><strong>{current ? `${Math.round(current.pressure_msl)} hPa` : '—'}</strong></div></div>
+            <div className="current-card-content"><div className="current-location"><MapPin size={19} />{city.name}{city.country && <span>, {city.country}</span>}</div><div className="current-reading"><div className="big-temperature">{temp(current?.temperature_2m, unit)}<span>{unit}</span></div><WeatherIcon code={current?.weather_code} isDay={true} size={80} className="big-weather-icon" /></div><div className="current-description">{current ? condition(current.weather_code, true).label : loading ? 'La météo arrive...' : 'Données indisponibles'}</div><p className="current-feels">Ressenti {temp(current?.apparent_temperature, unit)} <span>·</span> Max {temp(daily?.temperature_2m_max[0], unit)} / Min {temp(daily?.temperature_2m_min[0], unit)}</p></div>
+            <div className="current-card-bottom"><div><Sunrise size={19} /><span>Lever du soleil</span><strong>-</strong></div></div>
           </section>
 
           <section className="map-card" aria-label={`Carte de ${city.name}`}>
             <div className="map-header"><div><span className="section-kicker">REPÈRE GÉOGRAPHIQUE</span><h2>{city.name}, sur la carte</h2></div><div className="map-header-icon"><MapPin size={21} /></div></div>
             <p className="map-subtitle">La météo, exactement là où vous la cherchez.</p>
-            <div className="map-frame"><iframe key={`${city.latitude}-${city.longitude}`} title={`Carte OpenStreetMap de ${city.name}`} src={mapUrl} loading="lazy" referrerPolicy="no-referrer-when-downgrade" /><div className={`map-temperature ${mapTone}`}><WeatherIcon code={current?.weather_code ?? 2} size={18} />{temp(current?.temperature_2m, unit)}{unit}</div></div>
+            <div className="map-frame"><iframe key={`${city.latitude}-${city.longitude}`} title={`Carte OpenStreetMap de ${city.name}`} src={mapUrl} loading="lazy" referrerPolicy="no-referrer-when-downgrade" /><div className={`map-temperature ${mapTone}`}><WeatherIcon code={current?.weather_code} size={18} />{temp(current?.temperature_2m, unit)}{unit}</div></div>
             <div className="map-bottom"><div className="map-place"><div className="map-place-icon"><MapPin size={19} /></div><div><strong>{city.name}{city.country ? `, ${city.country}` : ''}</strong><span>{city.latitude.toFixed(3)}° N · {Math.abs(city.longitude).toFixed(3)}° {city.longitude < 0 ? 'O' : 'E'}</span></div></div><a href={osmUrl} target="_blank" rel="noreferrer" aria-label={`Ouvrir la carte de ${city.name} dans OpenStreetMap`}><ExternalLink size={17} /></a></div>
           </section>
         </div>
@@ -192,7 +234,24 @@ export default function App() {
         </div></section>
 
         <div className="lower-grid">
-          <section className="hourly-block" aria-labelledby="hourly-title"><div className="section-heading"><div><span className="section-kicker">HEURE PAR HEURE</span><h2 id="hourly-title">Les prochaines heures</h2></div><span className="section-aside">Aujourd’hui <ArrowRight size={16} /></span></div><div className="hourly-card">{hours.length ? hours.map((hour, index) => <div className={`hour-cell ${index === 0 ? 'active' : ''}`} key={hour.time}><span>{index === 0 ? 'Maintenant' : timeLabel(hour.time)}</span><WeatherIcon code={hour.code} size={29} /><strong>{temp(hour.temperature, unit)}</strong><small><Droplets size={12} fill="currentColor" />{hour.rain}%</small></div>) : Array.from({ length: 8 }, (_, index) => <div className="hour-cell" key={index}><span>—</span><Cloud size={29} /><strong>—°</strong><small>—</small></div>)}</div></section>
+          <section className="hourly-block" aria-labelledby="hourly-title">
+            <div className="section-heading">
+              <div>
+                <span className="section-kicker">HEURE PAR HEURE</span>
+                <h2 id="hourly-title">Les prochaines heures</h2>
+              </div>
+              <span className="section-aside">Aujourd’hui <ArrowRight size={16} /></span>
+            </div>
+            <div className="hourly-card">{hours.length ? hours.map((hour, index) => 
+              <div className={`hour-cell ${index === 0 ? 'active' : ''}`} key={hour.time}>
+                <span>{index === 0 ? 'Maintenant' : timeLabel(hour.time)}</span>
+                <WeatherIcon code={hour.code} size={29} />
+                <strong>{temp(hour.temperature, unit)}</strong>
+                <small><Droplets size={12} fill="currentColor" />{hour.rain} mm</small>
+              </div>
+              ) : Array.from({ length: 8 }, (_, index) => <div className="hour-cell" key={index}><span>—</span><Cloud size={29} /><strong>—°</strong><small>—</small></div>)}
+            </div>
+          </section>
           <a className="advice-card" href={ADVICE_PATH} style={{ display: 'grid', flexDirection: 'row', alignContent: 'space-between' }}>
             {/* Toute la carte mène à la page Conseils. */}
             <div className="advice-top">
@@ -208,7 +267,43 @@ export default function App() {
           </a>
         </div>
 
-        <section className="forecast-section" aria-labelledby="forecast-title"><div className="section-heading"><div><span className="section-kicker">POUR LES JOURS À VENIR</span><h2 id="forecast-title">Prévisions sur 7 jours</h2></div><span className="source-label">Prévisions Open-Meteo</span></div><div className="forecast-grid">{Array.from({ length: 7 }, (_, index) => { const code = daily?.weather_code[index] ?? 2; return <button key={index} className={`day-card ${selectedDay === index ? 'selected' : ''}`} onClick={() => setSelectedDay(index)} aria-pressed={selectedDay === index}><span className="day-name">{index === 0 ? 'Aujourd’hui' : daily ? dateLabel(daily.time[index], { weekday: 'short' }) : '—'}</span><span className="day-date">{daily ? dateLabel(daily.time[index], { day: 'numeric', month: 'short' }) : '—'}</span><WeatherIcon code={code} size={32} /><span className="day-condition">{daily ? condition(code).label : '—'}</span><span className="day-temps"><strong>{temp(daily?.temperature_2m_max[index], unit)}</strong><span>{temp(daily?.temperature_2m_min[index], unit)}</span></span><span className="day-rain"><Droplets size={12} />{daily ? daily.precipitation_probability_max[index] : '—'}%</span></button>; })}</div><div className="forecast-detail"><span className="detail-check"><Check size={15} /></span><span>{daily ? `${selectedDay === 0 ? 'Aujourd’hui' : dateLabel(daily.time[selectedDay], { weekday: 'long' })} : ${condition(daily.weather_code[selectedDay]).label.toLowerCase()}, risque de pluie ${daily.precipitation_probability_max[selectedDay]}%, neige ${daily.snowfall_sum[selectedDay]} cm, indice UV max ${Math.round(daily.uv_index_max[selectedDay])}.` : 'Sélectionnez un jour pour voir ses prévisions.'}</span><span className="forecast-credit">Données : Open-Meteo</span></div></section>
+        <section className="forecast-section" aria-labelledby="forecast-title">
+          <div className="section-heading">
+            <div>
+              <span className="section-kicker">POUR LES JOURS À VENIR</span>
+              <h2 id="forecast-title">Prévisions sur 7 jours</h2>
+            </div>
+            <span className="source-label">Prévisions Open-Meteo</span>
+          </div>
+          <div className="forecast-grid">
+            {Array.from({ length: 7 }, (_, index) => { const code = daily?.weather_code[index]; return <button key={index} className={`day-card ${selectedDay === index ? 'selected' : ''}`} onClick={() => setSelectedDay(index)} aria-pressed={selectedDay === index}>
+              <span className="day-name">{index === 0 ? 'Aujourd’hui' : daily ? dateLabel(daily.time[index], { weekday: 'short' }) : '—'}</span>
+              <span className="day-date">{daily ? dateLabel(daily.time[index], { day: 'numeric', month: 'short' }) : '—'}</span>
+              <WeatherIcon code={code} size={32} />
+              <span className="day-condition">{code != null ? condition(code).label : '—'}</span>
+              <span className="day-temps"><strong>{temp(daily?.temperature_2m_max[index], unit)}</strong><span>{temp(daily?.temperature_2m_min[index], unit)}</span></span>
+              <span className="day-rain"><Droplets size={12} />{daily ? `${daily.precipitation_sum[index]} mm` : '-'}</span></button>; 
+            })}
+          </div>
+          <div className="forecast-detail">
+            <span className="detail-check"><Check size={15} /></span>
+            <span>
+              {daily 
+              ? `${selectedDay === 0 ? 'Aujourd’hui' : dateLabel(daily.time[selectedDay], { 
+                  weekday: 'long',
+                  day: 'numeric',
+                  month: 'long'
+                })} : ${daily.weather_code[selectedDay] != null
+                  ?  condition(daily.weather_code[selectedDay]).label.toLowerCase()
+                  : 'Données indisponibles'
+                }, précipitations prévues ${
+                  daily.precipitation_sum[selectedDay] ?? '-'
+                } mm.` 
+              : 'Sélectionnez un jour pour voir ses prévisions.'}
+            </span>
+            <span className="forecast-credit">Données : Open-Meteo</span>
+          </div>
+        </section>
       </div>
     </main>
   );
