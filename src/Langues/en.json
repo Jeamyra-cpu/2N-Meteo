@@ -35,11 +35,13 @@
         "app-name": "2N-Meteo",
         "home": "Home",
         "about": "About",
+        
         "privacy": "Privacy Policy",
         "language": "Language",
         "theme": "Theme",
         "light": "Light",
-        "dark": "Dark"
+        "dark": "Dark",
+        "information": "Information"
     },
 
     "home": {
@@ -47,5 +49,24 @@
         "subtitle": "A clear forecast for your city, readable in three seconds. No ads, no account creation, no trackers.",
         "cta": "See my city",
         "source": "Data from Météo-France and open European models."
+    },
+
+    "information": {
+        "title": "Some information about you before continuing",
+        "subtitle": "Do these details suit you?",
+        "cta": "View my city",
+        "source": "Data from Météo-France and open European models.",
+        "titre_formulaire": "your Location",
+        "sous_titre_formulaire": "We need your location to provide you with accurate weather forecasts tailored to your area.",
+        "placeholder": "Your city",
+        "label1": "YOUR LOCATION",
+        "bouton1": "Validate My Location",
+        "bouton2": "Detect My Location",
+        "fin_formulaire": "Your location is used solely to determine the city corresponding to your position and provide you with tailored weather forecasts. You can correct it if it does not match your actual location.",
+        "detection": "Detecting Your Location ... ",
+        "error": "An error occurred while retrieving your location. Please check your location settings and try again.",
+        "erreur1": "Geolocation is not supported by your browser. Please enter your city manually.",
+        "erreur2": "An error occurred while retrieving your location. Please check your location settings and try again.",
+        "confirmation": "Location saved"
     }
 }

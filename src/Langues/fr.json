@@ -3,8 +3,7 @@
         "title": "À propos de nous",
         "description": "Bienvenue sur notre application de prévisions météorologiques en France. Nous nous engageons à fournir des informations météorologiques précises et fiables pour vous aider à planifier vos activités quotidiennes. Notre équipe est passionnée par la météo et s'efforce de vous offrir une expérience utilisateur optimale."
     },
-
-    "privacy-policy" : {
+    "privacy-policy": {
         "title": "Politique et Confidentialité",
         "introduction": "Politique de confidentialité",
         "content": "Bienvenue sur notre application de prévisions météorologiques en France. La protection de vos données personnelles est une priorité. Cette politique de confidentialité explique comment nous collectons, utilisons et protégeons vos informations.",
@@ -25,27 +24,44 @@
         "rights": "Vos droits",
         "rights-content": "Conformément à la réglementation en vigueur (RGPD), vous disposez d'un droit d'accès, de rectification, de suppression et d'opposition concernant vos données personnelles. Vous pouvez exercer ces droits en nous contactant via l'application."
     },
-
     "footer": {
         "copyright": " 2N-Météo. Tous droits réservés.",
         "app-name": "2N-Météo"
     },
-
     "header": {
         "app-name": "2N-Météo",
         "home": "Accueil",
         "about": "À propos",
+        "information": "Information",
         "privacy": "Politique & Confidentialité",
         "language": "Langue",
         "theme": "Thème",
         "light": "Clair",
         "dark": "Sombre"
     },
-
     "home": {
         "title": "Le ciel, sans le bruit.",
         "subtitle": "Une prévision claire pour votre ville, lisible en trois secondes. Sans publicité, sans compte à créer, sans traceur.",
         "cta": "Voir ma ville",
         "source": "Données Météo-France et modèles ouverts européens."
+    },
+    "information": {
+        "title": "Quelques informations sur vous avant de continuer",
+        "subtitle": "Ces informations vous conviennent-elles ?",
+        "cta": "Voir ma ville",
+        "source": "Données Météo-France et modèles ouverts européens.",
+        "titre_formulaire": "votre Localisation",
+        "sous_titre_formulaire": "Nous avons besoin de votre localisation pour vous fournir des prévisions météorologiques précisess et adaptées à votre localisation.",
+        "placeholder": "Votre ville",
+        "label1": "VOTRE LOCALISATION",
+        "bouton1": "Valider ma Localisation",
+        "bouton2": "Détecter ma Localisation",
+        "fin_formulaire": "Votre localisation est utilisée uniquement pour déterminer la ville correspondant à votre position et vous proposer des prévisions météo adaptées. Vous pouvez la corriger si elle ne correspond pas à votre position réelle.",
+        "detection": "Détection de votre Localisation ... ",
+        "error": "Une erreur est survenue lors de la récupération de votre localisation. Veuillez vérifier vos paramètres de localisation et réessayer.",
+        "erreur1": "La géolocalisation n'est pas prise en charge par votre navigateur. Saisissez votre ville manuellement.",
+        "erreur2": "Une erreur est survenue lors de la récupération de votre localisation. Veuillez vérifier vos paramètres de localisation et réessayer.",
+        "confirmation": "Localisation enregistrée"
+
     }
 }
