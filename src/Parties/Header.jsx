@@ -63,21 +63,21 @@ function Header() {
                         <Link to="/accueil" onClick={() => setMenuOuvert(false)}>
                             {t('header.home')}
                         </Link>
-                    </li>
-                    {location.pathname !== '/politique-confidentialite' && (
-                        <li>
-                            <Link to="/politique-confidentialite" onClick={() => setMenuOuvert(false)}>
-                                {t('header.privacy')}
-                            </Link>
-                        </li>
-                    )}          
+                    </li>                              
                     {location.pathname !== '/meteo' && (
                         <li>
                             <Link to="/meteo" onClick={() => setMenuOuvert(false)}>
                                 {t('header.meteo')}
                             </Link>
                         </li>
-                    )}              
+                    )}
+                    {location.pathname !== '/politique-confidentialite' && (
+                        <li>
+                            <Link to="/politique-confidentialite" onClick={() => setMenuOuvert(false)}>
+                                {t('header.privacy')}
+                            </Link>
+                        </li>
+                    )}            
                     {location.pathname !== '/a-propos' && (
                         <li>
                             <Link to="/a-propos" onClick={() => setMenuOuvert(false)}>
