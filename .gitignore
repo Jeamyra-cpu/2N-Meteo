@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Logs
 logs
 *.log
@@ -26,5 +27,8 @@ dist-ssr
 venv/
 node_modules/
 __pycache__/
+=======
+node_modules/
+>>>>>>> 3c44c4e418e0e196a3db4decf0bc7d8c3e769639
 dist/
 .env
