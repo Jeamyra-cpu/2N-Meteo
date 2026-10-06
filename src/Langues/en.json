@@ -4,6 +4,84 @@
     "description": "Welcome to our weather forecasting application for France. We are committed to providing accurate and reliable weather information to help you plan your daily activities. Our team is passionate about meteorology and strives to offer you the best user experience."
   },
 
+  "meteo": {
+    "title": "The weather, at a glance",
+    "realtime": "YOUR WEATHER, IN REAL TIME",
+    "subtitle": "Everything you need to know about the weather, wherever you are",
+    "precipitation": "Precipitation",
+    "snowfall": "Snowfall",
+    "humidity": "Humidity",
+    "inAir": "In the air",
+    "windSpeed": "Wind speed",
+    "at10m": "At 10m above ground",
+    "cloudCover": "Cloud cover",
+    "skyCovered": "Part of the sky covered",
+    "feelsLike": "Feels like",
+    "outdoorFeeling": "Outdoor temperature feeling",
+    "currently": "Currently",
+    "conditions": {
+      "clear": "Clear sky",
+      "partlyCloudy": "Partly cloudy",
+      "cloudy": "Cloudy",
+      "fog": "Fog",
+      "drizzle": "Drizzle",
+      "rain": "Rain",
+      "snow": "Snow",
+      "storm": "Thunderstorm",
+      "variable": "Variable"
+    },
+
+    "actual": "CURRENT WEATHER",
+    "noCityFound": "No city found",
+    "noCityFoundTryAgain": "No city found. Try another search",
+    "searchPlaceholder": "Search for a city...",
+    "clearSearch": "Clear search",
+    "searching": "Searching...",
+    "myLocation": "Use my location",
+    "weatherLoadError": "Unable to load weather data. Check that the server is running and try again.",
+    "searchUnavailable": "Search unavailable. Please try again.",
+    "locationComingSoon": "Location services will be available Soon...",
+    "switchToFahrenheit": "Switch to Fahrenheit",
+    "switchToCelsius": "Switch to Celsius",
+    "cities": "CITIES",
+    "weatherUnavailable": "Weather unavailable",
+    "loading": "Loading...",
+    "unavailable": "Unavailable",
+    "updatedAt": "Updated at",
+    "weatherComing": "Weather is loading...",
+    "dataUnavailable": "Data unavailable",
+    "feels": "Feels like",
+    "max": "Max",
+    "min": "Min",
+    "sunrise": "Sunrise",
+    "geographicMarker": "GEOGRAPHICAL MARKER",
+    "onMap": "on the map",
+    "mapSubtitle": "The weather, exactly where you're looking for it.",
+    "openMap": "Open the map of {{city}} in OpenStreetMap",
+    "atAGlance": "AT A GLANCE",
+    "conditionsDetail": "Detailed conditions",
+    "currentValues": "Current values in {{city}}",
+    "hourByHour": "HOUR BY HOUR",
+    "nextHours": "The next few hours",
+    "today": "Today",
+    "now": "Now",
+    "advice": {
+      "goFurther": "GO FURTHER",
+      "title": "Stay one step ahead",
+      "titleLine2": "of your day.",
+      "description": "Discover the right habits and advice adapted to the weather.",
+      "link": "View advice"
+    },
+    "upcomingDays": "FOR THE DAYS AHEAD",
+    "sevenDayForecast": "7-day forecast",
+    "openMeteoForecast": "Open-Meteo forecast",
+    "forecastDataUnavailable": "Data unavailable",
+    "selectDay": "Select a day to see its forecast.",
+    "dataSource": "Data",
+    "expectedPrecipitation": "expected precipitation",
+    " ": " "
+  },
+
   "privacy-policy": {
     "title": "Privacy Policy",
     "introduction": "Privacy Policy",
@@ -27,26 +105,26 @@
   },
 
   "footer": {
-        "copyright": " 2N-Meteo. All rights reserved.",
-        "app-name": "2N-Meteo"
-    },
+    "copyright": " 2N-Meteo. All rights reserved.",
+    "app-name": "2N-Meteo"
+  },
 
-    "header": {
-        "app-name": "2N-Meteo",
-        "home": "Home",
-        "meteo": "Weather",
-        "about": "About",
-        "privacy": "Privacy Policy",
-        "language": "Language",
-        "theme": "Theme",
-        "light": "Light",
-        "dark": "Dark"
-    },
+  "header": {
+    "app-name": "2N-Meteo",
+    "home": "Home",
+    "meteo": "Weather",
+    "about": "About",
+    "privacy": "Privacy Policy",
+    "language": "Language",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark"
+  },
 
-    "home": {
-        "title": "The sky, without the noise.",
-        "subtitle": "A clear forecast for your city, readable in three seconds. No ads, no account creation, no trackers.",
-        "cta": "See my city",
-        "source": "Data from Météo-France and open European models."
-    }
+  "home": {
+    "title": "The sky, without the noise.",
+    "subtitle": "A clear forecast for your city, readable in three seconds. No ads, no account creation, no trackers.",
+    "cta": "See my city",
+    "source": "Data from Météo-France and open European models."
+  }
 }
