@@ -1,52 +1,131 @@
 {
-    "about-us": {
-        "title": "À propos de nous",
-        "description": "Bienvenue sur notre application de prévisions météorologiques en France. Nous nous engageons à fournir des informations météorologiques précises et fiables pour vous aider à planifier vos activités quotidiennes. Notre équipe est passionnée par la météo et s'efforce de vous offrir une expérience utilisateur optimale."
-    },
+  "about-us": {
+    "title": "À propos de nous",
+    "description": "Bienvenue sur notre application de prévisions météorologiques en France. Nous nous engageons à fournir des informations météorologiques précises et fiables pour vous aider à planifier vos activités quotidiennes. Notre équipe est passionnée par la météo et s'efforce de vous offrir une expérience utilisateur optimale."
+  },
 
-    "privacy-policy" : {
-        "title": "Politique et Confidentialité",
-        "introduction": "Politique de confidentialité",
-        "content": "Bienvenue sur notre application de prévisions météorologiques en France. La protection de vos données personnelles est une priorité. Cette politique de confidentialité explique comment nous collectons, utilisons et protégeons vos informations.",
-        "data-collected": "Données collectées",
-        "data-collected-content": "Dans le cadre de l'utilisation de notre service, nous pouvons collecter votre adresse e-mail ainsi que des préférences système stockées localement sur votre appareil (notamment le thème par défaut et la langue d'affichage).",
-        "localisation": "Données de géolocalisation",
-        "localisation-content": "Afin de vous fournir des prévisions météo précises, nous traitons vos données de localisation. Nous sauvegardons également l'historique des localisations recherchées dans l'application pour faciliter vos prochaines consultations.",
-        "meteo-data": "Utilisation des données météo",
-        "meteo-data-content": "Les données météo et de localisation sont strictement utilisées pour afficher des bulletins météorologiques personnalisés. Nous nous engageons fermement à ne jamais vendre, louer ou divulguer vos données à des tiers.",
-        "other-services": "Services tiers",
-        "other-services-content": "Nous n'échangeons vos informations avec aucun service tiers à des fins commerciales ou publicitaires.",
-        "cookies": "Reconnaissance de l'appareil et stockage local",
-        "cookies-content": "Nous utilisons le stockage local ou des identifiants techniques pour mémoriser votre appareil lors de vos prochaines connexions. Cela vous évite de devoir reconfigurer vos préférences à chaque visite.",
-        "data-retention": "Conservation des données",
-        "data-retention-content": "Vos données personnelles et vos préférences sont conservées uniquement le temps nécessaire à la fourniture de nos services et peuvent être supprimées à tout moment sur simple demande.",
-        "security": "Sécurité des données",
-        "security-content": "Nous mettons en œuvre des mesures de sécurité techniques et organisationnelles appropriées pour protéger vos données contre tout accès non autorisé, altération ou fuite.",
-        "rights": "Vos droits",
-        "rights-content": "Conformément à la réglementation en vigueur (RGPD), vous disposez d'un droit d'accès, de rectification, de suppression et d'opposition concernant vos données personnelles. Vous pouvez exercer ces droits en nous contactant via l'application."
-    },
+  "meteo": {
+    "title": "Le temps, en un regard",
+    "realtime": "VOTRE MÉTÉO, EN TEMPS RÉEL",
+    "subtitle": "Tout ce qu'il faut savoir sur la météo, où que vous soyez.",
 
-    "footer": {
-        "copyright": " 2N-Météo. Tous droits réservés.",
-        "app-name": "2N-Météo"
+    "precipitation": "Précipitations",
+    "snowfall": "Chutes de neige",
+    "humidity": "Humidité",
+    "inAir": "Dans l'air",
+    "windSpeed": "Vitesse du vent",
+    "at10m": "À 10m du sol",
+    "cloudCover": "Couverture nuageuse",
+    "skyCovered": "Part du ciel couvert",
+    "feelsLike": "Température ressentie",
+    "outdoorFeeling": "Ressenti extérieur",
+    "currently": "En ce moment",
+    
+    "conditions": {
+      "clear": "Ciel dégagé",
+      "partlyCloudy": "Éclaircies",
+      "cloudy": "Nuageux",
+      "fog": "Brouillard",
+      "drizzle": "Bruine",
+      "rain": "Pluie",
+      "snow": "Neige",
+      "storm": "Orgage",
+      "variable": "Variable"
     },
-
-    "header": {
-        "app-name": "2N-Météo",
-        "home": "Accueil",
-        "meteo": "Météo",
-        "about": "À propos",
-        "privacy": "Politique & Confidentialité",
-        "language": "Langue",
-        "theme": "Thème",
-        "light": "Clair",
-        "dark": "Sombre"
+    "actual": "MÉTÉO ACTUELLE",
+    "noCityFound": "Aucune ville trouvée.",
+    "noCityFoundTryAgain": "Aucune ville trouvée. Essayez une autre recherche.",
+    "searchPlaceholder": "Rechercher une ville...",
+    "clearSearch": "Effacer la recherche",
+    "searching": "Recherche en cours...",
+    "myLocation": "Utiliser ma position",
+    "weatherLoadError": "Impossible de charger les données météo. Vérifiez que le serveur est démarré et réessayez.",
+    "searchUnavailable": "Recherche indisponible. Réessayez",
+    "locationComingSoon": "La géolocalisation sera disponible prochainement",
+    "switchToFahrenheit": "Passer en degrés Fahrenheit",
+    "switchToCelsius": "Passer en degrés Celsius",
+    "cities": "VILLES",
+    "weatherUnavailable": "Météo indisponible",
+    "loading": "Chargement...",
+    "unavailable": "Indisponible",
+    "updatedAt": "Mis à jour à",
+    "weatherComing": "La météo arrive...",
+    "dataUnavailable": "Données indisponibles",
+    "feels": "Ressenti",
+    "max": "Max",
+    "min": "Min",
+    "sunrise": "Lever du soleil",
+    "geographicMarker": "REPÈRE GÉOGRAPHIQUE",
+    "onMap": "sur la carte",
+    "mapSubtitle": "La météo, exactement là où vous la cherchez.",
+    "openMap": "Ouvrir la carte de {{city}} dans OpenStreetMap",
+    "atAGlance": "EN UN COUP D’ŒIL",
+    "conditionsDetail": "Les conditions en détail",
+    "currentValues": "Valeurs actuelles à {{city}}",
+    "hourByHour": "HEURE PAR HEURE",
+    "nextHours": "Les prochaines heures",
+    "today": "Aujourd’hui",
+    "now": "Maintenant",
+    "advice": {
+      "goFurther": "POUR ALLER PLUS LOIN",
+      "title": "Un temps d’avance",
+      "titleLine2": "sur votre journée.",
+      "description": "Découvrez les bons réflexes et nos conseils adaptés à la météo.",
+      "link": "Voir les conseils"
     },
+    "upcomingDays": "POUR LES JOURS À VENIR",
+    "sevenDayForecast": "Prévisions sur 7 jours",
+    "openMeteoForecast": "Prévisions Open-Meteo",
+    "forecastDataUnavailable": "Données indisponibles",
+    "selectDay": "Sélectionnez un jour pour voir ses prévisions.",
+    "dataSource": "Données",
+    "expectedPrecipitation": "précipitations prévues",
+    "": ""
+  },
 
-    "home": {
-        "title": "Le ciel, sans le bruit.",
-        "subtitle": "Une prévision claire pour votre ville, lisible en trois secondes. Sans publicité, sans compte à créer, sans traceur.",
-        "cta": "Voir ma ville",
-        "source": "Données Météo-France et modèles ouverts européens."
-    }
+  "privacy-policy": {
+    "title": "Politique et Confidentialité",
+    "introduction": "Politique de confidentialité",
+    "content": "Bienvenue sur notre application de prévisions météorologiques en France. La protection de vos données personnelles est une priorité. Cette politique de confidentialité explique comment nous collectons, utilisons et protégeons vos informations.",
+    "data-collected": "Données collectées",
+    "data-collected-content": "Dans le cadre de l'utilisation de notre service, nous pouvons collecter votre adresse e-mail ainsi que des préférences système stockées localement sur votre appareil (notamment le thème par défaut et la langue d'affichage).",
+    "localisation": "Données de géolocalisation",
+    "localisation-content": "Afin de vous fournir des prévisions météo précises, nous traitons vos données de localisation. Nous sauvegardons également l'historique des localisations recherchées dans l'application pour faciliter vos prochaines consultations.",
+    "meteo-data": "Utilisation des données météo",
+    "meteo-data-content": "Les données météo et de localisation sont strictement utilisées pour afficher des bulletins météorologiques personnalisés. Nous nous engageons fermement à ne jamais vendre, louer ou divulguer vos données à des tiers.",
+    "other-services": "Services tiers",
+    "other-services-content": "Nous n'échangeons vos informations avec aucun service tiers à des fins commerciales ou publicitaires.",
+    "cookies": "Reconnaissance de l'appareil et stockage local",
+    "cookies-content": "Nous utilisons le stockage local ou des identifiants techniques pour mémoriser votre appareil lors de vos prochaines connexions. Cela vous évite de devoir reconfigurer vos préférences à chaque visite.",
+    "data-retention": "Conservation des données",
+    "data-retention-content": "Vos données personnelles et vos préférences sont conservées uniquement le temps nécessaire à la fourniture de nos services et peuvent être supprimées à tout moment sur simple demande.",
+    "security": "Sécurité des données",
+    "security-content": "Nous mettons en œuvre des mesures de sécurité techniques et organisationnelles appropriées pour protéger vos données contre tout accès non autorisé, altération ou fuite.",
+    "rights": "Vos droits",
+    "rights-content": "Conformément à la réglementation en vigueur (RGPD), vous disposez d'un droit d'accès, de rectification, de suppression et d'opposition concernant vos données personnelles. Vous pouvez exercer ces droits en nous contactant via l'application."
+  },
+
+  "footer": {
+    "copyright": " 2N-Météo. Tous droits réservés.",
+    "app-name": "2N-Météo"
+  },
+
+  "header": {
+    "app-name": "2N-Météo",
+    "home": "Accueil",
+    "meteo": "Météo",
+    "about": "À propos",
+    "privacy": "Politique & Confidentialité",
+    "language": "Langue",
+    "theme": "Thème",
+    "light": "Clair",
+    "dark": "Sombre"
+  },
+
+  "home": {
+    "title": "Le ciel, sans le bruit.",
+    "subtitle": "Une prévision claire pour votre ville, lisible en trois secondes. Sans publicité, sans compte à créer, sans traceur.",
+    "cta": "Voir ma ville",
+    "source": "Données Météo-France et modèles ouverts européens."
+  }
 }
