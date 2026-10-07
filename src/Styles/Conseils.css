@@ -1,0 +1,59 @@
+.meteo-app{
+  --nuit:#101F38;
+  --soleil:#E8A33D;
+  --encre:#1B2837;
+  --doux:#5C7085;
+  --ligne:rgba(27,40,55,.14);
+  --fond:#F5F8FB;
+  --carte:#FFFFFF;
+}
+@media (prefers-color-scheme: dark){
+  .meteo-app:not([data-theme="light"]){
+    --fond:#0C1626; --encre:#E7EEF6; --doux:#93A6BA; --ligne:rgba(231,238,246,.16); --carte:#101C30;
+  }
+}
+.meteo-app[data-theme="dark"]{
+  --fond:#0C1626; --encre:#E7EEF6; --doux:#93A6BA; --ligne:rgba(231,238,246,.16); --carte:#101C30;
+}
+.meteo-app{
+  font-family:"IBM Plex Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  font-size:17px; line-height:1.6; color:var(--encre); background:var(--fond);
+  padding:28px clamp(16px,4vw,40px) 56px; border-radius:10px;
+}
+.meteo-app h1,.meteo-app h2{font-family:"Bricolage Grotesque","IBM Plex Sans",sans-serif;font-weight:600;letter-spacing:-.03em;margin:0}
+.meteo-app :focus-visible{outline:3px solid var(--soleil);outline-offset:3px}
+
+.meteo-carte{background:var(--carte);border:1px solid var(--ligne);border-radius:6px}
+
+.meteo-haut{display:flex;flex-direction:row;align-items:center;gap:26px;padding:20px 22px;flex-wrap:wrap}
+
+.meteo-badge{display:inline-flex;align-items:center;gap:10px;background:var(--nuit);color:#EEF4FA;
+  padding:9px 18px;border-radius:3px;font-weight:600}
+.meteo-badge .point{width:9px;height:9px;border-radius:50%;background:var(--soleil);box-shadow:0 0 0 4px rgba(232,163,61,.22)}
+.meteo-badge b{font-size:1.35rem;font-weight:600}
+.meteo-lieu{margin:10px 0 0;color:var(--doux);font-size:.88rem;max-width:220px}
+
+.meteo-conseils{flex:1;min-width:220px}
+.meteo-conseils h2{font-size:1.05rem;margin-bottom:8px}
+.meteo-conseils ul{margin:0;padding-left:18px;font-size:.95rem}
+.meteo-conseils li{margin:5px 0}
+
+.meteo-rangee{margin-top:18px;display:flex;flex-direction:row;gap:18px;align-items:stretch;flex-wrap:wrap}
+.meteo-illustration{flex:1 1 260px;min-width:220px;max-width:340px;overflow:hidden}
+
+.meteo-form{flex:2 1 300px;display:grid;gap:14px;grid-template-columns:1fr 1fr;padding:22px;align-content:start}
+.meteo-champ{display:grid;gap:6px;font-size:.82rem;color:var(--doux)}
+.meteo-champ input{font:inherit;font-family:"IBM Plex Sans",sans-serif;color:var(--encre);
+  background:transparent;border:1px solid var(--ligne);border-radius:3px;padding:10px 12px}
+.meteo-bouton{all:unset;cursor:pointer;background:var(--soleil);color:var(--encre);font-weight:600;
+  font-family:"Bricolage Grotesque",sans-serif;padding:13px 24px;border-radius:3px;text-align:center;
+  grid-column:1/-1;transition:opacity .2s ease}
+.meteo-bouton:hover{opacity:.88}
+
+.meteo-note{font-size:.8rem;color:var(--doux);margin:14px 4px 0}
+
+@media (max-width:560px){
+  .meteo-haut{gap:14px;padding:14px}
+  .meteo-badge{padding:7px 12px}
+  .meteo-badge b{font-size:1.1rem}
+}

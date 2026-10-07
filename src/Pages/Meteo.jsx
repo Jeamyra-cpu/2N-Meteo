@@ -1,6 +1,7 @@
 import "../Styles/Meteo.css";
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 import {
   ArrowRight, CalendarDays, Check, Cloud, CloudDrizzle, CloudFog, CloudLightning,
@@ -17,8 +18,8 @@ const POPULAR = [
   { name: 'Lyon', country: 'France', latitude: 45.7485, longitude: 4.8467, timezone: 'Europe/Paris' },
   { name: 'Bordeaux', country: 'France', latitude: 44.8404, longitude: -0.5805, timezone: 'Europe/Paris' },
 ];
-// Replace this path when the team's advice page is added to this repository.
-const ADVICE_PATH = '/conseil';
+// Chemin de la page de conseils (doit être identique à la <Route> déclarée dans App.jsx).
+const ADVICE_PATH = '/conseils.jsx';
 
 /*
 function condition(code, isDay = true,t) {
@@ -34,24 +35,24 @@ function condition(code, isDay = true,t) {
 }
 */
 
-function condition(code,isDay=true){
-  if (code === 0) return{ labelKey: 'meteo.conditions.clear', icon: isDay ? Sun : Moon};
-  if (code <= 2) return{ labelKey: 'meteo.conditions.partlyCloudy', icon: isDay ? CloudSun : Moon};
-  if (code === 3) return {labelKey: 'meteo.conditions.cloudy', icon: Cloud};
-  if (code <= 48) return {labelKey: 'meteo.conditions.fog', icon: CloudFog};
-  if (code <= 57) return {labelKey: 'meteo.conditions.drizzle', icon: CloudDrizzle};
-  if (code <= 67 || (code >= 80 && code <= 82)) return {labelKey: 'meteo.conditions.rain', icon: CloudRain};
-  if (code <= 77 || (code >= 85 && code <= 86)) return {labelKey: 'meteo.conditions.snow', icon: CloudSnow};
-  if (code >= 95) return { labelKey: 'meteo.conditions.storm', icon: CloudLightning};
-  return { labelKey: 'meteo.conditions.variable', icon: CloudSun};
+function condition(code, isDay = true) {
+  if (code === 0) return { labelKey: 'meteo.conditions.clear', icon: isDay ? Sun : Moon };
+  if (code <= 2) return { labelKey: 'meteo.conditions.partlyCloudy', icon: isDay ? CloudSun : Moon };
+  if (code === 3) return { labelKey: 'meteo.conditions.cloudy', icon: Cloud };
+  if (code <= 48) return { labelKey: 'meteo.conditions.fog', icon: CloudFog };
+  if (code <= 57) return { labelKey: 'meteo.conditions.drizzle', icon: CloudDrizzle };
+  if (code <= 67 || (code >= 80 && code <= 82)) return { labelKey: 'meteo.conditions.rain', icon: CloudRain };
+  if (code <= 77 || (code >= 85 && code <= 86)) return { labelKey: 'meteo.conditions.snow', icon: CloudSnow };
+  if (code >= 95) return { labelKey: 'meteo.conditions.storm', icon: CloudLightning };
+  return { labelKey: 'meteo.conditions.variable', icon: CloudSun };
 }
 
 
 function temp(value, unit) {
   if (value == null) return '-°';
 
-  return `${Math.round( unit === 'C' ? value : value *9/5 + 32)} °`;
-} 
+  return `${Math.round(unit === 'C' ? value : value * 9 / 5 + 32)} °`;
+}
 
 function dateLabel(date, options) {
   return new Intl.DateTimeFormat('fr-FR', { timeZone: 'UTC', ...options }).format(new Date(`${date.slice(0, 10)}T12:00:00Z`));
@@ -59,15 +60,15 @@ function dateLabel(date, options) {
 
 function timeLabel(date) { return date.slice(11, 16); }
 
-async function findCities(query, signal,language) {
+async function findCities(query, signal, language) {
   const response = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=6&language=${language}&format=json`, { signal });
   if (!response.ok) throw new Error('Search unavailable');
   const data = await response.json();
   return data.results ?? [];
 }
 
-function WeatherIcon({ code, size = 26, isDay = true, className = ''}) {
-  if (code == null){
+function WeatherIcon({ code, size = 26, isDay = true, className = '' }) {
+  if (code == null) {
     return <Cloud size={size} strokeWidth={1.7} className={className} aria-hidden="true" />;
   }
   const Icon = condition(code, isDay).icon;
@@ -79,7 +80,7 @@ function Metric({ icon: Icon, label, value, detail, tone }) {
 }
 
 export default function Meteo() {
-  const { t, i18n }= useTranslation();
+  const { t, i18n } = useTranslation();
   const [city, setCity] = useState(LIMOGES);
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -101,12 +102,12 @@ export default function Meteo() {
     setWeather(null);       //On efface les anciennes données météo pendant le chargement
 
     const ville = encodeURIComponent(city.name);
-    
+
     //On appelle notre serveur Express
-    fetch(`http://localhost:3001/api/meteo/${ville}`,{signal: controller.signal})
-      .then((response) => {if (!response.ok) {throw new Error('Méteo indisponible');} return response.json();})
-      .then((data) => { setWeather(data.prevision); setSelectedDay(0); setLoading(false);})
-      .catch((cause) => {if (cause.name === 'AbortError') { return;} setError(t('meteo.weatherLoadError')); setLoading(false);});
+    fetch(`http://localhost:3001/api/meteo/${ville}`, { signal: controller.signal })
+      .then((response) => { if (!response.ok) { throw new Error('Méteo indisponible'); } return response.json(); })
+      .then((data) => { setWeather(data.prevision); setSelectedDay(0); setLoading(false); })
+      .catch((cause) => { if (cause.name === 'AbortError') { return; } setError(t('meteo.weatherLoadError')); setLoading(false); });
     return () => controller.abort();
   }, [city]);
 
@@ -116,7 +117,7 @@ export default function Meteo() {
     const controller = new AbortController();
     const timeout = window.setTimeout(() => {
       setSearching(true);
-      findCities(query.trim(), controller.signal,i18n.language)
+      findCities(query.trim(), controller.signal, i18n.language)
         .then((results) => { setSuggestions(results); setSearchError(''); })
         .catch((cause) => { if (cause.name !== 'AbortError') setSearchError(t('meteo.searchUnavailable')); })
         .finally(() => { if (!controller.signal.aborted) setSearching(false); });
@@ -141,7 +142,7 @@ export default function Meteo() {
     if (suggestions.length) { chooseCity(suggestions[0]); return; }
     setSearching(true);
     try {
-      const results = await findCities(query.trim(),undefined,i18n.language);
+      const results = await findCities(query.trim(), undefined, i18n.language);
       if (results.length) chooseCity(results[0]);
       else { setSearchError(t('meteo.noCityFound')); setSearchOpen(true); }
     } catch { setSearchError(t('meteo.searchUnavailable')); setSearchOpen(true); }
@@ -157,7 +158,7 @@ export default function Meteo() {
   }
 */
 
-  function locate(){
+  function locate() {
     setSearchError(t('meteo.locationComingSoon'));
     setSearchOpen(true);
   }
@@ -166,42 +167,42 @@ export default function Meteo() {
   const hourly = weather?.valeurs_par_heure;  //-- horaires
   const now = new Date();                     //Heure actuelle
 
-  const currentHourString = 
+  const currentHourString =
     `${now.getFullYear()}-` +
-    `${String(now.getMonth() +1).padStart(2,'0')}-` +
+    `${String(now.getMonth() + 1).padStart(2, '0')}-` +
     `${String(now.getDate()).padStart(2, '0')}T` +
     `${String(now.getHours()).padStart(2, '0')}:00`;
-  
+
   const currentHourIndex = hourly   //Index de l'heure actuelle
     ? hourly.time.findIndex((time) => time === currentHourString)
     : -1;
-  
-    //Données meteo actuelles
+
+  //Données meteo actuelles
   const current = hourly && currentHourIndex !== -1 ? {
-      time: hourly.time[currentHourIndex],
-      temperature_2m: hourly.temperature_2m?.[currentHourIndex],
-      apparent_temperature: hourly.apparent_temperature?.[currentHourIndex],
-      precipitation: hourly.precipitation?.[currentHourIndex],
-      relative_humidity_2m: hourly.relative_humidity_2m?.[currentHourIndex],
-      weather_code: hourly.weather_code?.[currentHourIndex],
-      cloud_cover: hourly.cloud_cover?.[currentHourIndex],
-      wind_speed_10m: hourly.wind_speed_10m?.[currentHourIndex],
-      snowfall: hourly.snowfall?.[currentHourIndex],
-    }: null;
+    time: hourly.time[currentHourIndex],
+    temperature_2m: hourly.temperature_2m?.[currentHourIndex],
+    apparent_temperature: hourly.apparent_temperature?.[currentHourIndex],
+    precipitation: hourly.precipitation?.[currentHourIndex],
+    relative_humidity_2m: hourly.relative_humidity_2m?.[currentHourIndex],
+    weather_code: hourly.weather_code?.[currentHourIndex],
+    cloud_cover: hourly.cloud_cover?.[currentHourIndex],
+    wind_speed_10m: hourly.wind_speed_10m?.[currentHourIndex],
+    snowfall: hourly.snowfall?.[currentHourIndex],
+  } : null;
 
   //Premiere heure à afficher dans les previsions horaires
   const firstHour = hourly
     ? Math.max(0, hourly.time.findIndex((hour) => hour >= current?.time))
-    :0;
-  
+    : 0;
+
   //Les 8 prochaines heures
-  const hours = hourly ? hourly.time.slice(firstHour,firstHour + 8).map((time,offset) => ({
+  const hours = hourly ? hourly.time.slice(firstHour, firstHour + 8).map((time, offset) => ({
     time,
     temperature: hourly.temperature_2m[firstHour + offset],
     rain: hourly.precipitation[firstHour + offset],
     code: hourly.weather_code[firstHour + offset],
   }))
-  : [];
+    : [];
 
   const mapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${city.longitude - 0.09}%2C${city.latitude - 0.055}%2C${city.longitude + 0.09}%2C${city.latitude + 0.055}&layer=mapnik&marker=${city.latitude}%2C${city.longitude}`;
   const osmUrl = `https://www.openstreetmap.org/?mlat=${city.latitude}&mlon=${city.longitude}#map=12/${city.latitude}/${city.longitude}`;
@@ -259,29 +260,49 @@ export default function Meteo() {
               </div>
               <span className="section-aside">Aujourd’hui <ArrowRight size={16} /></span>
             </div>
-            <div className="hourly-card">{hours.length ? hours.map((hour, index) => 
+            <div className="hourly-card">{hours.length ? hours.map((hour, index) =>
               <div className={`hour-cell ${index === 0 ? 'active' : ''}`} key={hour.time}>
                 <span>{index === 0 ? 'Maintenant' : timeLabel(hour.time)}</span>
                 <WeatherIcon code={hour.code} size={29} />
                 <strong>{temp(hour.temperature, unit)}</strong>
                 <small><Droplets size={12} fill="currentColor" />{hour.rain} mm</small>
               </div>
-              ) : Array.from({ length: 8 }, (_, index) => <div className="hour-cell" key={index}><span>—</span><Cloud size={29} /><strong>—°</strong><small>—</small></div>)}
+            ) : Array.from({ length: 8 }, (_, index) => <div className="hour-cell" key={index}><span>—</span><Cloud size={29} /><strong>—°</strong><small>—</small></div>)}
             </div>
           </section>
-          <a className="advice-card" href={ADVICE_PATH} style={{ display: 'grid', flexDirection: 'row', alignContent: 'space-between' }}>
-            {/* Toute la carte mène à la page Conseils. */}
-            <div className="advice-top">
-              <span>POUR ALLER PLUS LOIN</span>
-              <span className="advice-arrow"><ArrowRight size={20} /></span>
-            </div>
-            <div className="advice-orbit"><Sun size={35} /></div>
-            <div>
-              <h2>Un temps d’avance<br />sur votre journée.</h2>
-              <p>Découvrez les bons réflexes et nos conseils adaptés à la météo.</p>
-              <span className="advice-link">Voir les conseils <ArrowRight size={16} /></span>
-            </div>
-          </a>
+         
+ 
+<Link
+  to={ADVICE_PATH}
+  state={{
+    ville: city.name,
+    // Toujours en °C (indépendant du bouton °C/°F) ; null tant que la météo n'est pas chargée
+    temperature: current?.temperature_2m ?? null
+  }}
+  className="advice-card"
+  style={{ display: 'grid', flexDirection: 'row', alignContent: 'space-between' }}
+>
+  <div className="advice-top">
+    <span>POUR ALLER PLUS LOIN</span>
+    <span className="advice-arrow">
+      <ArrowRight size={20} />
+    </span>
+  </div>
+
+  <div className="advice-orbit">
+    <Sun size={35} />
+  </div>
+
+  <div>
+    <h2>Un temps d’avance<br />sur votre journée.</h2>
+    <p>
+      Découvrez les bons réflexes et nos conseils adaptés à la météo.
+    </p>
+    <span className="advice-link">
+      Voir les conseils <ArrowRight size={16} />
+    </span>
+  </div>
+</Link>
         </div>
 
         <section className="forecast-section" aria-labelledby="forecast-title">
@@ -293,30 +314,30 @@ export default function Meteo() {
             <span className="source-label">Prévisions Open-Meteo</span>
           </div>
           <div className="forecast-grid">
-            {Array.from({ length: 7 }, (_, index) => { const code = daily?.weather_code[index]; return <button key={index} className={`day-card ${selectedDay === index ? 'selected' : ''}`} onClick={() => setSelectedDay(index)} aria-pressed={selectedDay === index}>
-              <span className="day-name">{index === 0 ? 'Aujourd’hui' : daily ? dateLabel(daily.time[index], { weekday: 'short' }) : '—'}</span>
-              <span className="day-date">{daily ? dateLabel(daily.time[index], { day: 'numeric', month: 'short' }) : '—'}</span>
-              <WeatherIcon code={code} size={32} />
-              <span className="day-condition">{code != null ? t(condition(code).labelKey) : '—'}</span>
-              <span className="day-temps"><strong>{temp(daily?.temperature_2m_max[index], unit)}</strong><span>{temp(daily?.temperature_2m_min[index], unit)}</span></span>
-              <span className="day-rain"><Droplets size={12} />{daily ? `${daily.precipitation_sum[index]} mm` : '-'}</span></button>; 
+            {Array.from({ length: 7 }, (_, index) => {
+              const code = daily?.weather_code[index]; return <button key={index} className={`day-card ${selectedDay === index ? 'selected' : ''}`} onClick={() => setSelectedDay(index)} aria-pressed={selectedDay === index}>
+                <span className="day-name">{index === 0 ? 'Aujourd’hui' : daily ? dateLabel(daily.time[index], { weekday: 'short' }) : '—'}</span>
+                <span className="day-date">{daily ? dateLabel(daily.time[index], { day: 'numeric', month: 'short' }) : '—'}</span>
+                <WeatherIcon code={code} size={32} />
+                <span className="day-condition">{code != null ? t(condition(code).labelKey) : '—'}</span>
+                <span className="day-temps"><strong>{temp(daily?.temperature_2m_max[index], unit)}</strong><span>{temp(daily?.temperature_2m_min[index], unit)}</span></span>
+                <span className="day-rain"><Droplets size={12} />{daily ? `${daily.precipitation_sum[index]} mm` : '-'}</span></button>;
             })}
           </div>
           <div className="forecast-detail">
             <span className="detail-check"><Check size={15} /></span>
             <span>
-              {daily 
-              ? `${selectedDay === 0 ? 'Aujourd’hui' : dateLabel(daily.time[selectedDay], { 
+              {daily
+                ? `${selectedDay === 0 ? 'Aujourd’hui' : dateLabel(daily.time[selectedDay], {
                   weekday: 'long',
                   day: 'numeric',
                   month: 'long'
                 })} : ${daily.weather_code[selectedDay] != null
                   ? t(condition(daily.weather_code[selectedDay]).labelKey).toLowerCase()
                   : t('meteo.dataUnavailable')
-                }, précipitations prévues ${
-                  daily.precipitation_sum[selectedDay] ?? '-'
-                } mm.` 
-              : 'Sélectionnez un jour pour voir ses prévisions.'}
+                }, précipitations prévues ${daily.precipitation_sum[selectedDay] ?? '-'
+                } mm.`
+                : 'Sélectionnez un jour pour voir ses prévisions.'}
             </span>
             <span className="forecast-credit">Données : Open-Meteo</span>
           </div>
