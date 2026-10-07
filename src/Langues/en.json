@@ -47,5 +47,55 @@
         "subtitle": "A clear forecast for your city, readable in three seconds. No ads, no account creation, no trackers.",
         "cta": "See my city",
         "source": "Data from Météo-France and open European models."
+    },
+
+    "settings": {
+        "title": "Settings",
+        "save": "Save",
+
+        "section1": {
+            "title": "Language",
+            "description": "Choose the language of the application."
+        },
+
+        "section2": {
+            "title": "Theme",
+            "description": "Choose your preferred display theme for the application."
+        },
+
+        "section3": {
+            "title": "Default City",
+            "description": "Define the city that will be displayed by default when opening the application.",
+            "placeholder": "Enter the name of your city",
+            "success": "Your default city has been updated successfully."
+        },
+
+        "section4": {
+            "title": "Data Management",
+            "description": "Manage your personal data and preferences.",
+            "emailSuccess": "Your email address has been updated successfully.",
+            "deleteSuccess": "All your data has been deleted.",
+            "updateEmail": "Update my email address"
+        },
+
+        "delete": {
+            "title": "Delete my data",
+            "desc": "Delete all your personal data and preferences stored locally.",
+            "button": "Delete my data"
+        },
+
+        "history": {
+            "title": "Clear search history",
+            "desc": "Delete the search history of locations you have looked up in the application.",
+            "clear": "Delete my history",
+            "cleared": "Your search history has been cleared."
+        },
+
+        "modal": {
+            "title": "Delete all my data",
+            "desc": "This action will permanently delete all your locally stored data. It cannot be undone. Do you want to continue?",
+            "cancel": "Cancel",
+            "confirm": "Delete"
+        }
     }
 }
