@@ -13,28 +13,32 @@ function Accueil() {
 
             <main className="accueil-heros">
                 <h1>{t('home.title')}</h1>
-                
+
                 <p className="description">
                     {t('home.subtitle')}
                 </p>
 
                 <div className="accueil-action">
                     {
-                        localStorage.getItem('deja_vu') && (
+                        localStorage.getItem('deja_vu') && localStorage.getItem('ville') && (
+
                             <button className="accueil-bouton" onClick={() => window.location.href = '/a-propos'}>
-                                {t('home.cta')} 
+                                {t('home.cta')}
                             </button>
                         )
                     }
-                    
+
                     {
-                        !localStorage.getItem('deja_vu') && (
+                        (!localStorage.getItem('deja_vu') || !localStorage.getItem('ville')) && (
+
                             <button className="accueil-bouton" onClick={() => window.location.href = '/Information'}>
-                                {t('home.cta')} 
+                                {t('home.cta')}
                             </button>
                         )
                     }
-                    
+
+
+
                 </div>
 
                 <p className="accueil-mention">

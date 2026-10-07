@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 
 import Footer from '../Parties/Footer.jsx';
@@ -7,17 +8,20 @@ import '../Styles/Information.css';
 import '../Styles/Alerte.css';
 
 
+// Le libellé n'est plus stocké ici : il est traduit à l'affichage grâce à l'id (clé alerte.types.<id>)
 const TYPES_METEO = [
-    { id: "pluie", libelle: "Pluie", codes: [51, 53, 55, 61, 63, 65, 80, 81, 82] },
-    { id: "orage", libelle: "Orage", codes: [95, 96, 97, 99] },
-    { id: "neige", libelle: "Neige", codes: [71, 73, 75, 77, 85, 86] },
-    { id: "verglas", libelle: "Pluie verglaçante", codes: [56, 57, 66, 67] },
-    { id: "brouillard", libelle: "Brouillard", codes: [45, 48] },
-    { id: "soleil", libelle: "Ciel dégagé", codes: [0, 1] }
+    { id: "pluie", codes: [51, 53, 55, 61, 63, 65, 80, 81, 82] },
+    { id: "orage", codes: [95, 96, 97, 99] },
+    { id: "neige", codes: [71, 73, 75, 77, 85, 86] },
+    { id: "verglas", codes: [56, 57, 66, 67] },
+    { id: "brouillard", codes: [45, 48] },
+    { id: "soleil", codes: [0, 1] }
 ];
 
 
 function Alerte() {
+
+    const { t } = useTranslation();
 
     const [email, setEmail] = useState("");
     const [typesChoisis, setTypesChoisis] = useState([]);
@@ -26,9 +30,9 @@ function Alerte() {
     const [confirmation, setConfirmation] = useState("");
 
 
-    const modifierEmail = (event) => {
+    const modifierEmail = (event) => { // Met à jour l'état de l'e-mail saisi par l'utilisateur
 
-        setEmail(event.target.value);
+        setEmail(event.target.value); // Met à jour l'état de l'e-mail avec la valeur saisie par l'utilisateur .event permet d'accéder à l'événement déclenché par l'utilisateur, et target.value récupère la valeur actuelle de l'input.
         setErreur("");
         setConfirmation("");
 
@@ -51,17 +55,17 @@ function Alerte() {
 
     const validerAlerte = async (event) => {
 
-        event.preventDefault();
+        event.preventDefault(); // Empêche le rechargement de la page lors de la soumission du formulaire
 
         const emailSaisi = email.trim();
 
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailSaisi)) {
-            setErreur("Veuillez saisir une adresse e-mail valide.");
+            setErreur(t('alerte.erreur_email'));
             return;
         }
 
         if (typesChoisis.length === 0) {
-            setErreur("Veuillez sélectionner au moins un type de météo.");
+            setErreur(t('alerte.erreur_type'));
             return;
         }
 
@@ -92,15 +96,13 @@ function Alerte() {
                 throw new Error("Impossible d'enregistrer l'alerte.");
             }
 
-            setConfirmation(`Alertes activées pour ${emailSaisi}`);
+            setConfirmation(t('alerte.confirmation', { email: emailSaisi }));
 
         } catch (error) {
 
             console.error("Erreur lors de l'enregistrement de l'alerte :", error);
 
-            setErreur(
-                "Impossible d'enregistrer vos alertes pour le moment. Veuillez réessayer."
-            );
+            setErreur(t('alerte.erreur_enregistrement'));
 
         } finally {
 
@@ -114,7 +116,7 @@ function Alerte() {
     const sauterEtape = () => {
 
         setErreur("");
-        setConfirmation("Étape ignorée. Vous pourrez activer les alertes plus tard.");
+        setConfirmation(t('alerte.etape_ignoree'));
 
     };
 
@@ -136,12 +138,11 @@ function Alerte() {
                         </div>
 
                         <h1 className="information-title">
-                            Alertes météo par e-mail
+                            {t('alerte.title')}
                         </h1>
 
                         <p className="information-subtitle">
-                            Recevez un e-mail lorsque le type de météo
-                            que vous avez choisi est prévu pour votre ville.
+                            {t('alerte.subtitle')}
                         </p>
 
                         <form onSubmit={validerAlerte} noValidate>
@@ -152,7 +153,7 @@ function Alerte() {
                                     className="information-location-label"
                                     htmlFor="email"
                                 >
-                                    Votre adresse e-mail
+                                    {t('alerte.label_email')}
                                 </label>
 
                                 <input
@@ -162,7 +163,7 @@ function Alerte() {
                                     name="email"
                                     value={email}
                                     onChange={modifierEmail}
-                                    placeholder="exemple@mail.com"
+                                    placeholder={t('alerte.placeholder_email')}
                                     autoComplete="email"
                                 />
 
@@ -171,17 +172,17 @@ function Alerte() {
                             <div className="information-location-box">
 
                                 <span className="information-location-label">
-                                    Types de météo à surveiller
+                                    {t('alerte.label_types')}
                                 </span>
 
                                 <div className="alerte-types">
 
-                                    {TYPES_METEO.map((type) => (
+                                    {TYPES_METEO.map((type) => ( // Parcourt chaque type de météo défini dans le tableau TYPES_METEO et crée un élément d'interface utilisateur pour chaque type. Chaque élément est un label contenant une case à cocher et le libellé du type de météo. Le label a une classe CSS qui change en fonction de si le type est sélectionné ou non, ce qui permet de styliser visuellement les types choisis par l'utilisateur.
 
                                         <label
                                             key={type.id}
                                             className={
-                                                typesChoisis.includes(type.id)
+                                                typesChoisis.includes(type.id) // permet de vérifier si le type de météo actuel est inclus dans le tableau typesChoisis. Si c'est le cas, la classe CSS "alerte-type-actif" est ajoutée pour indiquer visuellement que ce type est sélectionné. Sinon, seule la classe "alerte-type" est appliquée.
                                                     ? "alerte-type alerte-type-actif"
                                                     : "alerte-type"
                                             }
@@ -190,10 +191,10 @@ function Alerte() {
                                             <input
                                                 type="checkbox"
                                                 checked={typesChoisis.includes(type.id)}
-                                                onChange={() => basculerType(type.id)}
+                                                onChange={() => basculerType(type.id)} // permet de basculer l'état de sélection du type de météo lorsque l'utilisateur clique sur la case à cocher. Si le type est déjà sélectionné, il sera désélectionné, et vice versa.
                                             />
 
-                                            <span>{type.libelle}</span>
+                                            <span>{t(`alerte.types.${type.id}`)}</span>
 
                                         </label>
 
@@ -222,9 +223,9 @@ function Alerte() {
                             <button
                                 type="submit"
                                 className="information-button"
-                                disabled={envoi}
+                                disabled={envoi} // Désactive le bouton pendant l'envoi pour éviter les soumissions multiples
                             >
-                                {envoi ? "Enregistrement..." : "Activer mes alertes"}
+                                {envoi ? t('alerte.bouton_envoi') : t('alerte.bouton_activer')} {/* Si envoi est true, le texte d'enregistrement est affiché pour indiquer que le formulaire est en cours d'envoi. Sinon, le texte d'activation est affiché pour inviter l'utilisateur à soumettre le formulaire. */}
                             </button>
 
                             <button
@@ -233,15 +234,13 @@ function Alerte() {
                                 onClick={sauterEtape}
                                 disabled={envoi}
                             >
-                                Non, sauter cette étape
+                                {t('alerte.bouton_sauter')}
                             </button>
 
                         </form>
 
                         <p className="information-note">
-                            Votre adresse e-mail est utilisée uniquement
-                            pour vous envoyer les alertes météo que vous avez
-                            choisies. Vous pouvez modifier ces choix à tout moment.
+                            {t('alerte.note')}
                         </p>
 
                     </section>

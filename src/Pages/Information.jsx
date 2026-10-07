@@ -19,6 +19,12 @@ function Information() {
     const villeDetectee = useRef("");
     const villeModifiee = useRef(false);
     
+    const token = useRef(localStorage.getItem("user_token") || crypto.randomUUID()); // Génère un token unique si aucun n'existe déjà
+    
+    localStorage.setItem("user_token", token.current); // Stocke le token dans le localStorage pour une utilisation future 
+
+    console.log("Token utilisateur :", token);
+
 
 
     const recupererLocalisation = useCallback(() => {
@@ -70,6 +76,7 @@ function Information() {
                     if (!villeModifiee.current) {
                         setVille(data.ville);
                     }
+
 
                 } catch (error) {
 
@@ -269,8 +276,11 @@ function Information() {
                                 disabled={chargement || ville.trim() === ""}
                                 
                                 onClick={() => {
+                                    localStorage.setItem("ville", ville.trim());
                                     window.location.href = '/Alerte';
                                 }}
+
+                                
                             >
                                 {t('information.bouton1')}
 

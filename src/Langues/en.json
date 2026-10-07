@@ -68,5 +68,29 @@
         "erreur1": "Geolocation is not supported by your browser. Please enter your city manually.",
         "erreur2": "An error occurred while retrieving your location. Please check your location settings and try again.",
         "confirmation": "Location saved"
+    },
+    "alerte": {
+        "title": "Weather Alerts via Email",
+        "subtitle": "Receive an email when the type of weather you have chosen is forecasted for your city.",
+        "label_email": "Your email address",
+        "placeholder_email": "example@mail.com",
+        "label_types": "Weather Types to Monitor",
+        "types": {
+            "pluie": "Rain",
+            "orage": "Thunderstorm",
+            "neige": "Snow",
+            "verglas": "Freezing Rain",
+            "brouillard": "Fog",
+            "soleil": "Sunny"
+        },
+        "bouton_activer": "Activate My Alerts",
+        "bouton_envoi": "Recording...",
+        "bouton_sauter": "No, skip this step",
+        "erreur_email": "Please enter a valid email address.",
+        "erreur_type": "Please select at least one weather type.",
+        "erreur_enregistrement": "Unable to save your alerts at the moment. Please try again.",
+        "confirmation": "Alerts activated for {{email}}",
+        "etape_ignoree": "Step skipped. You can activate alerts later.",
+        "note": "Your email address is used only to send you the weather alerts you have chosen. You can modify these choices at any time."
     }
 }
