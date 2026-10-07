@@ -33,4 +33,4 @@ function APropos() {
     )
 }
 
-export default APropos
+export default APropos ;

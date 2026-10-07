@@ -47,5 +47,55 @@
         "subtitle": "Une prévision claire pour votre ville, lisible en trois secondes. Sans publicité, sans compte à créer, sans traceur.",
         "cta": "Voir ma ville",
         "source": "Données Météo-France et modèles ouverts européens."
+    },
+
+    "settings": {
+        "title": "Paramètres",
+        "save": "Enregistrer",
+
+        "section1": {
+            "title": "Langue",
+            "description": "Choisissez la langue d'affichage de l'application."
+        },
+
+        "section2": {
+            "title": "Thème",
+            "description": "Choisissez votre thème d'affichage de préférence de l'application."
+        },
+
+        "section3": {
+            "title": "Ville par défaut",
+            "description": "Définissez la ville qui s'affichera par défaut à l'ouverture de l'application.",
+            "placeholder": "Entrez le nom de votre ville",
+            "success": "Votre ville par défaut a été mise à jour avec succès."
+        },
+
+        "section4": {
+            "title": "Gestion des données",
+            "description": "Gérez vos données personnelles et vos préférences.",
+            "emailSuccess": "Votre adresse e-mail a été mise à jour avec succès.",
+            "deleteSuccess": "Toutes vos données ont été supprimées.",
+            "updateEmail": "Modifier mon adresse e-mail"
+        },
+
+        "delete": {
+            "title": "Supprimer mes données",
+            "desc": "Supprimez toutes vos données personnelles et vos préférences stockées localement.",
+            "button": "Supprimer mes données"
+        },
+
+        "history": {
+            "title": "Effacer l'historique des recherches",
+            "desc": "Supprimez l'historique des localisations que vous avez recherchées dans l'application.",
+            "clear": "Supprimer mon historique",
+            "cleared": "Votre historique de recherches a été effacé."
+        },
+
+        "modal": {
+            "title": "Suppression de toutes mes données",
+            "desc": "Cette action supprimera définitivement toutes vos données stockées localement. Elle ne peut pas être annulée. Continuez-vous ?",
+            "cancel": "Annuler",
+            "confirm": "Supprimer"
+        }
     }
 }

@@ -1,0 +1,232 @@
+/* --- Page Paramètres --- */
+
+.parametre-page {
+  background: var(--cloud-white);
+  color: var(--ink);
+  font-family: var(--font-body);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.parametre-main {
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 5rem;
+  flex: 1;
+}
+
+.parametre-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 700;
+  color: var(--sky-deep);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* Cartes de sections */
+.parametre-card {
+  background: #ffffff;
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  padding: 1.8rem;
+  margin-bottom: 1.8rem;
+  box-shadow: 0 4px 12px rgba(22, 64, 107, 0.05);
+}
+
+.parametre-card h2 {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--sky-deep);
+  margin: 0 0 0.4rem 0;
+}
+
+.parametre-card p {
+  color: var(--mist);
+  font-size: 0.95rem;
+  margin: 0 0 1.2rem 0;
+  line-height: 1.5;
+}
+
+/* Boutons Langues */
+.lang-buttons {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.lang-buttons button {
+  background: transparent;
+  border: 1px solid var(--hairline);
+  color: var(--ink);
+  padding: 0.5rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lang-buttons button.active,
+.lang-buttons button:hover {
+  background: var(--sky-mid);
+  color: #ffffff;
+  border-color: var(--sky-mid);
+}
+
+/* Bouton Thème */
+.btn-theme {
+  background: var(--cloud-white);
+  border: 1px solid var(--hairline);
+  color: var(--ink);
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-theme:hover {
+  background: rgba(22, 64, 107, 0.08);
+}
+
+/* Formulaires & Inputs */
+.parametre-form {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.parametre-input {
+  flex: 1;
+  min-width: 240px;
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--hairline);
+  border-radius: 6px;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--ink);
+  outline: none;
+}
+
+.parametre-input:focus {
+  border-color: var(--sky-mid);
+  box-shadow: 0 0 0 3px rgba(74, 143, 209, 0.2);
+}
+
+/* Boutons d'actions */
+.btn-primary {
+  background: var(--sky-mid);
+  color: #ffffff;
+  border: none;
+  padding: 0.65rem 1.3rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: var(--sky-deep);
+}
+
+.btn-secondary {
+  background: #190b0b29;
+  border: 1px solid var(--hairline);
+  color: var(--ink);
+  padding: 0.55rem 1rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background: rgba(22, 64, 107, 0.06);
+}
+
+.btn-danger {
+  background: #e53e3e;
+  color: #ffffff;
+  border: none;
+  padding: 0.55rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-danger:hover {
+  background: #c53030;
+}
+
+/* Lignes séparatrices */
+.parametre-divider {
+  border: none;
+  border-top: 1px solid var(--hairline);
+  margin: 1.5rem 0;
+}
+
+.action-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.sub-text {
+  font-size: 0.85rem !important;
+  margin: 0.2rem 0 0 0 !important;
+}
+
+.success-msg {
+  color: #2e7d32;
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(34, 52, 74, 0.5);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-content {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  max-width: 440px;
+  width: 100%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h3 {
+  font-family: var(--font-display);
+  color: var(--sky-deep);
+  margin: 0 0 0.8rem 0;
+  text-align: center;
+}
+
+.modal-content p {
+  text-align: justify;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  justify-content: space-evenly;
+}
