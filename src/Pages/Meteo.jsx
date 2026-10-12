@@ -1,6 +1,7 @@
 import "../Styles/Meteo.css";
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from "react-i18next";
+import {Link} from "react-router-dom";
 
 import {
   ArrowRight, CalendarDays, Check, Cloud, CloudDrizzle, CloudFog, CloudLightning,
@@ -18,7 +19,7 @@ const POPULAR = [
   { name: 'Bordeaux', country: 'France', latitude: 44.8404, longitude: -0.5805, timezone: 'Europe/Paris' },
 ];
 // Replace this path when the team's advice page is added to this repository.
-const ADVICE_PATH = '/conseil';
+
 
 /*
 function condition(code, isDay = true,t) {
@@ -53,8 +54,8 @@ function temp(value, unit) {
   return `${Math.round( unit === 'C' ? value : value *9/5 + 32)} °`;
 } 
 
-function dateLabel(date, options) {
-  return new Intl.DateTimeFormat('fr-FR', { timeZone: 'UTC', ...options }).format(new Date(`${date.slice(0, 10)}T12:00:00Z`));
+function dateLabel(date, options, language='fr') {
+  return new Intl.DateTimeFormat(language, { timeZone: 'UTC', ...options }).format(new Date(`${date.slice(0, 10)}T12:00:00Z`));
 }
 
 function timeLabel(date) { return date.slice(11, 16); }
@@ -223,14 +224,14 @@ export default function Meteo() {
           </div>
         </div>
 
-        <div className="city-strip"><span className="city-strip-label">{t('meteo.cities')}</span>{POPULAR.map((place) => <button key={place.name} className={city.name === place.name && city.country === place.country ? 'selected' : ''} onClick={() => chooseCity(place)}>{place.name}</button>)}<span className="strip-date"><CalendarDays size={15} />{daily ? dateLabel(daily.time[0], { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) : new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date())}</span></div>
+        <div className="city-strip"><span className="city-strip-label">{t('meteo.cities')}</span>{POPULAR.map((place) => <button key={place.name} className={city.name === place.name && city.country === place.country ? 'selected' : ''} onClick={() => chooseCity(place)}>{place.name}</button>)}<span className="strip-date"><CalendarDays size={15} />{daily ? dateLabel(daily.time[0], { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'}, i18n.language) : new Intl.DateTimeFormat(i18n.language, { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date())}</span></div>
         {error && <div className="error-banner" role="alert">{error}<button onClick={() => setCity({ ...city })}>Réessayer <ArrowRight size={15} /></button></div>}
 
         <div className="top-grid">
-          <section className="current-card" aria-label="Conditions météo actuelles">
-            <div className="current-card-top"><span className="live-pill">{t('meteo.actual')}</span><span className="updated-at">{current ? `Mis à jour à ${timeLabel(current.time)}` : loading ? 'Chargement...' : 'Indisponible'}</span></div>
-            <div className="current-card-content"><div className="current-location"><MapPin size={19} />{city.name}{city.country && <span>, {city.country}</span>}</div><div className="current-reading"><div className="big-temperature">{temp(current?.temperature_2m, unit)}<span>{unit}</span></div><WeatherIcon code={current?.weather_code} isDay={true} size={80} className="big-weather-icon" /></div><div className="current-description">{current ? t(condition(current.weather_code, true).labelKey) : loading ? t('meteo.weatherComing') : t('meteo.dataUnavailable')}</div><p className="current-feels">Ressenti {temp(current?.apparent_temperature, unit)} <span>·</span> Max {temp(daily?.temperature_2m_max[0], unit)} / Min {temp(daily?.temperature_2m_min[0], unit)}</p></div>
-            <div className="current-card-bottom"><div><Sunrise size={19} /><span>Lever du soleil</span><strong>-</strong></div></div>
+          <section className="current-card" aria-label={t('meteo.currentWeather')}>
+            <div className="current-card-top"><span className="live-pill">{t('meteo.actual')}</span><span className="updated-at">{current ? `${t('meteo.updatedAt')} ${timeLabel(current.time)}` : loading ? t('meteo.loading') : t('meteo.unavailable')}</span></div>
+            <div className="current-card-content"><div className="current-location"><MapPin size={19} />{city.name}{city.country && <span>, {city.country}</span>}</div><div className="current-reading"><div className="big-temperature">{temp(current?.temperature_2m, unit)}<span>{unit}</span></div><WeatherIcon code={current?.weather_code} isDay={true} size={80} className="big-weather-icon" /></div><div className="current-description">{current ? t(condition(current.weather_code, true).labelKey) : loading ? t('meteo.weatherComing') : t('meteo.dataUnavailable')}</div><p className="current-feels">{t('meteo.feels')} {temp(current?.apparent_temperature, unit)} <span>·</span> {t('meteo.max')} {temp(daily?.temperature_2m_max[0], unit)} / {t('meteo.min')} {temp(daily?.temperature_2m_min[0], unit)}</p></div>
+            <div className="current-card-bottom"><div><Sunrise size={19} /><span>{t('meteo.sunrise')}</span><strong>-</strong></div></div>
           </section>
 
           <section className="map-card" aria-label={`Carte de ${city.name}`}>
@@ -254,10 +255,10 @@ export default function Meteo() {
           <section className="hourly-block" aria-labelledby="hourly-title">
             <div className="section-heading">
               <div>
-                <span className="section-kicker">HEURE PAR HEURE</span>
-                <h2 id="hourly-title">Les prochaines heures</h2>
+                <span className="section-kicker">{t('meteo.hourByHour')}</span>
+                <h2 id="hourly-title">{t('meteo.nextHours')}</h2>
               </div>
-              <span className="section-aside">Aujourd’hui <ArrowRight size={16} /></span>
+              <span className="section-aside">{t('meteo.today')}<ArrowRight size={16} /></span>
             </div>
             <div className="hourly-card">{hours.length ? hours.map((hour, index) => 
               <div className={`hour-cell ${index === 0 ? 'active' : ''}`} key={hour.time}>
@@ -269,28 +270,29 @@ export default function Meteo() {
               ) : Array.from({ length: 8 }, (_, index) => <div className="hour-cell" key={index}><span>—</span><Cloud size={29} /><strong>—°</strong><small>—</small></div>)}
             </div>
           </section>
-          <a className="advice-card" href={ADVICE_PATH} style={{ display: 'grid', flexDirection: 'row', alignContent: 'space-between' }}>
+
+          <Link className="advice-card" to="/conseil" state={{ville: city.name, temperature: current?.temperature_2m}} style={{ display: 'grid', flexDirection: 'row', alignContent: 'space-between' }}>
             {/* Toute la carte mène à la page Conseils. */}
             <div className="advice-top">
-              <span>POUR ALLER PLUS LOIN</span>
+              <span>{t('meteo.advice.goFurther')}</span>
               <span className="advice-arrow"><ArrowRight size={20} /></span>
             </div>
             <div className="advice-orbit"><Sun size={35} /></div>
             <div>
-              <h2>Un temps d’avance<br />sur votre journée.</h2>
-              <p>Découvrez les bons réflexes et nos conseils adaptés à la météo.</p>
-              <span className="advice-link">Voir les conseils <ArrowRight size={16} /></span>
+              <h2>{t('meteo.title')}<br />{t('meteo.advice.titleLine2')}</h2>
+              <p>{t('meteo.advice.description')}</p>
+              <span className="advice-link">{t('meteo.advice.link')}<ArrowRight size={16} /></span>
             </div>
-          </a>
+          </Link>
         </div>
 
         <section className="forecast-section" aria-labelledby="forecast-title">
           <div className="section-heading">
             <div>
-              <span className="section-kicker">POUR LES JOURS À VENIR</span>
-              <h2 id="forecast-title">Prévisions sur 7 jours</h2>
+              <span className="section-kicker">{t('meteo.upcomingDays')}</span>
+              <h2 id="forecast-title">{t('meteo.sevenDayForecast')}</h2>
             </div>
-            <span className="source-label">Prévisions Open-Meteo</span>
+            <span className="source-label">{t('meteo.openMeteoForecast')}</span>
           </div>
           <div className="forecast-grid">
             {Array.from({ length: 7 }, (_, index) => { const code = daily?.weather_code[index]; return <button key={index} className={`day-card ${selectedDay === index ? 'selected' : ''}`} onClick={() => setSelectedDay(index)} aria-pressed={selectedDay === index}>
@@ -316,7 +318,7 @@ export default function Meteo() {
                 }, précipitations prévues ${
                   daily.precipitation_sum[selectedDay] ?? '-'
                 } mm.` 
-              : 'Sélectionnez un jour pour voir ses prévisions.'}
+              : t('meteo.selectDay')}
             </span>
             <span className="forecast-credit">Données : Open-Meteo</span>
           </div>

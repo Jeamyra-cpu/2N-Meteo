@@ -44,6 +44,7 @@
     "switchToFahrenheit": "Switch to Fahrenheit",
     "switchToCelsius": "Switch to Celsius",
     "cities": "CITIES",
+    "currentWeather": "Current weather conditions",
     "weatherUnavailable": "Weather unavailable",
     "loading": "Loading...",
     "unavailable": "Unavailable",

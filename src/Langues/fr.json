@@ -20,7 +20,7 @@
     "feelsLike": "Température ressentie",
     "outdoorFeeling": "Ressenti extérieur",
     "currently": "En ce moment",
-    
+
     "conditions": {
       "clear": "Ciel dégagé",
       "partlyCloudy": "Éclaircies",
@@ -46,6 +46,7 @@
     "switchToCelsius": "Passer en degrés Celsius",
     "cities": "VILLES",
     "weatherUnavailable": "Météo indisponible",
+    "currentWeather": "Conditions météo actuelles",
     "loading": "Chargement...",
     "unavailable": "Indisponible",
     "updatedAt": "Mis à jour à",
