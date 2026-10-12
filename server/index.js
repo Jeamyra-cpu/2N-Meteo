@@ -205,7 +205,7 @@ async function recuperationHistorique(latitude, longitude, date, modele) {
 
 /** Fonction de recupération de nom de ville */
 
-const api_key_LocationIQ = "pk.e91ebd5dcc170c6a4abdfd10d10a65c7"; // Clé API pour LocationIQ , recupération du nom de la ville en fonction de la latitude et la longitude
+const api_key_LocationIQ = "pk.e91ebd5dcc170c6a4abdfd10d10a65c7"; // Clé API pour LocationIQ , recupération du nom de la ville en fonction de la latitude et la longitude .
 const URL_LOCATIONIQ = "https://us1.locationiq.com/v1/reverse";
 
 async function recuperationNomVille(latitude,longitude){
