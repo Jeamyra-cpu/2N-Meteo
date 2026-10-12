@@ -1,0 +1,43 @@
+.alerte-types {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.alerte-type {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border: 1px solid rgba(128, 128, 128, 0.4);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+.alerte-type:hover {
+    border-color: #2563eb;
+}
+
+.alerte-type-actif {
+    border-color: #2563eb;
+    background-color: rgba(37, 99, 235, 0.12);
+}
+
+.alerte-type input {
+    accent-color: #2563eb;
+}
+
+.alerte-bouton-secondaire {
+    margin-top: 10px;
+    background: transparent;
+    border: 1px solid rgba(128, 128, 128, 0.5);
+    color: inherit;
+}
+
+@media (max-width: 480px) {
+    .alerte-types {
+        grid-template-columns: 1fr;
+    }
+}
