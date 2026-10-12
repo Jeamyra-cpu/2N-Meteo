@@ -1,0 +1,4 @@
+mameteo
+accueil
+apropos
+politique

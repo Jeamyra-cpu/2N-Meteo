@@ -5,6 +5,7 @@ import "../Styles/Accueil.css";
 import Header from '../Parties/Header.jsx';
 
 function Accueil() {
+
     const { t } = useTranslation();
 
     return (
@@ -17,9 +18,28 @@ function Accueil() {
                 </p>
 
                 <div className="accueil-action">
+<<<<<<< HEAD
                     <Link to="/meteo" className="accueil-bouton">
                         {t('home.cta')}
                     </Link>
+=======
+                    {
+                        localStorage.getItem('deja_vu') && (
+                            <button className="accueil-bouton" onClick={() => window.location.href = '/'}>
+                                {t('home.cta')} 
+                            </button>
+                        )
+                    }
+                    
+                    {
+                        !localStorage.getItem('deja_vu') && (
+                            <button className="accueil-bouton" onClick={() => window.location.href = '/Information'}>
+                                {t('home.cta')} 
+                            </button>
+                        )
+                    }
+                    
+>>>>>>> origin/feature/frontends
                 </div>
 
                 <p className="accueil-mention">

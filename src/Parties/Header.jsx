@@ -85,6 +85,15 @@ function Header() {
                             </Link>
                         </li>
                     )}
+
+                    {location.pathname !== '/information' && (
+                        <li>
+                            <Link to="/information" onClick={() => setMenuOuvert(false)}>
+                                {t('header.information')}
+                            </Link>
+                        </li>
+                    )}
+                    
                 </ul>
 
                 <div className="drawer-actions">

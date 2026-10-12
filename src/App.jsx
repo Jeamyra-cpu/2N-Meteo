@@ -7,6 +7,7 @@ import './App.css'
 import APropos from './Pages/Apropos.jsx'
 import Politique from './Pages/PolitiqueConfidentialite.jsx'
 import Accueil from './Pages/Accueil.jsx'
+import Information from './Pages/Information.jsx'
 
 import Meteo from "./Pages/Meteo.jsx"
 import Header from './Parties/Header.jsx'
@@ -27,11 +28,13 @@ function App() {
         <Route path="/politique-confidentialite" element={<Politique />} />
         <Route path="/accueil" element={<Accueil />} />
 
+
         <Route path="/meteo" element={<Meteo />} />
         <Route path="/conseil" element={<Conseils />} />
 
         <Route path="/parametre" element={<Parametre />} />
- origin/feature/frontend
+ 
+        <Route path="/information" element={<Information />} />
       </Routes>
       <Footer />
     </BrowserRouter>
