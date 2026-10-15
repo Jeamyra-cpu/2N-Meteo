@@ -1,9 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback, useRef } from 'react';
 
-import Footer from '../Parties/Footer.jsx';
-import Header from '../Parties/Header.jsx';
-
 import '../Styles/Information.css';
 
 
@@ -183,9 +180,6 @@ function Information() {
     return (
 
         <div className="information-page">
-
-            <Header />
-
             <main className="information-hero">
 
                 <div className="information-container">
@@ -299,9 +293,6 @@ function Information() {
                 </div>
 
             </main>
-
-            <Footer />
-
         </div>
 
     );

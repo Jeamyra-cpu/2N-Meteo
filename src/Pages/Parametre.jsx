@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import "../Styles/Parametre.css";
-import Header from '../Parties/Header.jsx';
-import Footer from '../Parties/Footer.jsx';
 
 function Parametre() {
     const { t, i18n } = useTranslation();
@@ -56,8 +54,6 @@ function Parametre() {
 
     return (
         <div className="parametre-page">
-            <Header />
-
             <main className="parametre-main">
                 <h1 className="parametre-title">{t('settings.title')}</h1>
 
@@ -176,7 +172,6 @@ function Parametre() {
                 </div>
             )}
 
-            <Footer />
         </div>
     );
 }

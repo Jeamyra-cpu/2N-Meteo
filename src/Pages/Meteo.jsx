@@ -19,7 +19,7 @@ const POPULAR = [
   { name: 'Bordeaux', country: 'France', latitude: 44.8404, longitude: -0.5805, timezone: 'Europe/Paris' },
 ];
 // Chemin de la page de conseils (doit être identique à la <Route> déclarée dans App.jsx).
-const ADVICE_PATH = '/conseils.jsx';
+const ADVICE_PATH = '/conseil';
 
 /*
 function condition(code, isDay = true,t) {
