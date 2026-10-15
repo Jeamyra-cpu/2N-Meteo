@@ -2,10 +2,11 @@ import React from "react";
 import {Link} from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import "../Styles/Accueil.css";
-import Header from '../Parties/Header.jsx';
 
 function Accueil() {
+
     const { t } = useTranslation();
+    const dejaVu = localStorage.getItem("deja_vu") === "true";
 
     return (
         <div className="accueil-page">
@@ -17,7 +18,7 @@ function Accueil() {
                 </p>
 
                 <div className="accueil-action">
-                    <Link to="/meteo" className="accueil-bouton">
+                    <Link to={dejaVu ? "/meteo" : "/information"} className="accueil-bouton">
                         {t('home.cta')}
                     </Link>
                 </div>
