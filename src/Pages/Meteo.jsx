@@ -83,6 +83,7 @@ export default function Meteo() {
   const { t, i18n } = useTranslation();
   const [city, setCity] = useState(LIMOGES);
   const [weather, setWeather] = useState(null);
+  const [chronos, setChronos] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [query, setQuery] = useState('');
@@ -108,6 +109,32 @@ export default function Meteo() {
       .then((response) => { if (!response.ok) { throw new Error('Méteo indisponible'); } return response.json(); })
       .then((data) => { setWeather(data.prevision); setSelectedDay(0); setLoading(false); })
       .catch((cause) => { if (cause.name === 'AbortError') { return; } setError(t('meteo.weatherLoadError')); setLoading(false); });
+    return () => controller.abort();
+  }, [city]);
+
+  // Récupère séparément les prévisions Chronos pour les jours 5 à 7.
+  // Si Chronos échoue, les quatre premiers jours Open-Meteo restent affichés.
+  useEffect(() => {
+    const controller = new AbortController();
+    setChronos(null);
+
+    const ville = encodeURIComponent(city.name);
+
+    fetch(`http://localhost:3001/api/meteo/prediction/chronos/${ville}`, {
+      signal: controller.signal
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("Prévision Chronos indisponible");
+        return response.json();
+      })
+      .then((data) => setChronos(data))
+      .catch((cause) => {
+        if (cause.name !== "AbortError") {
+          console.error("Impossible de charger les prévisions Chronos :", cause);
+          setChronos(null);
+        }
+      });
+
     return () => controller.abort();
   }, [city]);
 
@@ -163,9 +190,46 @@ export default function Meteo() {
     setSearchOpen(true);
   }
 
-  const daily = weather?.valeurs_par_jour;    //Data quotidiennes
-  const hourly = weather?.valeurs_par_heure;  //-- horaires
-  const now = new Date();                     //Heure actuelle
+  const daily = weather?.valeurs_par_jour;    // Données quotidiennes Open-Meteo
+  const hourly = weather?.valeurs_par_heure;   // Données horaires Open-Meteo
+
+  // Prépare une liste de 7 jours : 4 jours Open-Meteo + 3 jours Chronos.
+  // Chronos fournit 24 températures horaires par jour, pas les précipitations.
+  const predictionChronos = chronos?.prediction?.prediction_par_jour;
+
+  const forecastDays = Array.from({ length: 7 }, (_, index) => {
+    if (index < 4) {
+      return {
+        source: "Open-Meteo",
+        date: daily?.time?.[index],
+        code: daily?.weather_code?.[index] ?? null,
+        max: daily?.temperature_2m_max?.[index] ?? null,
+        min: daily?.temperature_2m_min?.[index] ?? null,
+        rain: daily?.precipitation_sum?.[index] ?? null,
+        mean: null,
+      };
+    }
+
+    const hourlyTemperatures = predictionChronos?.[`jour_${index - 3}`];
+    const validTemperatures = Array.isArray(hourlyTemperatures)
+      ? hourlyTemperatures.filter((value) => typeof value === "number" && Number.isFinite(value))
+      : [];
+
+    return {
+      source: "Chronos",
+      // Les dates sont celles des jours 5 à 7 de la prévision Open-Meteo.
+      date: daily?.time?.[index],
+      code: null,
+      max: validTemperatures.length ? Math.max(...validTemperatures) : null,
+      min: validTemperatures.length ? Math.min(...validTemperatures) : null,
+      rain: null,
+      mean: validTemperatures.length
+        ? validTemperatures.reduce((sum, value) => sum + value, 0) / validTemperatures.length
+        : null,
+    };
+  });
+
+  const now = new Date();                     // Heure actuelle
 
   const currentHourString =
     `${now.getFullYear()}-` +
@@ -292,36 +356,69 @@ export default function Meteo() {
               <span className="section-kicker">{t('meteo.upcomingDays')}</span>
               <h2 id="forecast-title">{t('meteo.sevenDayForecast')}</h2>
             </div>
-            <span className="source-label">{t('meteo.openMeteoForecast')}</span>
+            <span className="source-label">Jours 1–4 : Open-Meteo · Jours 5–7 : Chronos</span>
           </div>
           <div className="forecast-grid">
-            {Array.from({ length: 7 }, (_, index) => {
-              const code = daily?.weather_code[index]; return <button key={index} className={`day-card ${selectedDay === index ? 'selected' : ''}`} onClick={() => setSelectedDay(index)} aria-pressed={selectedDay === index}>
-                <span className="day-name">{index === 0 ? 'Aujourd’hui' : daily ? dateLabel(daily.time[index], { weekday: 'short' }) : '—'}</span>
-                <span className="day-date">{daily ? dateLabel(daily.time[index], { day: 'numeric', month: 'short' }) : '—'}</span>
-                <WeatherIcon code={code} size={32} />
-                <span className="day-condition">{code != null ? t(condition(code).labelKey) : '—'}</span>
-                <span className="day-temps"><strong>{temp(daily?.temperature_2m_max[index], unit)}</strong><span>{temp(daily?.temperature_2m_min[index], unit)}</span></span>
-                <span className="day-rain"><Droplets size={12} />{daily ? `${daily.precipitation_sum[index]} mm` : '-'}</span></button>;
+            {forecastDays.map((day, index) => {
+              const chronosDay = index >= 4;
+              const hourlyTemperatures = chronosDay
+                ? predictionChronos?.[`jour_${index - 3}`]
+                : null;
+              const hasChronosValues = Array.isArray(hourlyTemperatures) && hourlyTemperatures.length > 0;
+
+              return (
+                <button
+                  key={`${day.source}-${day.date ?? index}`}
+                  className={`day-card ${selectedDay === index ? 'selected' : ''}`}
+                  onClick={() => setSelectedDay(index)}
+                  aria-pressed={selectedDay === index}
+                >
+                  <span className="day-name">
+                    {index === 0 ? 'Aujourd’hui' : day.date ? dateLabel(day.date, { weekday: 'short' }) : '—'}
+                  </span>
+                  <span className="day-date">
+                    {day.date ? dateLabel(day.date, { day: 'numeric', month: 'short' }) : '—'}
+                  </span>
+                  <WeatherIcon code={day.code} size={32} />
+                  <span className="day-condition">
+                    {chronosDay
+                      ? (hasChronosValues ? 'Température prédite' : 'Chronos indisponible')
+                      : day.code != null ? t(condition(day.code).labelKey) : '—'}
+                  </span>
+                  <span className="day-temps">
+                    <strong>{temp(day.max, unit)}</strong>
+                    <span>{temp(day.min, unit)}</span>
+                  </span>
+                  <span className="day-rain">
+                    {chronosDay
+                      ? (day.mean != null ? `Moy. ${temp(day.mean, unit)}` : '—')
+                      : <><Droplets size={12} />{day.rain != null ? `${day.rain} mm` : '—'}</>}
+                  </span>
+                  <span className="forecast-credit">{day.source}</span>
+                </button>
+              );
             })}
           </div>
           <div className="forecast-detail">
             <span className="detail-check"><Check size={15} /></span>
             <span>
-              {daily
-                ? `${selectedDay === 0 ? 'Aujourd’hui' : dateLabel(daily.time[selectedDay], {
-                  weekday: 'long',
-                  day: 'numeric',
-                  month: 'long'
-                })} : ${daily.weather_code[selectedDay] != null
-                  ? t(condition(daily.weather_code[selectedDay]).labelKey).toLowerCase()
-                  : t('meteo.dataUnavailable')
-                }, précipitations prévues ${
-                  daily.precipitation_sum[selectedDay] ?? '-'
-                } mm.` 
-              : t('meteo.selectDay')}
+              {forecastDays[selectedDay]?.date
+                ? `${selectedDay === 0 ? 'Aujourd’hui' : dateLabel(forecastDays[selectedDay].date, {
+                    weekday: 'long',
+                    day: 'numeric',
+                    month: 'long'
+                  })} — Source : ${forecastDays[selectedDay].source}. ${
+                    selectedDay < 4
+                      ? `Précipitations prévues : ${forecastDays[selectedDay].rain ?? '—'} mm.`
+                      : forecastDays[selectedDay].mean != null
+                        ? `Température moyenne estimée : ${temp(forecastDays[selectedDay].mean, unit)}. Chronos ne prédit pas les précipitations.`
+                        : 'Les températures Chronos ne sont pas disponibles pour le moment.'
+                  }`
+                : t('meteo.selectDay')}
             </span>
-            <span className="forecast-credit">Données : Open-Meteo</span>
+            <span className="forecast-credit">
+              {selectedDay < 4 ? 'Données : Open-Meteo' : 'Estimation : Chronos'}
+            </span>
           </div>
         </section>
       </div>
