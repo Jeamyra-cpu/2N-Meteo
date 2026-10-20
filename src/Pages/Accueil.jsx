@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import "../Styles/Accueil.css";
 import Header from '../Parties/Header.jsx';
@@ -8,8 +9,6 @@ function Accueil() {
 
     return (
         <div className="accueil-page">
-            <Header />
-
             <main className="accueil-heros">
                 <h1>{t('home.title')}</h1>
                 
@@ -18,16 +17,15 @@ function Accueil() {
                 </p>
 
                 <div className="accueil-action">
-                    <button className="accueil-bouton">
+                    <Link to="/meteo" className="accueil-bouton">
                         {t('home.cta')}
-                    </button>
+                    </Link>
                 </div>
 
                 <p className="accueil-mention">
                     {t('home.source')}
                 </p>
             </main>
-
         </div>
     );
 }
