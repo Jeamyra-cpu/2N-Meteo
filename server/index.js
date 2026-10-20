@@ -205,7 +205,7 @@ async function recuperationHistorique(latitude, longitude, date, modele) {
 
 /** Fonction de recupération de nom de ville */
 
-const api_key_LocationIQ = "pk.e91ebd5dcc170c6a4abdfd10d10a65c7"; // Clé API pour LocationIQ , recupération du nom de la ville en fonction de la latitude et la longitude
+const api_key_LocationIQ = "pk.e91ebd5dcc170c6a4abdfd10d10a65c7"; // Clé API pour LocationIQ , recupération du nom de la ville en fonction de la latitude et la longitude .
 const URL_LOCATIONIQ = "https://us1.locationiq.com/v1/reverse";
 
 async function recuperationNomVille(latitude,longitude){
@@ -226,6 +226,9 @@ async function recuperationNomVille(latitude,longitude){
 
     return  data.address ;
 }
+
+
+
 
 /*************************************************************************************************************************************************
  * 
@@ -341,6 +344,145 @@ app.get("/api/meteo/historique/:ville/:date", async (req, res) => { // date au f
     latitude: ville.latitude,
     longitude: ville.longitude,
     historique: historique,
+  });
+});
+
+// prediction avec le modele Chronos pour les 72 prochaines heures
+app.get("/api/meteo/prediction/chronos/:ville", async (req, res) => {
+  const nomville = req.params.ville;
+
+  const ville = await trouverCoordonnes(nomville);
+
+  if (!ville) {
+    return res.status(404).json({ error: "Ville non trouvée" });
+  }
+
+  // On fixe la date d'hier pour s'assurer que les 29 jours d'historique complets sont disponibles
+  const hier = new Date();
+  hier.setDate(hier.getDate() - 1);
+
+  const historique = await recuperationHistorique(
+    ville.latitude,
+    ville.longitude,
+    hier,
+    "meteofrance_seamless"
+  );
+
+  if (!historique || !historique.valeur_historique || !historique.valeur_historique.temperature_2m) {
+    return res.status(404).json({
+      error: "Impossible de récupérer l'historique pour la prédiction"
+    });
+  }
+
+  // Filtrage des éventuelles valeurs nulles ou indéfinies transmises par l'API
+  const temperaturesHistoriques = historique.valeur_historique.temperature_2m.filter(
+    (valeur) => valeur !== null && valeur !== undefined
+  );
+
+  if (temperaturesHistoriques.length === 0) {
+    return res.status(400).json({ error: "Données d'historique de température vides" });
+  }
+
+  const predictionChronos = await predireChronos(temperaturesHistoriques, 72);
+
+  if (!predictionChronos) {
+    return res.status(500).json({
+      error: "Échec du calcul de la prédiction par le modèle Chronos"
+    });
+  }
+
+  res.json({
+    ville: ville.nom,
+    latitude: ville.latitude,
+    longitude: ville.longitude,
+    unite: historique.unites_des_valeurs.temperature_2m || "°C",
+    prediction: predictionChronos
+  });
+});
+
+
+
+/** Fonction de prédiction avec logs de contrôle */
+const URL_SERVICE_CHRONOS = "http://127.0.0.1:8000/predict";
+
+async function predireChronos(historiqueTemperatures, dureeHeures = 72) {
+  try {
+    console.log("Transmission vers Python de", historiqueTemperatures.length, "valeurs...");
+
+    const response = await fetch(URL_SERVICE_CHRONOS, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        historique: historiqueTemperatures,
+        prediction_length: dureeHeures,
+      }),
+    });
+
+    if (!response.ok) {
+      const detailErreur = await response.text();
+      console.log("Erreur renvoyée par Python (Code " + response.status + ") :", detailErreur);
+      return null;
+    }
+
+    const donnees = await response.json();
+    return donnees;
+  } catch (erreur) {
+    console.error("Impossible de contacter le service Python :", erreur.message);
+    return null;
+  }
+}
+
+/** Route d'API avec vérification étape par étape */
+app.get("/api/meteo/prediction/chronos/:ville", async (req, res) => {
+  const nomville = req.params.ville;
+
+  const ville = await trouverCoordonnes(nomville);
+
+  if (!ville) {
+    console.log("Étape 1 ÉCHEC : Ville non trouvée");
+    return res.status(404).json({ error: "Ville non trouvée" });
+  }
+
+  const hier = new Date();
+  hier.setDate(hier.getDate() - 1);
+
+  const historique = await recuperationHistorique(
+    ville.latitude,
+    ville.longitude,
+    hier,
+    "meteofrance_seamless"
+  );
+
+  if (!historique || !historique.valeur_historique || !historique.valeur_historique.temperature_2m) {
+    console.log("Étape 2 ÉCHEC : Historique Open-Meteo vide ou invalide");
+    return res.status(404).json({
+      error: "Impossible de récupérer l'historique pour la prédiction"
+    });
+  }
+
+  const temperatures = historique.valeur_historique.temperature_2m.filter(
+    (v) => v !== null && v !== undefined
+  );
+
+  console.log("Étape 2 SUCCÈS :", temperatures.length, "températures extraites");
+
+  const prediction = await predireChronos(temperatures, 72);
+
+  if (!prediction) {
+    console.log("Étape 3 ÉCHEC : Le service Python n'a pas renvoyé de prédiction");
+    return res.status(500).json({
+      error: "Échec du calcul de la prédiction par le modèle Chronos"
+    });
+  }
+
+  res.json({
+    ville: ville.nom,
+    latitude: ville.latitude,
+    longitude: ville.longitude,
+    unite: historique.unites_des_valeurs.temperature_2m || "°C",
+    prediction: prediction
   });
 });
 
