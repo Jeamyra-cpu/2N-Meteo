@@ -79,6 +79,12 @@ function Header() {
                             </Link>
                         </li>
                     )}
+
+                    <li>
+                        <Link to="/parametre" onClick={() => setMenuOuvert(false)}>
+                            {t('header.settings')}
+                        </Link>
+                    </li>
                 </ul>
 
                 <div className="drawer-actions">

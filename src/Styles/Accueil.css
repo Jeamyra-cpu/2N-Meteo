@@ -57,6 +57,7 @@
   appearance: none;
   border: none;
   cursor: pointer;
+  text-decoration: none;
   background: var(--sky-warm);
   color: var(--ink);
   font-family: var(--font-body);
