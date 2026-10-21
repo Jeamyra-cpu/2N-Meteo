@@ -1,7 +1,7 @@
 {
     "about-us": {
         "title": "À propos de nous",
-        "description": "Bienvenue sur notre application de prévisions météorologiques en France. Nous nous engageons à fournir des informations météorologiques précises et fiables pour vous aider à planifier vos activités quotidiennes. Notre équipe est passionnée par la météo et s'efforce de vous offrir une expérience utilisateur optimale."
+        "description": " Bienvenue sur notre application de prévisions météorologiques en France ! Notre objectif est de vous fournir des informations météorologiques précises, fiables et régulièrement actualisées afin de vous aider à mieux planifier vos activités quotidiennes. Grâce aux technologies modernes et à l'analyse des données météorologiques, vous pouvez consulter facilement les températures, les précipitations, l'humidité, la vitesse du vent et les prévisions des prochains jours selon votre localisation. Nous mettons un point d'honneur à proposer une interface intuitive, accessible et agréable, permettant à chacun de comprendre rapidement les conditions climatiques et d'anticiper les changements météorologiques. Notre ambition est d'améliorer continuellement votre expérience en vous offrant un outil pratique et performant pour vous accompagner au quotidien. "
     },
 
     "meteo": {

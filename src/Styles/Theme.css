@@ -1,19 +1,72 @@
-@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
   --sky-deep: #16406B;
   --sky-mid: #4A8FD1;
+  --sky-soft: #79C9F2;
   --sky-warm: #F6B963;
+  --sky-warm-strong: #F39B52;
   --cloud-white: #FBFCFE;
+  --surface: rgba(255, 255, 255, 0.8);
+  --surface-strong: #FFFFFF;
+  --surface-alt: #F3F8FF;
   --ink: #22344A;
+  --muted: #607388;
   --mist: #7C8CA0;
   --hairline: rgba(22, 64, 107, 0.12);
+  --success: #2DAA7A;
 
   --font-display: 'Quicksand', sans-serif;
   --font-body: 'Inter', sans-serif;
+
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 26px;
+
+  --shadow-soft: 0 18px 45px rgba(14, 35, 58, 0.10);
+  --shadow-card: 0 20px 50px rgba(19, 47, 70, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #edf5fb 0%, #f7fafc 100%);
+  color: var(--ink);
+  font-family: var(--font-body);
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
 }
 
 *:focus-visible {
   outline: 2px solid var(--sky-mid);
   outline-offset: 3px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
 }

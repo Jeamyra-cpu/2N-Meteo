@@ -12,12 +12,14 @@ import Alerte from './Pages/Alerte.jsx'
 import Conseils from './Pages/Conseils.jsx'
 import Information from './Pages/Information.jsx'
 import Meteo from './Pages/Meteo.jsx'
+import Header from './Parties/Header.jsx'
+import Footer from './Parties/Footer.jsx'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <BrowserRouter>
+    <header />
       <Routes>
         <Route path="/" element={<Accueil />} />
         <Route path="/a-propos" element={<APropos />} />
@@ -26,9 +28,10 @@ function App() {
         <Route path="/parametre" element={<Parametre />} />
         <Route path="/alerte" element={<Alerte />} />
         <Route path="/conseils" element={<Conseils />} />
-        <Route path="/informations" element={<Information />} />
+        <Route path="/information" element={<Information />} />
         <Route path="/meteo" element={<Meteo />} />
       </Routes>
+      <footer />
     </BrowserRouter>
   )
 }

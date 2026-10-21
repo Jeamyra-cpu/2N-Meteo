@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import Header from '../Parties/Header.jsx';
+import Footer from '../Parties/Footer.jsx';
 import "../Styles/Conseils.css";
 
 const CONDITIONS = {
@@ -12,9 +14,9 @@ const CONDITIONS = {
 };
 
 const VEHICULES = [
-  { id: "voiture", nom: "Voiture" },
-  { id: "moto", nom: "Moto" },
-  { id: "velo", nom: "Vélo" },
+  { id: "voiture", nom: "Voiture", icon: "🚗" },
+  { id: "moto", nom: "Moto", icon: "🏍️" },
+  { id: "velo", nom: "Vélo", icon: "🚲" },
 ];
 
 const NIVEAUX = {
@@ -109,18 +111,17 @@ function nowStr() {
 
 function IllustrationMeteo({ condition, temp, nuit }) {
   const symboles = {
-    soleil: "☀",
-    nuageux: "☁",
-    pluie: "☂",
-    orage: "ϟ",
-    neige: "❄",
-    brouillard: "≋",
+    soleil: "☀️",
+    nuageux: "☁️",
+    pluie: "🌧️",
+    orage: "⛈️",
+    neige: "❄️",
+    brouillard: "🌫️",
   };
   return (
-    <svg className="cv-illustration-meteo" viewBox="0 0 120 100" role="img" aria-label={`${CONDITIONS[condition].nom}, ${temp} degrés`}>
-      <circle cx="60" cy="50" r="43" fill={nuit ? "#1b3555" : "#fff2d8"} />
-      <text x="60" y="66" textAnchor="middle" fontSize="46" fill={nuit ? "#eef4fa" : "#e8a33d"}>{symboles[condition]}</text>
-    </svg>
+    <div className="cv-illu-badge" aria-label={`${CONDITIONS[condition].nom}, ${temp} degrés`}>
+      <span className="cv-illu-icon">{symboles[condition]}</span>
+    </div>
   );
 }
 
@@ -221,14 +222,12 @@ function phraseBonhomme(condition, temp) {
 }
 
 export default function Conseils() {
-  // Données envoyées par la page Météo via <Link state={{ ville, temperature }}>
   const { state } = useLocation();
   const ville = (typeof state?.ville === "string" ? state.ville : "").trim() || "Paris";
   const tempTransmise = Number.isFinite(state?.temperature) ? state.temperature : null;
 
   const [vehicule, setVehicule] = useState("voiture");
 
-  // Date et heure figées à l'ouverture de la page
   const maintenant = useMemo(() => ({ date: todayStr(), heure: nowStr() }), []);
 
   const resultat = useMemo(() => {
@@ -249,21 +248,24 @@ export default function Conseils() {
 
   return (
     <>
+      <Header />
       <div className="meteo-app">
         <div className="cv-retour-zone">
-          <Link to="/meteo" className="meteo-bouton cv-retour">← Retour à la météo</Link>
+          <Link to="/meteo" className="cv-retour-link">
+            ← Retour à la météo
+          </Link>
         </div>
 
-        {/* En-tête : météo du moment + illustration */}
+        {/* En-tête */}
         <section className="meteo-carte cv-entete">
           <div>
             <div className="meteo-badge">
               <span className="point" />
               <b>{resultat.temp}°C</b>
-              <span>{CONDITIONS[resultat.condition].nom}</span>
+              <span className="condition-nom">{CONDITIONS[resultat.condition].nom}</span>
             </div>
             <p className="meteo-lieu">
-              {ville} – {resultat.dateTexte} à {String(resultat.h).padStart(2, "0")}h
+              <b>{ville}</b> – {resultat.dateTexte} à {String(resultat.h).padStart(2, "0")}h
               {String(resultat.m).padStart(2, "0")} ({resultat.nuit ? "nuit" : "jour"})
             </p>
           </div>
@@ -273,17 +275,19 @@ export default function Conseils() {
         </section>
 
         <div className="cv-grille">
-          {/* Colonne gauche : le bonhomme */}
-          <div className="meteo-carte meteo-illustration">
+          {/* Colonne gauche : bonhomme */}
+          <div className="meteo-carte cv-illustration-card">
             <p className="cv-bulle">{phraseBonhomme(resultat.condition, resultat.temp)}</p>
-            <BonhommeGrand condition={resultat.condition} temp={resultat.temp} nuit={resultat.nuit} />
+            <div className="cv-bonhomme-wrapper">
+              <BonhommeGrand condition={resultat.condition} temp={resultat.temp} nuit={resultat.nuit} />
+            </div>
           </div>
 
-          {/* Colonne droite : conseils généraux puis véhicule */}
+          {/* Colonne droite */}
           <div className="cv-colonne">
             <section className="meteo-carte cv-conseils-carte">
               <h2>Nos conseils</h2>
-              <ul>
+              <ul className="cv-conseils-list">
                 {resultat.conseils.map((c, i) => (
                   <li key={i}>{c}</li>
                 ))}
@@ -292,7 +296,7 @@ export default function Conseils() {
 
             <section className="meteo-carte cv-panneau" aria-labelledby="cv-titre-veh">
               <h2 id="cv-titre-veh">Vous prenez un véhicule ?</h2>
-              <p className="cv-aide">Choisissez le vôtre pour voir les précautions adaptées à la météo.</p>
+              <p className="cv-aide">Choisissez le vôtre pour voir les précautions adaptées.</p>
 
               <div className="cv-onglets" role="tablist" aria-label="Type de véhicule">
                 {VEHICULES.map((v) => (
@@ -304,12 +308,16 @@ export default function Conseils() {
                     aria-selected={vehicule === v.id}
                     onClick={() => setVehicule(v.id)}
                   >
-                    {v.nom}
+                    <span className="cv-tab-icon">{v.icon}</span>
+                    <span>{v.nom}</span>
                   </button>
                 ))}
               </div>
 
-              <p className={`cv-risque cv-risque--${resultat.route.niveau}`}>{NIVEAUX[resultat.route.niveau]}</p>
+              <div className={`cv-risque cv-risque--${resultat.route.niveau}`}>
+                <span className="cv-dot"></span>
+                {NIVEAUX[resultat.route.niveau]}
+              </div>
 
               <ul className="cv-liste">
                 {resultat.route.items.map((it, i) => (
@@ -330,6 +338,7 @@ export default function Conseils() {
           Les conseils véhicule suivent le code de la route français.
         </p>
       </div>
+      <Footer />
     </>
   );
 }

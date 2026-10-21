@@ -1,14 +1,15 @@
 .about-page {
-  background: var(--cloud-white);
+  background: linear-gradient(180deg, #ebf7ff 0%, #f8fbff 100%);
   color: var(--ink);
   font-family: var(--font-body);
 }
 
 .about-hero {
   position: relative;
-  background: linear-gradient(160deg, var(--sky-deep) 0%, var(--sky-mid) 55%, var(--sky-warm) 100%);
+  background: linear-gradient(160deg, var(--sky-deep) 0%, #23598f 42%, var(--sky-mid) 75%, #f3b567 100%);
   text-align: center;
   overflow: hidden;
+  box-shadow: inset 0 -12px 24px rgba(255,255,255,0.08);
 }
 
 .about-hero::before {
@@ -44,14 +45,19 @@
 }
 
 .about-content {
-  max-width: 640px;
-  margin: 0 auto;
-  padding: 3rem 1.5rem 5rem;
+  max-width: 780px;
+  margin: -16px auto 0;
+  padding: 0 1.5rem 5rem;
 }
 
 .about-content__text {
-  font-size: 1.125rem;
-  line-height: 1.75;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(22, 64, 107, 0.08);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-soft);
+  padding: 2.2rem 2rem;
+  font-size: 1.08rem;
+  line-height: 1.8;
   color: var(--ink);
   text-align: center;
 }

@@ -64,6 +64,15 @@ function Header() {
                             {t('header.home')}
                         </Link>
                     </li>
+
+                     {location.pathname !== '/meteo' && (
+                        <li>
+                            <Link to="/meteo" onClick={() => setMenuOuvert(false)}>
+                                {t('header.meteo')}
+                            </Link>
+                        </li>
+                    )}
+
                     {location.pathname !== '/politique-confidentialite' && (
                         <li>
                             <Link to="/politique-confidentialite" onClick={() => setMenuOuvert(false)}>

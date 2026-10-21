@@ -1,39 +1,57 @@
 import "../Styles/Meteo.css";
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
-
+import { Link } from "react-router-dom";import Header from '../Parties/Header.jsx';
+import Footer from '../Parties/Footer.jsx';
 import {
-  ArrowRight, CalendarDays, Check, Cloud, CloudDrizzle, CloudFog, CloudLightning,
-  CloudRain, CloudSnow, CloudSun, Compass, Droplets, ExternalLink, Gauge,
-  LocateFixed, MapPin, Moon, Search, Snowflake, Sun, Sunrise, Sunset,
+  ArrowRight, Check, Cloud, CloudDrizzle, CloudFog, CloudLightning,
+  CloudRain, CloudSnow, CloudSun, Droplets, ExternalLink,
+  LocateFixed, MapPin, Moon, Search, Snowflake, Sun, Sunrise,
   Thermometer, Wind, X,
 } from 'lucide-react';
 
 
-const LIMOGES = { name: 'Limoges', country: 'France', latitude: 45.8315, longitude: 1.2578, timezone: 'Europe/Paris' };
-const POPULAR = [
-  LIMOGES,
-  { name: 'Paris', country: 'France', latitude: 48.8534, longitude: 2.3488, timezone: 'Europe/Paris' },
-  { name: 'Lyon', country: 'France', latitude: 45.7485, longitude: 4.8467, timezone: 'Europe/Paris' },
-  { name: 'Bordeaux', country: 'France', latitude: 44.8404, longitude: -0.5805, timezone: 'Europe/Paris' },
-];
 // Chemin de la page de conseils (doit être identique à la <Route> déclarée dans App.jsx).
-const ADVICE_PATH = '/conseil';
+const ADVICE_PATH = '/conseils';
 
-/*
-function condition(code, isDay = true,t) {
-  if (code === 0) return { label: t('meteo.conditions.clear'), icon: isDay ? Sun : Moon };
-  if (code <= 2) return { label: t('meteo.conditions.partlyCloudy'), icon: isDay ? CloudSun : Moon };
-  if (code === 3) return { label: t('meteo.conditions.cloudy'), icon: Cloud };
-  if (code <= 48) return { label: t('meteo.conditions.fog'), icon: CloudFog };
-  if (code <= 57) return { label: t('meteo.conditions.drizzle'), icon: CloudDrizzle };
-  if (code <= 67 || (code >= 80 && code <= 82)) return { label: t('meteo.conditions.rain'), icon: CloudRain };
-  if (code <= 77 || (code >= 85 && code <= 86)) return { label: t('meteo.conditions.snow'), icon: CloudSnow };
-  if (code >= 95) return { label: t('meteo.conditions.storm'), icon: CloudLightning };
-  return { label: t('meteo.conditions.variable'), icon: CloudSun };
+// Vérifie qu'une paire latitude / longitude est exploitable.
+function validCoordinates(latitude, longitude) {
+  return (
+    typeof latitude === 'number' &&
+    typeof longitude === 'number' &&
+    Number.isFinite(latitude) &&
+    Number.isFinite(longitude) &&
+    Math.abs(latitude) <= 90 &&
+    Math.abs(longitude) <= 180
+  );
 }
-*/
+
+// Convertit une valeur du localStorage en nombre, ou null si elle est absente ou invalide.
+function toNumberOrNull(value) {
+  if (value === null || value === undefined) return null;
+  if (typeof value === 'string' && value.trim() === '') return null;
+  const numeric = Number(value);
+  return Number.isFinite(numeric) ? numeric : null;
+}
+
+// Information.jsx est la source de référence : aucune ville de secours.
+// Les trois variables lues ici sont : ville, latitude, longitude.
+function readStoredCity() {
+  const savedName = localStorage.getItem('ville');
+  if (!savedName || !savedName.trim()) return null;
+
+  const savedLatitude = toNumberOrNull(localStorage.getItem('latitude'));
+  const savedLongitude = toNumberOrNull(localStorage.getItem('longitude'));
+  const hasValid = validCoordinates(savedLatitude, savedLongitude);
+
+  return {
+    name: savedName.trim(),
+    country: 'France',
+    latitude: hasValid ? savedLatitude : null,
+    longitude: hasValid ? savedLongitude : null,
+    timezone: 'Europe/Paris',
+  };
+}
 
 function condition(code, isDay = true) {
   if (code === 0) return { labelKey: 'meteo.conditions.clear', icon: isDay ? Sun : Moon };
@@ -47,24 +65,39 @@ function condition(code, isDay = true) {
   return { labelKey: 'meteo.conditions.variable', icon: CloudSun };
 }
 
-
 function temp(value, unit) {
   if (value == null) return '-°';
 
   return `${Math.round(unit === 'C' ? value : value * 9 / 5 + 32)} °`;
 }
 
-function dateLabel(date, options, language='fr') {
+function dateLabel(date, options, language = 'fr') {
   return new Intl.DateTimeFormat(language, { timeZone: 'UTC', ...options }).format(new Date(`${date.slice(0, 10)}T12:00:00Z`));
 }
 
 function timeLabel(date) { return date.slice(11, 16); }
 
+// Open-Meteo attend un code de langue court (« fr »), pas « fr-FR ».
+function shortLanguage(language) {
+  return (language || 'fr').split('-')[0];
+}
+
 async function findCities(query, signal, language) {
-  const response = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=6&language=${language}&format=json`, { signal });
+  const response = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(query)}&count=6&language=${shortLanguage(language)}&format=json`, { signal });
   if (!response.ok) throw new Error('Search unavailable');
   const data = await response.json();
   return data.results ?? [];
+}
+
+// Retrouve les coordonnées d'une ville à partir de son nom (API gratuite, sans clé).
+// Les résultats français sont privilégiés, puisque la ville vient de Information.jsx.
+async function findCoordinates(name, signal, language) {
+  const results = await findCities(name, signal, language);
+  return (
+    results.find((place) => place.country_code === 'FR' && validCoordinates(place.latitude, place.longitude)) ??
+    results.find((place) => validCoordinates(place.latitude, place.longitude)) ??
+    null
+  );
 }
 
 function WeatherIcon({ code, size = 26, isDay = true, className = '' }) {
@@ -81,7 +114,9 @@ function Metric({ icon: Icon, label, value, detail, tone }) {
 
 export default function Meteo() {
   const { t, i18n } = useTranslation();
-  const [city, setCity] = useState(LIMOGES);
+  // La ville et ses coordonnées viennent du localStorage renseigné
+  // dans Information.jsx (variables : ville, latitude, longitude).
+  const [city, setCity] = useState(() => readStoredCity());
   const [weather, setWeather] = useState(null);
   const [chronos, setChronos] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -93,28 +128,96 @@ export default function Meteo() {
   const [searchError, setSearchError] = useState('');
   const [unit, setUnit] = useState('C');
   const [selectedDay, setSelectedDay] = useState(0);
+  const [locating, setLocating] = useState(false);       // Recherche des coordonnées en cours
+  const [coordsFailed, setCoordsFailed] = useState(false); // Coordonnées introuvables
   const searchRef = useRef(null);
 
-  // Recharge la météo quand la ville change ; annule l'ancienne requête si nécessaire.
+  // Complète les coordonnées manquantes.
+  // Information.jsx supprime latitude et longitude du localStorage quand la ville saisie
+  // à la main diffère de la ville détectée par GPS. Dans ce cas, la ville est géocodée
+  // ici à partir de son nom, puis les coordonnées sont enregistrées dans le localStorage.
   useEffect(() => {
+    if (!city?.name) {
+      setLocating(false);
+      setCoordsFailed(false);
+      return undefined;
+    }
+
+    if (validCoordinates(city.latitude, city.longitude)) {
+      setLocating(false);
+      setCoordsFailed(false);
+      return undefined;
+    }
+
     const controller = new AbortController();
-    setLoading(true);       //Indiquer à React que les données sont en cours de chargement
-    setError('');           //On efface l'ancienne erreur
-    setWeather(null);       //On efface les anciennes données météo pendant le chargement
+    setLocating(true);
+    setCoordsFailed(false);
+
+    findCoordinates(city.name, controller.signal, i18n.language)
+      .then((place) => {
+        if (controller.signal.aborted) return;
+
+        if (!place) {
+          setCoordsFailed(true);
+          setLocating(false);
+          return;
+        }
+
+        const latitude = Number(place.latitude);
+        const longitude = Number(place.longitude);
+
+        localStorage.setItem('latitude', String(latitude));
+        localStorage.setItem('longitude', String(longitude));
+
+        setCity((previous) =>
+          previous && previous.name === city.name
+            ? { ...previous, latitude, longitude }
+            : previous
+        );
+        setLocating(false);
+      })
+      .catch((cause) => {
+        if (cause.name === 'AbortError') return;
+        setCoordsFailed(true);
+        setLocating(false);
+      });
+
+    return () => controller.abort();
+  }, [city?.name, city?.latitude, city?.longitude, i18n.language]);
+
+  // Recharge la météo quand la ville change ; annule l'ancienne requête si nécessaire.
+  // La dépendance porte sur le nom : l'ajout tardif des coordonnées ne relance pas l'appel.
+  useEffect(() => {
+    if (!city?.name) {
+      setLoading(false);
+      setWeather(null);
+      setError('');
+      return undefined;
+    }
+
+    const controller = new AbortController();
+    setLoading(true);       // Indiquer à React que les données sont en cours de chargement
+    setError('');           // On efface l'ancienne erreur
+    setWeather(null);       // On efface les anciennes données météo pendant le chargement
 
     const ville = encodeURIComponent(city.name);
 
-    //On appelle notre serveur Express
+    // On appelle notre serveur Express
     fetch(`http://localhost:3001/api/meteo/${ville}`, { signal: controller.signal })
       .then((response) => { if (!response.ok) { throw new Error('Méteo indisponible'); } return response.json(); })
       .then((data) => { setWeather(data.prevision); setSelectedDay(0); setLoading(false); })
       .catch((cause) => { if (cause.name === 'AbortError') { return; } setError(t('meteo.weatherLoadError')); setLoading(false); });
     return () => controller.abort();
-  }, [city]);
+  }, [city?.name]);
 
   // Récupère séparément les prévisions Chronos pour les jours 5 à 7.
   // Si Chronos échoue, les quatre premiers jours Open-Meteo restent affichés.
   useEffect(() => {
+    if (!city?.name) {
+      setChronos(null);
+      return undefined;
+    }
+
     const controller = new AbortController();
     setChronos(null);
 
@@ -136,7 +239,7 @@ export default function Meteo() {
       });
 
     return () => controller.abort();
-  }, [city]);
+  }, [city?.name]);
 
   // Attend la fin de la saisie avant de chercher des suggestions de villes.
   useEffect(() => {
@@ -159,8 +262,35 @@ export default function Meteo() {
   }, []);
 
   function chooseCity(next) {
-    setCity(next);
-    setQuery(''); setSuggestions([]); setSearchOpen(false); setSearchError('');
+    const nextLatitude = toNumberOrNull(next.latitude);
+    const nextLongitude = toNumberOrNull(next.longitude);
+    const hasValid = validCoordinates(nextLatitude, nextLongitude);
+
+    const nextCity = {
+      ...next,
+      latitude: hasValid ? nextLatitude : null,
+      longitude: hasValid ? nextLongitude : null,
+    };
+
+    setCity(nextCity);
+    setQuery('');
+    setSuggestions([]);
+    setSearchOpen(false);
+    setSearchError('');
+
+    // Les trois variables de référence : ville, latitude, longitude.
+    localStorage.setItem('ville', nextCity.name);
+
+    if (hasValid) {
+      localStorage.setItem('latitude', String(nextLatitude));
+      localStorage.setItem('longitude', String(nextLongitude));
+    } else {
+      // Ne pas laisser les coordonnées de l'ancienne ville associées à la nouvelle.
+      localStorage.removeItem('latitude');
+      localStorage.removeItem('longitude');
+    }
+
+    localStorage.setItem('deja_vu', 'true');
   }
 
   async function submitSearch(event) {
@@ -176,18 +306,24 @@ export default function Meteo() {
     finally { setSearching(false); }
   }
 
-  /*  J'ai remplacé, à intervertir après si on recupere les coordonnées au lieu du nom de la ville
-  function locate() {
-    if (!navigator.geolocation) { setSearchError('La géolocalisation n’est pas disponible.'); setSearchOpen(true); return; }
-    navigator.geolocation.getCurrentPosition(({ coords }) => {
-      chooseCity({ name: 'Ma position', country: '', latitude: coords.latitude, longitude: coords.longitude });
-    }, () => { setSearchError('Autorisez la localisation ou recherchez une ville.'); setSearchOpen(true); });
-  }
-*/
-
   function locate() {
     setSearchError(t('meteo.locationComingSoon'));
     setSearchOpen(true);
+  }
+
+  // Sans ville enregistrée par Information.jsx, on n'invente aucune localisation.
+  if (!city?.name) {
+    return (
+      <main className="weather-main">
+        <div className="content-wrap">
+          <section className="map-card" role="status">
+            <h2>Aucune ville enregistrée</h2>
+            <p>La page Météo attend la ville, la latitude et la longitude enregistrées dans le localStorage par la page Information.</p>
+            <p>Retournez sur la page Information, autorisez la localisation ou choisissez une ville, puis ouvrez de nouveau la page Météo.</p>
+          </section>
+        </div>
+      </main>
+    );
   }
 
   const daily = weather?.valeurs_par_jour;    // Données quotidiennes Open-Meteo
@@ -237,11 +373,11 @@ export default function Meteo() {
     `${String(now.getDate()).padStart(2, '0')}T` +
     `${String(now.getHours()).padStart(2, '0')}:00`;
 
-  const currentHourIndex = hourly   //Index de l'heure actuelle
+  const currentHourIndex = hourly   // Index de l'heure actuelle
     ? hourly.time.findIndex((time) => time === currentHourString)
     : -1;
 
-  //Données meteo actuelles
+  // Données météo actuelles
   const current = hourly && currentHourIndex !== -1 ? {
     time: hourly.time[currentHourIndex],
     temperature_2m: hourly.temperature_2m?.[currentHourIndex],
@@ -254,12 +390,12 @@ export default function Meteo() {
     snowfall: hourly.snowfall?.[currentHourIndex],
   } : null;
 
-  //Premiere heure à afficher dans les previsions horaires
+  // Première heure à afficher dans les prévisions horaires
   const firstHour = hourly
     ? Math.max(0, hourly.time.findIndex((hour) => hour >= current?.time))
     : 0;
 
-  //Les 8 prochaines heures
+  // Les 8 prochaines heures
   const hours = hourly ? hourly.time.slice(firstHour, firstHour + 8).map((time, offset) => ({
     time,
     temperature: hourly.temperature_2m[firstHour + offset],
@@ -268,15 +404,33 @@ export default function Meteo() {
   }))
     : [];
 
-  const mapUrl = `https://www.openstreetmap.org/export/embed.html?bbox=${city.longitude - 0.09}%2C${city.latitude - 0.055}%2C${city.longitude + 0.09}%2C${city.latitude + 0.055}&layer=mapnik&marker=${city.latitude}%2C${city.longitude}`;
-  const osmUrl = `https://www.openstreetmap.org/?mlat=${city.latitude}&mlon=${city.longitude}#map=12/${city.latitude}/${city.longitude}`;
+  const hasCoordinates = validCoordinates(city.latitude, city.longitude);
+
+  // OpenStreetMap attend bbox=longitudeMin,latitudeMin,longitudeMax,latitudeMax.
+  // Le marqueur reçoit latitude, puis longitude.
+  const mapParams = hasCoordinates
+    ? new URLSearchParams({
+        bbox: `${city.longitude - 0.09},${city.latitude - 0.055},${city.longitude + 0.09},${city.latitude + 0.055}`,
+        layer: 'mapnik',
+        marker: `${city.latitude},${city.longitude}`,
+      })
+    : null;
+  const mapUrl = mapParams
+    ? `https://www.openstreetmap.org/export/embed.html?${mapParams.toString()}`
+    : '';
+
+  const osmUrl = hasCoordinates
+    ? `https://www.openstreetmap.org/?mlat=${encodeURIComponent(city.latitude)}&mlon=${encodeURIComponent(city.longitude)}#map=14/${city.latitude}/${city.longitude}`
+    : '#';
   const degrees = current?.temperature_2m ?? 16;
   const mapTone = degrees < 5 ? 'cold' : degrees >= 25 ? 'hot' : 'mild';
 
   return (
-    <main className="weather-main">
-      <div className="content-wrap">
-        <div className="page-heading">
+    <>
+      <Header />
+      <main className="weather-main">
+        <div className="content-wrap">
+          <div className="page-heading">
           <div><div className="eyebrow"><span className="eyebrow-line" />{t('meteo.realtime')}</div><h1>{t('meteo.title')}</h1><p>{t('meteo.subtitle')}</p></div>
           <div className="heading-actions">
             <div className="search-wrap" ref={searchRef}>
@@ -288,21 +442,32 @@ export default function Meteo() {
           </div>
         </div>
 
-        <div className="city-strip"><span className="city-strip-label">{t('meteo.cities')}</span>{POPULAR.map((place) => <button key={place.name} className={city.name === place.name && city.country === place.country ? 'selected' : ''} onClick={() => chooseCity(place)}>{place.name}</button>)}<span className="strip-date"><CalendarDays size={15} />{daily ? dateLabel(daily.time[0], { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'}, i18n.language) : new Intl.DateTimeFormat(i18n.language, { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date())}</span></div>
-        {error && <div className="error-banner" role="alert">{error}<button onClick={() => setCity({ ...city })}>Réessayer <ArrowRight size={15} /></button></div>}
+        {error && <div className="error-banner" role="alert">{error}</div>}
 
         <div className="top-grid">
           <section className="current-card" aria-label={t('meteo.currentWeather')}>
             <div className="current-card-top"><span className="live-pill">{t('meteo.actual')}</span><span className="updated-at">{current ? `${t('meteo.updatedAt')} ${timeLabel(current.time)}` : loading ? t('meteo.loading') : t('meteo.unavailable')}</span></div>
-            <div className="current-card-content"><div className="current-location"><MapPin size={19} />{city.name}{city.country && <span>, {city.country}</span>}</div><div className="current-reading"><div className="big-temperature">{temp(current?.temperature_2m, unit)}<span>{unit}</span></div><WeatherIcon code={current?.weather_code} isDay={true} size={80} className="big-weather-icon" /></div><div className="current-description">{current ? t(condition(current.weather_code, true).labelKey) : loading ? t('meteo.weatherComing') : t('meteo.dataUnavailable')}</div><p className="current-feels">{t('meteo.feels')} {temp(current?.apparent_temperature, unit)} <span>·</span> {t('meteo.max')} {temp(daily?.temperature_2m_max[0], unit)} / {t('meteo.min')} {temp(daily?.temperature_2m_min[0], unit)}</p></div>
+            <div className="current-card-content"><div className="current-location"><MapPin size={19} />{city.name}{city.country && <span>, {city.country}</span>}</div><div className="current-reading"><div className="big-temperature">{temp(current?.temperature_2m, unit)}<span>{unit}</span></div><WeatherIcon code={current?.weather_code} isDay={true} size={80} className="big-weather-icon" /></div><div className="current-description">{current ? t(condition(current.weather_code, true).labelKey) : loading ? t('meteo.weatherComing') : t('meteo.dataUnavailable')}</div><p className="current-feels">{t('meteo.feels')} {temp(current?.apparent_temperature, unit)} <span>·</span> {t('meteo.max')} {temp(daily?.temperature_2m_max?.[0], unit)} / {t('meteo.min')} {temp(daily?.temperature_2m_min?.[0], unit)}</p></div>
             <div className="current-card-bottom"><div><Sunrise size={19} /><span>{t('meteo.sunrise')}</span><strong>-</strong></div></div>
           </section>
 
           <section className="map-card" aria-label={`Carte de ${city.name}`}>
             <div className="map-header"><div><span className="section-kicker">{t('meteo.geographicMarker')}</span><h2>{city.name},{t('meteo.onMap')}</h2></div><div className="map-header-icon"><MapPin size={21} /></div></div>
             <p className="map-subtitle">{t('meteo.mapSubtitle')}</p>
-            <div className="map-frame"><iframe key={`${city.latitude}-${city.longitude}`} title={`Carte OpenStreetMap de ${city.name}`} src={mapUrl} loading="lazy" referrerPolicy="no-referrer-when-downgrade" /><div className={`map-temperature ${mapTone}`}><WeatherIcon code={current?.weather_code} size={18} />{temp(current?.temperature_2m, unit)}{unit}</div></div>
-            <div className="map-bottom"><div className="map-place"><div className="map-place-icon"><MapPin size={19} /></div><div><strong>{city.name}{city.country ? `, ${city.country}` : ''}</strong><span>{city.latitude.toFixed(3)}° N · {Math.abs(city.longitude).toFixed(3)}° {city.longitude < 0 ? 'O' : 'E'}</span></div></div><a href={osmUrl} target="_blank" rel="noreferrer" aria-label={`Ouvrir la carte de ${city.name} dans OpenStreetMap`}><ExternalLink size={17} /></a></div>
+            {hasCoordinates ? (
+              <>
+                <div className="map-frame"><iframe key={`${city.latitude}-${city.longitude}`} title={`Carte OpenStreetMap de ${city.name}`} src={mapUrl} loading="lazy" referrerPolicy="no-referrer-when-downgrade" /><div className={`map-temperature ${mapTone}`}><WeatherIcon code={current?.weather_code} size={18} />{temp(current?.temperature_2m, unit)}{unit}</div></div>
+                <div className="map-bottom"><div className="map-place"><div className="map-place-icon"><MapPin size={19} /></div><div><strong>{city.name}{city.country ? `, ${city.country}` : ''}</strong><span>{Math.abs(city.latitude).toFixed(3)}° {city.latitude < 0 ? 'S' : 'N'} · {Math.abs(city.longitude).toFixed(3)}° {city.longitude < 0 ? 'O' : 'E'}</span></div></div><a href={osmUrl} target="_blank" rel="noreferrer" aria-label={`Ouvrir la carte de ${city.name} dans OpenStreetMap`}><ExternalLink size={17} /></a></div>
+              </>
+            ) : (
+              <div className="map-frame" style={{ display: 'grid', placeItems: 'center', minHeight: 180, color: '#7f8ca3', textAlign: 'center', padding: 16 }}>
+                {locating
+                  ? 'Recherche de la position de la ville…'
+                  : coordsFailed
+                    ? 'Coordonnées de localisation introuvables pour cette ville.'
+                    : 'Chargement de la carte…'}
+              </div>
+            )}
           </section>
         </div>
 
@@ -335,7 +500,7 @@ export default function Meteo() {
             </div>
           </section>
 
-          <Link className="advice-card" to="/conseil" state={{ville: city.name, temperature: current?.temperature_2m}} style={{ display: 'grid', flexDirection: 'row', alignContent: 'space-between' }}>
+          <Link className="advice-card" to={ADVICE_PATH} state={{ ville: city.name, temperature: current?.temperature_2m }} style={{ display: 'grid', flexDirection: 'row', alignContent: 'space-between' }}>
             {/* Toute la carte mène à la page Conseils. */}
             <div className="advice-top">
               <span>{t('meteo.advice.goFurther')}</span>
@@ -421,7 +586,9 @@ export default function Meteo() {
             </span>
           </div>
         </section>
-      </div>
-    </main>
+        </div>
+      </main>
+      <Footer />
+    </>
   );
 }

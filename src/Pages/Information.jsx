@@ -1,15 +1,21 @@
+
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import Footer from '../Parties/Footer.jsx';
 import Header from '../Parties/Header.jsx';
 
 import '../Styles/Information.css';
 
+function normalizeCoordinate(value) {
+    const numericValue = Number(value);
+    return Number.isFinite(numericValue) ? numericValue : null;
+}
 
 function Information() {
-
     const { t } = useTranslation();
+    const navigate = useNavigate();
 
     const [ville, setVille] = useState("");
     const [chargement, setChargement] = useState(true);
@@ -18,143 +24,177 @@ function Information() {
 
     const villeDetectee = useRef("");
     const villeModifiee = useRef(false);
-    
 
+    const token = useRef(
+        localStorage.getItem("user_token") ||
+        globalThis.crypto?.randomUUID?.() ||
+        `user-${Date.now()}-${Math.random().toString(16).slice(2)}`
+    );
 
+    // Enregistrement du token utilisateur
+    useEffect(() => {
+        localStorage.setItem("user_token", token.current);
+        console.log("Token utilisateur :", token.current);
+    }, []);
+
+    // Détection de la ville à partir de la position GPS
     const recupererLocalisation = useCallback(() => {
-
         setChargement(true);
         setErreur("");
         setConfirmation("");
+
         villeModifiee.current = false;
 
         if (!navigator.geolocation) {
-
-            setErreur(
-                t('information.erreur1')
-            );
-
+            setErreur(t('information.erreur1'));
             setChargement(false);
-
             return;
         }
 
         navigator.geolocation.getCurrentPosition(
-
             async (position) => {
-
                 try {
+                    const {
+                        latitude: latitudeInitiale,
+                        longitude: longitudeInitiale
+                    } = position.coords;
 
-                    const { latitude, longitude } = position.coords;
+                    const latitudeValide =
+                        normalizeCoordinate(latitudeInitiale);
 
-                    localStorage.setItem("latitude", latitude);
-                    localStorage.setItem("longitude", longitude);
+                    const longitudeValide =
+                        normalizeCoordinate(longitudeInitiale);
+
+                    if (
+                        latitudeValide === null ||
+                        longitudeValide === null
+                    ) {
+                        throw new Error("Coordonnées GPS invalides.");
+                    }
 
                     const response = await fetch(
-                        `http://localhost:3001/api/ville/${latitude}/${longitude}`
+                        `http://localhost:3001/api/ville/${latitudeValide}/${longitudeValide}`
                     );
 
                     if (!response.ok) {
-                        throw new Error("Impossible de récupérer la ville.");
+                        throw new Error(
+                            "Impossible de récupérer la ville."
+                        );
                     }
 
                     const data = await response.json();
 
                     if (!data.ville) {
-                        throw new Error("Aucune ville n'a été trouvée.");
+                        throw new Error(
+                            "Aucune ville n'a été trouvée."
+                        );
+                    }
+
+                    const latitudeFinale = normalizeCoordinate(
+                        data.latitude ?? latitudeValide
+                    );
+
+                    const longitudeFinale = normalizeCoordinate(
+                        data.longitude ?? longitudeValide
+                    );
+
+                    if (
+                        latitudeFinale === null ||
+                        longitudeFinale === null
+                    ) {
+                        throw new Error(
+                            "Coordonnées de localisation invalides."
+                        );
                     }
 
                     villeDetectee.current = data.ville;
 
+                    // Enregistrer la localisation détectée
+                    localStorage.setItem("ville", data.ville);
+                    localStorage.setItem(
+                        "latitude",
+                        String(latitudeFinale)
+                    );
+                    localStorage.setItem(
+                        "longitude",
+                        String(longitudeFinale)
+                    );
+                    localStorage.setItem("deja_vu", "true");
+
+                    // Afficher la ville sans changer de page
                     if (!villeModifiee.current) {
                         setVille(data.ville);
                     }
 
                 } catch (error) {
-
                     console.error(
                         "Erreur lors de la récupération de la ville :",
                         error
                     );
 
                     setErreur(
-                        "Impossible de récupérer votre localisation. Réessayez ou saisissez votre ville manuellement."
+                        "Impossible de récupérer votre localisation. " +
+                        "Réessayez ou saisissez votre ville manuellement."
                     );
 
                 } finally {
-
                     setChargement(false);
-
                 }
-
             },
 
             (error) => {
-
-                console.error("Erreur de géolocalisation :", error);
+                console.error(
+                    "Erreur de géolocalisation :",
+                    error
+                );
 
                 if (error.code === error.PERMISSION_DENIED) {
-
-                    setErreur(
-                        t('information.erreur2')
-                    );
-
+                    setErreur(t('information.erreur2'));
                 } else {
-
-                    setErreur(
-                        t('information.error')
-                    );
-
+                    setErreur(t('information.error'));
                 }
 
                 setChargement(false);
-
             }
-
         );
+    }, [t]);
 
-    }, []);
-
-
+    // Vérification du backend et lancement de la détection GPS
     useEffect(() => {
-
         const verifierBackend = async () => {
-
             try {
-
-                const response = await fetch("http://localhost:3001/api/test");
+                const response = await fetch(
+                    "http://localhost:3001/api/test"
+                );
 
                 if (!response.ok) {
-                    console.error("Le serveur backend semble indisponible.");
+                    console.error(
+                        "Le serveur backend semble indisponible."
+                    );
                 }
-
             } catch (error) {
-
-                console.error("Impossible de contacter le backend :", error);
-
+                console.error(
+                    "Impossible de contacter le backend :",
+                    error
+                );
             }
-
         };
 
         verifierBackend();
         recupererLocalisation();
-
     }, [recupererLocalisation]);
 
-
+    // Gestion de la saisie manuelle
     const modifierVille = (event) => {
-
         villeModifiee.current = true;
 
         setVille(event.target.value);
         setErreur("");
         setConfirmation("");
-
     };
 
-
+    // Validation et redirection déclenchées uniquement par l'utilisateur
     const validerVille = (event) => {
-
         event.preventDefault();
 
         const villeSaisie = ville.trim();
@@ -164,32 +204,54 @@ function Information() {
             return;
         }
 
+        // Enregistrer la ville choisie
         localStorage.setItem("ville", villeSaisie);
+        localStorage.setItem("deja_vu", "true");
 
-        if (villeSaisie !== villeDetectee.current) {
+        // Si la ville choisie diffère de celle détectée,
+        // supprimer les anciennes coordonnées GPS
+        if (
+            villeSaisie.toLowerCase() !==
+            villeDetectee.current.toLowerCase()
+        ) {
             localStorage.removeItem("latitude");
             localStorage.removeItem("longitude");
         }
 
-        setVille(villeSaisie);
         setErreur("");
-        setConfirmation(`${t('information.confirmation')} : ${villeSaisie}`);
+        setConfirmation(
+            `${t('information.confirmation')} : ${villeSaisie}`
+        );
 
-        localStorage.setItem("deja_vu", "true");
+        // Récupérer les coordonnées encore disponibles
+        const latitude = normalizeCoordinate(
+            localStorage.getItem("latitude")
+        );
 
+        const longitude = normalizeCoordinate(
+            localStorage.getItem("longitude")
+        );
+
+        // Naviguer uniquement après la validation manuelle
+        navigate('/meteo', {
+            state: {
+                city: {
+                    name: villeSaisie,
+                    country: 'France',
+                    latitude,
+                    longitude,
+                    timezone: 'Europe/Paris'
+                }
+            }
+        });
     };
 
-
     return (
-
         <div className="information-page">
-
             <Header />
 
             <main className="information-hero">
-
                 <div className="information-container">
-
                     <section className="information-card">
 
                         <div className="information-location-icon">
@@ -204,8 +266,10 @@ function Information() {
                             {t('information.sous_titre_formulaire')}
                         </p>
 
-                        <form onSubmit={validerVille} noValidate>
-
+                        <form
+                            onSubmit={validerVille}
+                            noValidate
+                        >
                             <div className="information-location-box">
 
                                 <label
@@ -233,7 +297,6 @@ function Information() {
                             </div>
 
                             {chargement && (
-
                                 <div className="information-status">
 
                                     <span className="information-spinner"></span>
@@ -243,41 +306,31 @@ function Information() {
                                     </span>
 
                                 </div>
-
                             )}
 
                             {erreur && (
-
                                 <div className="information-error">
                                     {erreur}
                                 </div>
-
                             )}
 
                             {confirmation && (
-
                                 <div className="information-status">
                                     <span>{confirmation}</span>
                                 </div>
-
                             )}
 
                             <button
                                 type="submit"
                                 className="information-button"
-                                disabled={chargement || ville.trim() === ""}
-                                
-                                onClick={() => {
-                                    window.location.href = '/Accueil';
-                                }}
+                                disabled={
+                                    chargement || ville.trim() === ""
+                                }
                             >
                                 {t('information.bouton1')}
-
-                                
                             </button>
 
                             {!chargement && (
-
                                 <button
                                     type="button"
                                     className="information-button"
@@ -285,7 +338,6 @@ function Information() {
                                 >
                                     📍 {t('information.bouton2')}
                                 </button>
-
                             )}
 
                         </form>
@@ -295,17 +347,12 @@ function Information() {
                         </p>
 
                     </section>
-
                 </div>
-
             </main>
 
             <Footer />
-
         </div>
-
     );
-
 }
 
 export default Information;

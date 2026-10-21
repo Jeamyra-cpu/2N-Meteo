@@ -1,32 +1,38 @@
 .alerte-types {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-top: 8px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 12px;
 }
 
 .alerte-type {
     display: flex;
     align-items: center;
-    gap: 8px;
-    padding: 10px 12px;
-    border: 1px solid rgba(128, 128, 128, 0.4);
-    border-radius: 8px;
+    gap: 10px;
+    padding: 12px 14px;
+    border: 1px solid rgba(22, 64, 107, 0.12);
+    border-radius: 14px;
+    background: linear-gradient(180deg, rgba(240, 247, 255, 0.9), rgba(255,255,255,0.9));
     cursor: pointer;
-    transition: border-color 0.2s, background-color 0.2s;
+    transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+    color: var(--ink);
+    font-weight: 600;
 }
 
 .alerte-type:hover {
-    border-color: #2563eb;
+    border-color: rgba(74, 160, 216, 0.7);
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px rgba(22, 64, 107, 0.06);
 }
 
 .alerte-type-actif {
-    border-color: #2563eb;
-    background-color: rgba(37, 99, 235, 0.12);
+    border-color: rgba(74, 160, 216, 0.9);
+    background: linear-gradient(135deg, rgba(74, 160, 216, 0.14), rgba(247, 183, 104, 0.12));
+    box-shadow: 0 10px 22px rgba(74, 160, 216, 0.12);
 }
 
 .alerte-type input {
-    accent-color: #2563eb;
+    accent-color: #1d6bb2;
 }
 
 .alerte-bouton-secondaire {
