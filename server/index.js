@@ -348,6 +348,7 @@ app.get("/api/meteo/historique/:ville/:date", async (req, res) => { // date au f
 });
 
 // prediction avec le modele Chronos pour les 72 prochaines heures
+/*
 app.get("/api/meteo/prediction/chronos/:ville", async (req, res) => {
   const nomville = req.params.ville;
 
@@ -399,7 +400,7 @@ app.get("/api/meteo/prediction/chronos/:ville", async (req, res) => {
     prediction: predictionChronos
   });
 });
-
+*/
 
 
 /** Fonction de prédiction avec logs de contrôle */
@@ -435,6 +436,7 @@ async function predireChronos(historiqueTemperatures, dureeHeures = 72) {
 }
 
 /** Route d'API avec vérification étape par étape */
+/*
 app.get("/api/meteo/prediction/chronos/:ville", async (req, res) => {
   const nomville = req.params.ville;
 
@@ -485,8 +487,100 @@ app.get("/api/meteo/prediction/chronos/:ville", async (req, res) => {
     prediction: prediction
   });
 });
+*/
 
 const PORT = 3001;
 app.listen(PORT, () => {
   console.log(`Le serveur a demarrer sur le port :  ${PORT} donc acces avec http://localhost:${PORT}`);
+});
+
+app.get("/api/meteo/prediction/chronos/:ville", async (req, res) => {
+  try {
+    // 1. Récupérer le nom de la ville demandé par le frontend
+    const nomville = req.params.ville;
+
+    // 2. Trouver les coordonnées géographiques de la ville
+    const ville = await trouverCoordonnes(nomville);
+
+    if (!ville) {
+      return res.status(404).json({
+        error: "Ville non trouvée"
+      });
+    }
+
+    // 3. Récupérer les prévisions horaires d'Open-Meteo
+    const prevision = await recupererPrevision(
+      nomville,
+      ville.latitude,
+      ville.longitude,
+      "meteofrance_seamless"
+    );
+
+    // 4. Vérifier que les données horaires existent
+    const temperaturesHoraires =
+      prevision?.valeurs_par_heure?.temperature_2m;
+
+    if (
+      !Array.isArray(temperaturesHoraires) ||
+      temperaturesHoraires.length < 96
+    ) {
+      return res.status(502).json({
+        error: "Open-Meteo n'a pas fourni les 96 températures nécessaires"
+      });
+    }
+
+    // 5. Garder les 96 premières températures horaires
+    // Elles représentent 96 heures, soit 4 périodes de 24 heures.
+    const temperaturesContexte = temperaturesHoraires.slice(0, 96);
+
+    // 6. Vérifier que les 96 températures sont valides
+    const temperaturesValides = temperaturesContexte.every(
+      (valeur) =>
+        typeof valeur === "number" &&
+        Number.isFinite(valeur)
+    );
+
+    if (!temperaturesValides) {
+      return res.status(502).json({
+        error: "Certaines températures horaires sont manquantes ou invalides"
+      });
+    }
+
+    console.log(
+      "Contexte envoyé à Chronos :",
+      temperaturesContexte.length,
+      "températures horaires"
+    );
+
+    // 7. Demander à Chronos de prédire les 72 heures suivantes
+    const predictionChronos = await predireChronos(
+      temperaturesContexte,
+      72
+    );
+
+    if (!predictionChronos) {
+      return res.status(500).json({
+        error: "Échec du calcul de la prédiction par Chronos"
+      });
+    }
+
+    // 8. Envoyer les résultats au frontend
+    return res.json({
+      ville: ville.nom,
+      latitude: ville.latitude,
+      longitude: ville.longitude,
+      unite:
+        prevision.unites_valeurs_par_heure?.temperature_2m || "°C",
+      heures_de_contexte: 96,
+      heures_predites: 72,
+      prediction: predictionChronos
+    });
+
+  } catch (erreur) {
+    console.error("Erreur dans la route Chronos :", erreur);
+
+    return res.status(500).json({
+      error: "Une erreur est survenue pendant la prédiction Chronos"
+    });
+  }
 });
