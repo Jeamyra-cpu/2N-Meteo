@@ -1,5 +1,9 @@
+/* =========================================================
+   PAGE POLITIQUE DE CONFIDENTIALITÉ
+   ========================================================= */
+
 .privacy-policy-page {
-  background: linear-gradient(180deg, #ebf7ff 0%, #f8fbff 100%);
+  background: var(--bg);
   color: var(--ink);
   font-family: var(--font-body);
 }
@@ -8,37 +12,40 @@
   position: relative;
   padding: 2.7rem 1.5rem 4rem;
   text-align: center;
-  background: linear-gradient(135deg, var(--sky-deep) 0%, #1e5b93 30%, var(--sky-mid) 70%, #f6b76c 100%);
+  background: var(--hero-gradient);
   overflow: hidden;
 }
 
 .privacy-hero::before {
-  content: "";
+  content: '';
   position: absolute;
-  inset: auto -80px -110px auto;
+  top: -80px;
+  right: 6%;
   width: 280px;
   height: 280px;
+  border: 1px solid #ffffff19;
   border-radius: 50%;
-  background: rgba(255,255,255,0.08);
+  pointer-events: none;
 }
 
 .privacy-hero__title {
   position: relative;
   z-index: 1;
   font-family: var(--font-display);
-  font-weight: 700;
-  color: #fff;
-  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--on-dark);
+  font-size: clamp(2rem, 4vw, 2.7rem);
   margin: 0;
 }
 
 .privacy-layout {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 2.5rem;
+  gap: 1.5rem;
   max-width: 1100px;
   margin: -24px auto 0;
-  padding: 0 1.5rem 5rem;
+  padding: 0 clamp(16px, 4vw, 24px) 5rem;
 }
 
 @media (min-width: 860px) {
@@ -46,17 +53,17 @@
     grid-template-columns: 220px 1fr;
     align-items: start;
   }
+
   .privacy-toc {
     position: sticky;
-    top: 2rem;
+    top: 5.5rem; /* sous le header collant */
   }
 }
 
 .privacy-toc {
-  background: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(22, 64, 107, 0.08);
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-soft);
   padding: 1.2rem 1.1rem;
 }
 
@@ -67,51 +74,47 @@
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
-  border-left: 2px solid rgba(74, 160, 216, 0.3);
+  border-left: 2px solid var(--accent);
 }
 
 .privacy-toc a {
   color: var(--muted);
-  text-decoration: none;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 600;
-  transition: color 0.15s ease, transform 0.15s ease;
+  transition: color 0.15s, transform 0.15s;
 }
 
 .privacy-toc a:hover,
 .privacy-toc a:focus-visible {
-  color: var(--sky-deep);
+  color: var(--accent-deep);
   transform: translateX(2px);
 }
 
 .privacy-body {
-  background: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(22, 64, 107, 0.08);
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-soft);
   padding: 1.2rem 1.2rem 0.8rem;
 }
 
 .privacy-section {
-  scroll-margin-top: 1.5rem;
+  scroll-margin-top: 5.5rem;
   padding: 1.5rem 1.2rem;
   margin-top: 1.25rem;
-  border-top: 1px solid rgba(22, 64, 107, 0.08);
-  background: rgba(246, 251, 255, 0.8);
-  border-radius: 18px;
+  background: var(--bg);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-lg);
 }
 
 .privacy-section:first-child {
   margin-top: 0;
-  padding-top: 0;
-  border-top: none;
 }
 
 .privacy-section h2 {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1.375rem;
-  color: var(--sky-deep);
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ink-strong);
   margin: 0 0 0.75rem;
 }
 

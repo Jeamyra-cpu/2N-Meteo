@@ -1,9 +1,11 @@
 .footer {
   position: relative;
-  background: linear-gradient(135deg, rgba(11, 31, 52, 0.96) 0%, rgba(25, 60, 95, 0.98) 48%, rgba(17, 60, 91, 0.98) 100%);
+  background: rgba(13, 39, 62, 0.72);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
   color: var(--cloud-white);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 -10px 25px rgba(14, 34, 56, 0.16);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 -10px 25px rgba(18, 46, 75, 0.16);
 }
 
 .footer-container {

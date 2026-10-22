@@ -1,71 +1,86 @@
+/* =========================================================
+   PAGE À PROPOS
+   ========================================================= */
+
 .about-page {
-  background: linear-gradient(180deg, #ebf7ff 0%, #f8fbff 100%);
+  background: var(--bg);
   color: var(--ink);
   font-family: var(--font-body);
 }
 
+/* Bandeau sombre identique à la carte « météo actuelle » */
 .about-hero {
   position: relative;
-  background: linear-gradient(160deg, var(--sky-deep) 0%, #23598f 42%, var(--sky-mid) 75%, #f3b567 100%);
+  background: var(--hero-gradient);
   text-align: center;
   overflow: hidden;
-  box-shadow: inset 0 -12px 24px rgba(255,255,255,0.08);
+}
+
+.about-hero::before,
+.about-hero::after {
+  content: '';
+  position: absolute;
+  border: 1px solid #ffffff19;
+  border-radius: 50%;
+  pointer-events: none;
 }
 
 .about-hero::before {
-  content: '';
-  position: absolute;
-  top: -90px;
+  width: 260px;
+  height: 260px;
+  top: -70px;
   right: 8%;
-  width: 220px;
-  height: 220px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #FFE8B8, var(--sky-warm) 60%, transparent 75%);
-  opacity: 0.9;
-  pointer-events: none;
+}
+
+.about-hero::after {
+  width: 340px;
+  height: 340px;
+  top: -110px;
+  right: calc(8% - 40px);
 }
 
 .about-hero__title {
   position: relative;
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(2.25rem, 5vw, 3.5rem);
-  color: #fff;
+  font-weight: 800;
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  letter-spacing: -0.04em;
+  color: var(--on-dark);
   max-width: 18ch;
   margin: 0 auto;
-  padding-bottom: 2.5rem;
-  padding-top: 2rem;
-  letter-spacing: -0.01em;
+  padding: 3rem 1.5rem 2.5rem;
 }
 
 .about-hero__wave {
   display: block;
   width: 100%;
-  height: 70px;
+  height: 60px;
 }
 
 .about-content {
   max-width: 780px;
   margin: -16px auto 0;
-  padding: 0 1.5rem 5rem;
+  padding: 0 clamp(16px, 4vw, 24px) 5rem;
 }
 
 .about-content__text {
-  background: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(22, 64, 107, 0.08);
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-soft);
   padding: 2.2rem 2rem;
-  font-size: 1.08rem;
+  font-size: 1.05rem;
   line-height: 1.8;
   color: var(--ink);
   text-align: center;
 }
 
 @media (max-width: 480px) {
-  .about-hero::before {
-    width: 140px;
-    height: 140px;
-    top: -50px;
+  .about-hero::before,
+  .about-hero::after {
+    display: none;
+  }
+
+  .about-content__text {
+    padding: 1.6rem 1.2rem;
   }
 }

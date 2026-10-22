@@ -13,12 +13,12 @@ function Footer() {
                     <p className="footer-copyright">&copy; {new Date().getFullYear()} {t('footer.copyright')}</p>
                 </div>
 
-                <nav className="footer-links" aria-label="Liens utiles">
-                    <Link to="/accueil">Accueil</Link>
-                    <Link to="/meteo">Météo</Link>
-                    <Link to="/parametre">Paramètres</Link>
-                    <Link to="/a-propos">À propos</Link>
-                    <Link to="/politique-confidentialite">Confidentialité</Link>
+                <nav className="footer-links" aria-label={t('footer.links', 'Liens utiles')}>
+                    <Link to="/accueil">{t('header.home')}</Link>
+                    <Link to="/meteo">{t('header.meteo')}</Link>
+                    <Link to="/parametre">{t('header.settings')}</Link>
+                    <Link to="/a-propos">{t('header.about')}</Link>
+                    <Link to="/politique-confidentialite">{t('header.privacy')}</Link>
                 </nav>
             </div>
         </footer>
