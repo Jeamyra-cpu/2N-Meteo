@@ -15,12 +15,12 @@ const SECTIONS = [
   { id: 'rights', label: 'privacy-policy.rights', content: 'privacy-policy.rights-content' },
 ]
 
-function Politique() {
+function Politique({ theme = 'light', onToggleTheme = () => {} }) {
     const { t } = useTranslation();
 
     return (
         <div className="privacy-policy-page">
-            <Header />
+            <Header theme={theme} onToggleTheme={onToggleTheme} />
             <main>
                 <section className="privacy-hero">
                     <h1 className="privacy-hero__title">{t('privacy-policy.title')}</h1>

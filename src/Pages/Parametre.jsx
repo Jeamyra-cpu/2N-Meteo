@@ -1,37 +1,25 @@
 import React, { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import "../Styles/Parametre.css";
 import Header from '../Parties/Header.jsx';
 import Footer from '../Parties/Footer.jsx';
 
-function Parametre() {
+function Parametre({ theme = 'light', onToggleTheme = () => {} }) {
     const { t, i18n } = useTranslation();
-    const [themeSombre, setThemeSombre] = useState(false);
-    
+    const navigate = useNavigate();
+
     // États pour les formulaires
-    const [villeParDefaut, setVilleParDefaut] = useState("Paris");
     const [email, setEmail] = useState("utilisateur@exemple.fr");
     const [historiqueEfface, setHistoriqueEfface] = useState(false);
-    
+    const isDark = theme === 'dark' || document.body.classList.contains('dark-theme');
+
     // État pour la modal de confirmation
     const [afficherModal, setAfficherModal] = useState(false);
 
     // Changer la langue
     const changerLangue = (langue) => {
         i18n.changeLanguage(langue);
-    };
-
-    // Basculer entre le mode clair et le mode sombre
-    const basculerTheme = () => {
-        setThemeSombre(!themeSombre);
-        document.body.classList.toggle('dark-mode');
-    };
-
-    // Sauvegarder la ville par défaut
-    const enregistrerVille = (e) => {
-        e.preventDefault();
-        // Logique de sauvegarde local/API
-        alert(t('settings.section3.success'));
     };
 
     // Enregistrer ou modifier l'email
@@ -49,14 +37,19 @@ function Parametre() {
 
     // Supprimer toutes les données (Suggestion 5 - Modal)
     const confirmerSuppressionDonnees = () => {
+        const themePreference = localStorage.getItem('theme');
         localStorage.clear();
+        if (themePreference) {
+            localStorage.setItem('theme', themePreference);
+        }
         setAfficherModal(false);
         alert(t('settings.section4.deleteSuccess'));
+        navigate('/accueil', { replace: true });
     };
 
     return (
         <div className="parametre-page">
-            <Header />
+            <Header theme={theme} onToggleTheme={onToggleTheme} />
 
             <main className="parametre-main">
                 <h1 className="parametre-title">{t('settings.title')}</h1>
@@ -87,31 +80,12 @@ function Parametre() {
                     <h2>{t('settings.section2.title')}</h2>
                     <p>{t('settings.section2.description')}</p>
 
-                    <button className="btn-theme" onClick={basculerTheme}>
-                        {themeSombre ? '☀️ ' + t('header.light', 'Mode Clair') : '🌙 ' + t('header.dark', 'Mode Sombre')}
+                    <button className="btn-theme" onClick={onToggleTheme}>
+                        {isDark ? '☀️ ' + t('header.light', 'Mode Clair') : '🌙 ' + t('header.dark', 'Mode Sombre')}
                     </button>
                 </section>
 
-                {/* Section 3 : Ville par défaut */}
-                <section className="parametre-card">
-                    <h2>{t('settings.section3.title')}</h2>
-                    <p>{t('settings.section3.description')}</p>
-
-                    <form onSubmit={enregistrerVille} className="parametre-form">
-                        <input 
-                            type="text" 
-                            className="parametre-input"
-                            value={villeParDefaut}
-                            onChange={(e) => setVilleParDefaut(e.target.value)}
-                            placeholder={t('settings.section3.placeholder')}
-                        />
-                        <button type="submit" className="btn-primary">
-                            {t('settings.save')}
-                        </button>
-                    </form>
-                </section>
-
-                {/* Section 4 : Gestion du compte & Historique */}
+                {/* Section 3 : Gestion du compte & Historique */}
                 <section className="parametre-card">
                     <h2>{t('settings.section4.title')}</h2>
                     <p>{t('settings.section4.description')}</p>

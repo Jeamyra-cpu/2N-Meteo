@@ -19,7 +19,7 @@ const TYPES_METEO = [
 ];
 
 
-function Alerte() {
+function Alerte({ theme = 'light', onToggleTheme = () => {} }) {
 
     const { t } = useTranslation();
 
@@ -125,7 +125,7 @@ function Alerte() {
 
         <div className="information-page">
 
-            <Header />
+            <Header theme={theme} onToggleTheme={onToggleTheme} />
 
             <main className="information-hero">
 

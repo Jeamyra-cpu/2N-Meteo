@@ -3,12 +3,12 @@ import Footer from '../Parties/Footer.jsx'
 import Header from '../Parties/Header.jsx'
 import '../Styles/APropos.css'
 
-function APropos() {
+function APropos({ theme = 'light', onToggleTheme = () => {} }) {
     const { t } = useTranslation();
 
     return (
         <div className="about-page">
-            <Header />
+            <Header theme={theme} onToggleTheme={onToggleTheme} />
             <main>
                 <section className="about-hero">
                     <h1 className="about-hero__title">{t('about-us.title')}</h1>

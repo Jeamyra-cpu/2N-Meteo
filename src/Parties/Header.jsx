@@ -3,22 +3,28 @@ import { useTranslation } from 'react-i18next'
 import { Link, useLocation } from 'react-router-dom' 
 import '../Styles/Header.css'
 
-function Header() {
+function Header({ theme = 'light', onToggleTheme = () => {} }) {
     const { t, i18n } = useTranslation()
     const [menuOuvert, setMenuOuvert] = useState(false)
-    const [themeSombre, setThemeSombre] = useState(false)
 
     const location = useLocation()
+    const isDark = theme === 'dark' || document.body.classList.contains('dark-theme')
+
+    const handleThemeToggle = () => {
+        if (typeof onToggleTheme === 'function') {
+            onToggleTheme();
+            return;
+        }
+
+        const nextTheme = document.body.classList.contains('dark-theme') ? 'light' : 'dark';
+        document.body.classList.toggle('dark-theme', nextTheme === 'dark');
+        document.body.classList.toggle('light-theme', nextTheme === 'light');
+        localStorage.setItem('theme', nextTheme);
+    }
 
     // Changer la langue
     const changerLangue = (langue) => {
         i18n.changeLanguage(langue)
-    }
-
-    // Basculer entre mode Clair et Sombre
-    const basculerTheme = () => {
-        setThemeSombre(!themeSombre)
-        document.body.classList.toggle('dark-mode')
     }
 
     return (
@@ -117,8 +123,8 @@ function Header() {
 
                     <div className="action-item">
                         <span>{t('header.theme')} :</span>
-                        <button className="btn-theme" onClick={basculerTheme}>
-                            {themeSombre ? '☀️' + t('header.light') : '🌙' + t('header.dark')}
+                        <button className="btn-theme" onClick={handleThemeToggle}>
+                            {isDark ? '☀️ ' + t('header.light') : '🌙 ' + t('header.dark')}
                         </button>
                     </div>
                 </div>

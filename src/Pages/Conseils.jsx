@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Link, useLocation } from "react-router-dom";
 import {
   ArrowLeft, Bike, Calendar, Car, Clock, Cloud, CloudFog, CloudLightning, CloudRain, CloudSnow,
@@ -99,41 +100,41 @@ function calculerMeteo(ville, date, heure, tempReelle = null, codeReel = null) {
 }
 
 // Chaque conseil a une icône (icone) et un texte.
-function calculerConseils(condition, temp, nuit) {
+function calculerConseils(condition, temp, nuit, t) {
   const conseilsParCondition = {
     soleil: [
-      { icone: Glasses, texte: "Mettez de la crème solaire et des lunettes de soleil." },
-      { icone: Droplets, texte: "Buvez régulièrement de l'eau." },
+      { icone: Glasses, texte: t('advicePage.tips.sunny.1') },
+      { icone: Droplets, texte: t('advicePage.tips.sunny.2') },
     ],
     nuageux: [
-      { icone: Shirt, texte: "Prenez une petite veste, au cas où." },
-      { icone: Glasses, texte: "Gardez vos lunettes à portée si le ciel se dégage." },
+      { icone: Shirt, texte: t('advicePage.tips.cloudy.1') },
+      { icone: Glasses, texte: t('advicePage.tips.cloudy.2') },
     ],
     pluie: [
-      { icone: Umbrella, texte: "Emportez un parapluie ou un imperméable." },
-      { icone: Footprints, texte: "Choisissez des chaussures étanches." },
+      { icone: Umbrella, texte: t('advicePage.tips.rain.1') },
+      { icone: Footprints, texte: t('advicePage.tips.rain.2') },
     ],
     orage: [
-      { icone: Zap, texte: "Évitez les zones dégagées et les sorties en forêt." },
-      { icone: ShieldCheck, texte: "Mettez-vous à l'abri pendant l'orage." },
+      { icone: Zap, texte: t('advicePage.tips.storm.1') },
+      { icone: ShieldCheck, texte: t('advicePage.tips.storm.2') },
     ],
     neige: [
-      { icone: Shirt, texte: "Habillez-vous en plusieurs couches, avec bonnet et gants." },
-      { icone: Footprints, texte: "Attention aux trottoirs glissants." },
+      { icone: Shirt, texte: t('advicePage.tips.snow.1') },
+      { icone: Footprints, texte: t('advicePage.tips.snow.2') },
     ],
     brouillard: [
-      { icone: Lightbulb, texte: "Allumez vos feux de croisement." },
-      { icone: Eye, texte: "Portez un vêtement visible si vous marchez." },
+      { icone: Lightbulb, texte: t('advicePage.tips.fog.1') },
+      { icone: Eye, texte: t('advicePage.tips.fog.2') },
     ],
   };
   const conseils = [...conseilsParCondition[condition]];
-  if (temp >= 28) conseils.push({ icone: Thermometer, texte: "Il fait très chaud : évitez les efforts aux heures les plus chaudes." });
-  else if (temp <= 5 && condition !== "neige") conseils.push({ icone: Thermometer, texte: "Il fait froid : pensez au manteau et à l'écharpe." });
-  if (nuit) conseils.push({ icone: Moon, texte: "Il fait nuit : soyez bien visible si vous êtes à pied ou à vélo." });
+  if (temp >= 28) conseils.push({ icone: Thermometer, texte: t('advicePage.tips.heat') });
+  else if (temp <= 5 && condition !== "neige") conseils.push({ icone: Thermometer, texte: t('advicePage.tips.cold') });
+  if (nuit) conseils.push({ icone: Moon, texte: t('advicePage.tips.night') });
   return conseils;
 }
 
-function conseilsVehicule(vehicule, condition, temp, nuit) {
+function conseilsVehicule(vehicule, condition, temp, nuit, t) {
   const niveau = condition === "soleil" && temp > 5
     ? "faible"
     : condition === "orage" || condition === "neige" || condition === "brouillard"
@@ -142,20 +143,20 @@ function conseilsVehicule(vehicule, condition, temp, nuit) {
   const items = [];
 
   if (condition === "pluie" || condition === "orage") {
-    items.push({ icone: Droplets, t: "Adhérence", d: "Réduisez votre vitesse et augmentez les distances de sécurité.", n: "attention" });
+    items.push({ icone: Droplets, t: t('advicePage.route.grip'), d: t('advicePage.route.gripDesc'), n: "attention" });
   }
   if (condition === "neige" || condition === "brouillard") {
-    items.push({ icone: Eye, t: "Visibilité", d: "Rendez-vous visible et adaptez votre allure aux conditions.", n: "danger" });
+    items.push({ icone: Eye, t: t('advicePage.route.visibility'), d: t('advicePage.route.visibilityDesc'), n: "danger" });
   }
   if (nuit) {
-    items.push({ icone: Moon, t: "De nuit", d: "Vérifiez votre éclairage avant de partir.", n: "attention" });
+    items.push({ icone: Moon, t: t('advicePage.route.night'), d: t('advicePage.route.nightDesc'), n: "attention" });
   }
   if (vehicule === "moto") {
-    items.push({ icone: ShieldCheck, t: "Équipement", d: "Portez un équipement protecteur et restez particulièrement prudent sur chaussée humide.", n: "attention" });
+    items.push({ icone: ShieldCheck, t: t('advicePage.route.equipment'), d: t('advicePage.route.motoDesc'), n: "attention" });
   } else if (vehicule === "velo") {
-    items.push({ icone: ShieldCheck, t: "Équipement", d: "Portez un casque et assurez-vous d'être visible des autres usagers.", n: "attention" });
+    items.push({ icone: ShieldCheck, t: t('advicePage.route.equipment'), d: t('advicePage.route.bikeDesc'), n: "attention" });
   } else {
-    items.push({ icone: Gauge, t: "Conduite", d: "Gardez une bonne distance avec le véhicule qui vous précède.", n: "conseil" });
+    items.push({ icone: Gauge, t: t('advicePage.route.driving'), d: t('advicePage.route.drivingDesc'), n: "conseil" });
   }
   return { niveau, items };
 }
@@ -275,15 +276,16 @@ function BonhommeGrand({ condition, temp, nuit }) {
   );
 }
 
-function phraseBonhomme(condition, temp) {
-  if (condition === "pluie" || condition === "orage") return "Pensez à vous protéger de la pluie.";
-  if (condition === "neige") return "Couvrez-vous bien et marchez prudemment.";
-  if (temp >= 28) return "Pensez à boire régulièrement.";
-  if (temp <= 5) return "Une couche chaude sera la bienvenue.";
-  return "Adaptez votre tenue à la météo du jour.";
+function phraseBonhomme(condition, temp, t) {
+  if (condition === "pluie" || condition === "orage") return t('advicePage.outfit.rain');
+  if (condition === "neige") return t('advicePage.outfit.snow');
+  if (temp >= 28) return t('advicePage.outfit.heat');
+  if (temp <= 5) return t('advicePage.outfit.cold');
+  return t('advicePage.outfit.default');
 }
 
-export default function Conseils() {
+export default function Conseils({ theme = 'light', onToggleTheme = () => {} }) {
+  const { t, i18n } = useTranslation();
   const { state } = useLocation();
 
   // La page Météo transmet : ville, température, code météo et, pour un autre jour que
@@ -308,6 +310,8 @@ export default function Conseils() {
     };
   }, [dateTransmise]);
 
+  const localeDate = i18n.language?.startsWith("en") ? "en-US" : "fr-FR";
+
   const resultat = useMemo(() => {
     const d = new Date(`${maintenant.date}T12:00:00`);
     const [hStr, mStr] = maintenant.heure.split(":");
@@ -319,45 +323,44 @@ export default function Conseils() {
 
     const { condition, temp } = calculerMeteo(ville, d, h, tempValide ? tempTransmise : null, codeValide ? codeTransmis : null);
 
-    const conseils = calculerConseils(condition, temp, nuit);
-    const route = conseilsVehicule(vehicule, condition, temp, nuit);
-    const dateTexte = d.toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
+    const conseils = calculerConseils(condition, temp, nuit, t);
+    const route = conseilsVehicule(vehicule, condition, temp, nuit, t);
+    const dateTexte = d.toLocaleDateString(localeDate, { weekday: "long", day: "numeric", month: "long" });
     return { dateTexte, h, m, nuit, condition, temp, conseils, route, tempValide, codeValide, estAujourdhui: maintenant.estAujourdhui };
-  }, [maintenant, ville, tempTransmise, codeTransmis, vehicule]);
+  }, [maintenant, ville, tempTransmise, codeTransmis, vehicule, t, localeDate]);
 
   let noteSource;
   if (resultat.tempValide && resultat.codeValide) {
-    noteSource = "La température et le type de temps proviennent de la page Météo.";
+    noteSource = t('advicePage.source.tempAndWeather');
   } else if (resultat.tempValide) {
-    noteSource = "La température provient de la page Météo ; le type de temps affiché est simulé.";
+    noteSource = t('advicePage.source.tempOnly');
   } else if (resultat.codeValide) {
-    noteSource = "Le type de temps provient de la page Météo ; la température affichée est simulée.";
+    noteSource = t('advicePage.source.weatherOnly');
   } else {
-    noteSource = "Les valeurs sont simulées à partir de la ville, de la date et de l'heure : ce composant n'accède pas à un service météo en direct.";
+    noteSource = t('advicePage.source.simulated');
   }
 
   const heureTexte = `${String(resultat.h).padStart(2, "0")}h${String(resultat.m).padStart(2, "0")}`;
 
   return (
     <>
-      <Header />
+      <Header theme={theme} onToggleTheme={onToggleTheme} />
       <div className="meteo-app">
         <div className="cv-wrap">
           <div className="cv-retour-zone">
             <Link to="/meteo" className="cv-retour-link">
               <ArrowLeft size={16} aria-hidden="true" />
-              Retour à la météo
+              {t('advicePage.backToWeather')}
             </Link>
           </div>
 
-          {/* En-tête */}
           <section className="cv-hero">
             <div className="cv-hero-haut">
               <div>
-                <span className="cv-kicker">{resultat.estAujourdhui ? "Conseils du jour" : "Conseils de la journée"}</span>
+                <span className="cv-kicker">{resultat.estAujourdhui ? t('advicePage.adviceOfDay') : t('advicePage.adviceOfTheDay')}</span>
                 <p className="cv-lieu"><MapPin size={19} aria-hidden="true" />{ville}</p>
                 <div className="cv-temperature">{resultat.temp}<span>°C</span></div>
-                <p className="cv-condition">{CONDITIONS[resultat.condition].nom}</p>
+                <p className="cv-condition">{t(`advicePage.conditions.${resultat.condition}`)}</p>
               </div>
               <div className="cv-illu">
                 <IllustrationMeteo condition={resultat.condition} temp={resultat.temp} nuit={resultat.nuit} />
@@ -367,39 +370,37 @@ export default function Conseils() {
             <div className="cv-hero-bas">
               <div>
                 <Calendar size={19} aria-hidden="true" />
-                <span>Date</span>
+                <span>{t('advicePage.date')}</span>
                 <strong>{resultat.dateTexte}</strong>
               </div>
               <div>
                 <Clock size={19} aria-hidden="true" />
-                <span>{resultat.estAujourdhui ? "Heure" : "Type"}</span>
-                <strong>{resultat.estAujourdhui ? heureTexte : "Prévision de la journée"}</strong>
+                <span>{resultat.estAujourdhui ? t('advicePage.time') : t('advicePage.type')}</span>
+                <strong>{resultat.estAujourdhui ? heureTexte : t('advicePage.forecastOfTheDay')}</strong>
               </div>
               {resultat.estAujourdhui && (
                 <div>
                   {resultat.nuit ? <Moon size={19} aria-hidden="true" /> : <Sun size={19} aria-hidden="true" />}
-                  <span>Moment</span>
-                  <strong>{resultat.nuit ? "Nuit" : "Jour"}</strong>
+                  <span>{t('advicePage.moment')}</span>
+                  <strong>{resultat.nuit ? t('advicePage.night') : t('advicePage.day')}</strong>
                 </div>
               )}
             </div>
           </section>
 
           <div className="cv-grille">
-            {/* Colonne gauche : bonhomme */}
-            <aside className="cv-tenue" aria-label="Tenue conseillée">
-              <span className="cv-kicker">Votre tenue</span>
-              <p className="cv-bulle">{phraseBonhomme(resultat.condition, resultat.temp)}</p>
+            <aside className="cv-tenue" aria-label={t('advicePage.yourOutfit')}>
+              <span className="cv-kicker">{t('advicePage.yourOutfit')}</span>
+              <p className="cv-bulle">{phraseBonhomme(resultat.condition, resultat.temp, t)}</p>
               <div className="cv-bonhomme-wrapper">
                 <BonhommeGrand condition={resultat.condition} temp={resultat.temp} nuit={resultat.nuit} />
               </div>
             </aside>
 
-            {/* Colonne droite */}
             <div className="cv-colonne">
               <section className="cv-bloc" aria-labelledby="cv-titre-conseils">
-                <span className="cv-kicker">À prévoir</span>
-                <h2 id="cv-titre-conseils">Nos conseils</h2>
+                <span className="cv-kicker">{t('advicePage.toPlan')}</span>
+                <h2 id="cv-titre-conseils">{t('advicePage.ourAdvice')}</h2>
                 <ul className={`cv-conseils-list cv-ton-${resultat.condition}`}>
                   {resultat.conseils.map((c, i) => {
                     const Icone = c.icone;
@@ -414,11 +415,11 @@ export default function Conseils() {
               </section>
 
               <section className="cv-bloc" aria-labelledby="cv-titre-veh">
-                <span className="cv-kicker">Sur la route</span>
-                <h2 id="cv-titre-veh">Vous prenez un véhicule ?</h2>
-                <p className="cv-aide">Choisissez le vôtre pour voir les précautions adaptées.</p>
+                <span className="cv-kicker">{t('advicePage.onRoad')}</span>
+                <h2 id="cv-titre-veh">{t('advicePage.vehicleQuestion')}</h2>
+                <p className="cv-aide">{t('advicePage.vehicleHint')}</p>
 
-                <div className="cv-onglets" role="tablist" aria-label="Type de véhicule">
+                <div className="cv-onglets" role="tablist" aria-label={t('advicePage.vehicleType')}>
                   {VEHICULES.map((v) => {
                     const Icone = v.icone;
                     return (
@@ -431,7 +432,7 @@ export default function Conseils() {
                         onClick={() => setVehicule(v.id)}
                       >
                         <Icone size={18} strokeWidth={1.8} />
-                        <span>{v.nom}</span>
+                        <span>{t(`advicePage.vehicle.${v.id}`)}</span>
                       </button>
                     );
                   })}
@@ -443,7 +444,7 @@ export default function Conseils() {
                       <i key={n} className={n < RANG_NIVEAU[resultat.route.niveau] ? "on" : ""} />
                     ))}
                   </span>
-                  {NIVEAUX[resultat.route.niveau]}
+                  {t(`advicePage.risk.${resultat.route.niveau}`)}
                 </div>
 
                 <ul className="cv-liste">
@@ -464,7 +465,7 @@ export default function Conseils() {
 
           <p className="meteo-note">
             {noteSource}{" "}
-            Les conseils véhicule suivent le code de la route français.
+            {t('advicePage.roadRules')}
           </p>
         </div>
       </div>

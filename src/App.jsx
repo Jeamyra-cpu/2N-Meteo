@@ -1,8 +1,5 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route } from "react-router-dom"
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
 import './App.css'
 import APropos from './Pages/Apropos.jsx'
 import Politique from './Pages/PolitiqueConfidentialite.jsx'
@@ -12,26 +9,37 @@ import Alerte from './Pages/Alerte.jsx'
 import Conseils from './Pages/Conseils.jsx'
 import Information from './Pages/Information.jsx'
 import Meteo from './Pages/Meteo.jsx'
-import Header from './Parties/Header.jsx'
-import Footer from './Parties/Footer.jsx'
 
 function App() {
+  const [theme, setTheme] = useState(() => {
+    const savedTheme = localStorage.getItem('theme');
+    return savedTheme === 'dark' ? 'dark' : 'light';
+  });
+
+  useEffect(() => {
+    const isDark = theme === 'dark';
+    document.body.classList.toggle('dark-theme', isDark);
+    document.body.classList.toggle('light-theme', !isDark);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((currentTheme) => (currentTheme === 'dark' ? 'light' : 'dark'));
+  };
 
   return (
     <BrowserRouter>
-    <header />
       <Routes>
-        <Route path="/" element={<Accueil />} />
-        <Route path="/a-propos" element={<APropos />} />
-        <Route path="/politique-confidentialite" element={<Politique />} />
-        <Route path="/accueil" element={<Accueil />} />
-        <Route path="/parametre" element={<Parametre />} />
-        <Route path="/alerte" element={<Alerte />} />
-        <Route path="/conseils" element={<Conseils />} />
-        <Route path="/information" element={<Information />} />
-        <Route path="/meteo" element={<Meteo />} />
+        <Route path="/" element={<Accueil theme={theme} onToggleTheme={toggleTheme} />} />
+        <Route path="/a-propos" element={<APropos theme={theme} onToggleTheme={toggleTheme} />} />
+        <Route path="/politique-confidentialite" element={<Politique theme={theme} onToggleTheme={toggleTheme} />} />
+        <Route path="/accueil" element={<Accueil theme={theme} onToggleTheme={toggleTheme} />} />
+        <Route path="/parametre" element={<Parametre theme={theme} onToggleTheme={toggleTheme} />} />
+        <Route path="/alerte" element={<Alerte theme={theme} onToggleTheme={toggleTheme} />} />
+        <Route path="/conseils" element={<Conseils theme={theme} onToggleTheme={toggleTheme} />} />
+        <Route path="/information" element={<Information theme={theme} onToggleTheme={toggleTheme} />} />
+        <Route path="/meteo" element={<Meteo theme={theme} onToggleTheme={toggleTheme} />} />
       </Routes>
-      <footer />
     </BrowserRouter>
   )
 }

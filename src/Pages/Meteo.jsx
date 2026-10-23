@@ -123,7 +123,7 @@ function Metric({ icon: Icon, label, value, detail, tone }) {
   return <div className="metric-card"><div className={`metric-icon ${tone}`}><Icon size={23} strokeWidth={1.8} /></div><span className="metric-label">{label}</span><strong className="metric-value">{value}</strong><span className="metric-detail">{detail}</span></div>;
 }
  
-export default function Meteo() {
+export default function Meteo({ theme = 'light', onToggleTheme = () => {} }) {
   const { t, i18n } = useTranslation();
   // La ville et ses coordonnées viennent du localStorage renseigné
   // dans Information.jsx (variables : ville, latitude, longitude).
@@ -571,7 +571,7 @@ export default function Meteo() {
  
   return (
     <>
-      <Header />
+      <Header theme={theme} onToggleTheme={onToggleTheme} />
       <main className="weather-main">
         <div className="content-wrap">
           <div className="page-heading">
@@ -590,7 +590,7 @@ export default function Meteo() {
  
         <div className="top-grid">
           <section className="current-card" aria-label={t('meteo.currentWeather')}>
-            <div className="current-card-top"><span className="live-pill">{selectedDay === 0 ? t('meteo.actual') : 'PRÉVISION'}</span><span className="updated-at">{cardUpdatedAt}</span></div>
+            <div className="current-card-top"><span className="live-pill">{selectedDay === 0 ? t('meteo.actual') : t('meteo.forecast')}</span><span className="updated-at">{cardUpdatedAt}</span></div>
             <div className="current-card-content"><div className="current-location"><MapPin size={19} />{city.name}{city.country && <span>, {city.country}</span>}</div><div className="current-reading"><div className="big-temperature">{temp(cardTemperature, unit)}<span>{unit}</span></div>{jourChronos ? <Thermometer size={80} strokeWidth={1.7} className="big-weather-icon" aria-hidden="true" /> : <WeatherIcon code={cardCode} isDay={true} size={80} className="big-weather-icon" />}</div><div className="current-description">{cardDescription}</div>
               <p className="current-feels">
                 {selectedDay === 0 && <>{t('meteo.feels')} {temp(current?.apparent_temperature, unit)} <span>·</span> </>}
@@ -713,7 +713,7 @@ export default function Meteo() {
               <span className="section-kicker">{t('meteo.upcomingDays')}</span>
               <h2 id="forecast-title">{t('meteo.sevenDayForecast')}</h2>
             </div>
-            <span className="source-label">Jours 1–4 : Open-Meteo · Jours 5–7 : Chronos</span>
+            <span className="source-label">{t('meteo.daysSource')}</span>
           </div>
           <div className="forecast-grid">
             {forecastDays.map((day, index) => {
@@ -731,7 +731,7 @@ export default function Meteo() {
                   aria-pressed={selectedDay === index}
                 >
                   <span className="day-name">
-                    {index === 0 ? 'Aujourd’hui' : day.date ? dateLabel(day.date, { weekday: 'short' }) : '—'}
+                    {index === 0 ? t('meteo.todayLabel') : day.date ? dateLabel(day.date, { weekday: 'short' }) : '—'}
                   </span>
                   <span className="day-date">
                     {day.date ? dateLabel(day.date, { day: 'numeric', month: 'short' }) : '—'}
@@ -739,7 +739,7 @@ export default function Meteo() {
                   <WeatherIcon code={day.code} size={32} />
                   <span className="day-condition">
                     {chronosDay
-                      ? (hasChronosValues ? 'Température prédite' : 'Chronos indisponible')
+                      ? (hasChronosValues ? t('meteo.predictedTemperature') : t('meteo.chronosUnavailable'))
                       : day.code != null ? t(condition(day.code).labelKey) : '—'}
                   </span>
                   <span className="day-temps">
@@ -748,7 +748,7 @@ export default function Meteo() {
                   </span>
                   <span className="day-rain">
                     {chronosDay
-                      ? (day.mean != null ? `Moy. ${temp(day.mean, unit)}` : '—')
+                      ? (day.mean != null ? `${t('meteo.avg')} ${temp(day.mean, unit)}` : '—')
                       : <><Droplets size={12} />{day.rain != null ? `${day.rain} mm` : '—'}</>}
                   </span>
                   <span className="forecast-credit">{day.source}</span>
@@ -760,21 +760,21 @@ export default function Meteo() {
             <span className="detail-check"><Check size={15} /></span>
             <span>
               {forecastDays[selectedDay]?.date
-                ? `${selectedDay === 0 ? 'Aujourd’hui' : dateLabel(forecastDays[selectedDay].date, {
+                ? `${selectedDay === 0 ? t('meteo.todayLabel') : dateLabel(forecastDays[selectedDay].date, {
                     weekday: 'long',
                     day: 'numeric',
                     month: 'long'
-                  })} — Source : ${forecastDays[selectedDay].source}. ${
+                  })} — ${t('meteo.sourceLabel', { source: forecastDays[selectedDay].source })}. ${
                     selectedDay < 4
-                      ? `Précipitations prévues : ${forecastDays[selectedDay].rain ?? '—'} mm.`
+                      ? `${t('meteo.expectedRain')} ${forecastDays[selectedDay].rain ?? '—'} mm.`
                       : forecastDays[selectedDay].mean != null
-                        ? `Température moyenne estimée : ${temp(forecastDays[selectedDay].mean, unit)}. Chronos ne prédit pas les précipitations.`
-                        : 'Les températures Chronos ne sont pas disponibles pour le moment.'
+                        ? `${t('meteo.estimatedMeanTemp', { temp: temp(forecastDays[selectedDay].mean, unit) })}`
+                        : t('meteo.chronosTempsUnavailable')
                   }`
                 : t('meteo.selectDay')}
             </span>
             <span className="forecast-credit">
-              {selectedDay < 4 ? 'Données : Open-Meteo' : 'Estimation : Chronos'}
+              {selectedDay < 4 ? t('meteo.dataOpenMeteo') : t('meteo.estimateChronos')}
             </span>
           </div>
         </section>

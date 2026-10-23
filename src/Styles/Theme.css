@@ -44,6 +44,101 @@ body {
   font-family: var(--font-body);
 }
 
+body.dark-theme {
+  --sky-deep: #e8f4ff;
+  --sky-mid: #7bc5ff;
+  --sky-soft: #2a4f75;
+  --sky-warm: #f4b96d;
+  --sky-warm-strong: #ffcf7a;
+  --cloud-white: #edf5ff;
+  --surface: rgba(18, 25, 35, 0.85);
+  --surface-strong: #111b28;
+  --surface-alt: #172534;
+  --ink: #eaf4ff;
+  --muted: #a9b9cc;
+  --mist: #8ca2b5;
+  --hairline: rgba(171, 201, 234, 0.18);
+  --success: #54d19a;
+  background: linear-gradient(180deg, #07131d 0%, #0e1d2d 100%);
+  color: var(--ink);
+}
+
+body.dark-theme .parametre-page,
+body.dark-theme .information-page,
+body.dark-theme .accueil-page,
+body.dark-theme .meteo-page,
+body.dark-theme .privacy-page,
+body.dark-theme .about-page {
+  background: linear-gradient(180deg, #07131d 0%, #0e1d2d 100%);
+  color: var(--ink);
+}
+
+body.dark-theme .parametre-card,
+body.dark-theme .modal-content,
+body.dark-theme .information-card,
+body.dark-theme .about-card,
+body.dark-theme .privacy-card,
+body.dark-theme .weather-panel,
+body.dark-theme .forecast-card {
+  background: rgba(17, 27, 40, 0.9);
+  border-color: var(--hairline);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+  color: var(--ink);
+}
+
+body.dark-theme .parametre-card h2,
+body.dark-theme .parametre-title,
+body.dark-theme .information-title,
+body.dark-theme .about-hero__title,
+body.dark-theme .privacy-hero__title,
+body.dark-theme .footer-title,
+body.dark-theme .weather-card h2,
+body.dark-theme .forecast h3 {
+  color: var(--sky-deep);
+}
+
+body.dark-theme .parametre-input,
+body.dark-theme .information-location-input,
+body.dark-theme .search-box,
+body.dark-theme .filter-select,
+body.dark-theme textarea,
+body.dark-theme select {
+  background: rgba(20, 31, 42, 0.92);
+  color: var(--ink);
+  border-color: var(--hairline);
+}
+
+body.dark-theme .btn-theme,
+body.dark-theme .lang-buttons button,
+body.dark-theme .btn-primary,
+body.dark-theme .btn-secondary,
+body.dark-theme .btn-danger,
+body.dark-theme .information-button,
+body.dark-theme .accueil-bouton {
+  box-shadow: none;
+}
+
+body.dark-theme .barre {
+  background: rgba(8, 17, 24, 0.8);
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+}
+
+body.dark-theme .navbar-drawer {
+  background: linear-gradient(180deg, rgba(10, 18, 25, 0.98) 0%, rgba(18, 29, 39, 0.98) 100%);
+  color: var(--cloud-white);
+}
+
+body.dark-theme .nav-links a,
+body.dark-theme .drawer-header h3,
+body.dark-theme .action-item,
+body.dark-theme .btn-close {
+  color: var(--cloud-white);
+}
+
+body.dark-theme .menu-overlay {
+  background: rgba(2, 7, 11, 0.58);
+}
+
 img,
 svg {
   display: block;

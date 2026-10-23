@@ -2,6 +2,7 @@
 import { useTranslation } from 'react-i18next';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { MapPin } from 'lucide-react';
 
 import Footer from '../Parties/Footer.jsx';
 import Header from '../Parties/Header.jsx';
@@ -13,7 +14,7 @@ function normalizeCoordinate(value) {
     return Number.isFinite(numericValue) ? numericValue : null;
 }
 
-function Information() {
+function Information({ theme = 'light', onToggleTheme = () => {} }) {
     const { t } = useTranslation();
     const navigate = useNavigate();
 
@@ -69,7 +70,7 @@ function Information() {
                         latitudeValide === null ||
                         longitudeValide === null
                     ) {
-                        throw new Error("Coordonnées GPS invalides.");
+                        throw new Error("invalid-coordinates");
                     }
 
                     const response = await fetch(
@@ -77,9 +78,7 @@ function Information() {
                     );
 
                     if (!response.ok) {
-                        throw new Error(
-                            "Impossible de récupérer la ville."
-                        );
+                        throw new Error("location-unavailable");
                     }
 
                     const data = await response.json();
@@ -102,9 +101,7 @@ function Information() {
                         latitudeFinale === null ||
                         longitudeFinale === null
                     ) {
-                        throw new Error(
-                            "Coordonnées de localisation invalides."
-                        );
+                        throw new Error("invalid-coordinates");
                     }
 
                     villeDetectee.current = data.ville;
@@ -132,10 +129,7 @@ function Information() {
                         error
                     );
 
-                    setErreur(
-                        "Impossible de récupérer votre localisation. " +
-                        "Réessayez ou saisissez votre ville manuellement."
-                    );
+                    setErreur(t(error.message === "invalid-coordinates" ? 'information.erreurCoordonnees' : 'information.erreurLocalisation'));
 
                 } finally {
                     setChargement(false);
@@ -200,7 +194,7 @@ function Information() {
         const villeSaisie = ville.trim();
 
         if (villeSaisie === "") {
-            setErreur("Veuillez saisir le nom d'une ville.");
+            setErreur(t('information.erreurVille'));
             return;
         }
 
@@ -248,15 +242,13 @@ function Information() {
 
     return (
         <div className="information-page">
-            <Header />
+            <Header theme={theme} onToggleTheme={onToggleTheme} />
 
             <main className="information-hero">
                 <div className="information-container">
                     <section className="information-card">
 
-                        <div className="information-location-icon">
-                            📍
-                        </div>
+                        <div className="information-location-icon" aria-hidden="true"><MapPin size={26} /></div>
 
                         <h1 className="information-title">
                             {t('information.title')}
@@ -336,7 +328,7 @@ function Information() {
                                     className="information-button"
                                     onClick={recupererLocalisation}
                                 >
-                                    📍 {t('information.bouton2')}
+                                    <MapPin size={17} aria-hidden="true" /> {t('information.bouton2')}
                                 </button>
                             )}
 

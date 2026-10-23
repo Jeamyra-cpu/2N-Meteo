@@ -37,6 +37,97 @@ input:focus-visible {
     background: #f6f8f8;
 }
 
+body.dark-theme .weather-main {
+    background: linear-gradient(180deg, #07131d 0%, #0e1d2d 100%);
+    color: #edf7ff;
+}
+
+body.dark-theme .page-heading h1,
+body.dark-theme .city-strip strong,
+body.dark-theme .location-name,
+body.dark-theme .metric-value,
+body.dark-theme .hourly-card strong,
+body.dark-theme .daily-day,
+body.dark-theme .daily-card h4,
+body.dark-theme .section-title,
+body.dark-theme .insight-title,
+body.dark-theme .info-chip,
+body.dark-theme .advice-card h3 {
+    color: #edf7ff;
+}
+
+body.dark-theme .page-heading p,
+body.dark-theme .metric-label,
+body.dark-theme .metric-detail,
+body.dark-theme .city-strip-label,
+body.dark-theme .hourly-card small,
+body.dark-theme .daily-card p,
+body.dark-theme .advice-card p,
+body.dark-theme .advice-card small,
+body.dark-theme .search-results p,
+body.dark-theme .search-results small,
+body.dark-theme .search-results strong {
+    color: #b9cfe2;
+}
+
+body.dark-theme .search-box,
+body.dark-theme .icon-button,
+body.dark-theme .unit-button,
+body.dark-theme .search-results,
+body.dark-theme .weather-card,
+body.dark-theme .metric-card,
+body.dark-theme .daily-card,
+body.dark-theme .advice-card,
+body.dark-theme .insight-card,
+body.dark-theme .city-pill {
+    background: rgba(14, 27, 37, 0.92);
+    border-color: rgba(160, 193, 218, 0.18);
+    color: #edf7ff;
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-theme .search-box input,
+body.dark-theme .search-box input::placeholder,
+body.dark-theme .search-results button,
+body.dark-theme .country-tag,
+body.dark-theme .meta-value,
+body.dark-theme .metric-detail {
+    color: #edf7ff;
+}
+
+body.dark-theme .clear-search,
+body.dark-theme .icon-button,
+body.dark-theme .unit-button {
+    color: #dfeefc;
+}
+
+body.dark-theme .weather-card,
+body.dark-theme .daily-card,
+body.dark-theme .metric-card,
+body.dark-theme .advice-card,
+body.dark-theme .insight-card {
+    background: rgba(14, 27, 37, 0.92);
+}
+
+body.dark-theme .eyebrow,
+body.dark-theme .section-kicker {
+    color: #7ed5c4;
+}
+
+body.dark-theme .eyebrow-line {
+    background: #7ed5c4;
+}
+
+body.dark-theme .map-card,
+body.dark-theme .summary-card {
+    background: rgba(14, 27, 37, 0.92);
+    border-color: rgba(160, 193, 218, 0.18);
+}
+
+body.dark-theme .search-results button:hover {
+    background: rgba(126, 213, 196, 0.08);
+}
+
 .content-wrap {
     max-width: 1480px;
     margin: auto;

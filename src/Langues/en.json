@@ -78,7 +78,113 @@
     "forecastDataUnavailable": "Data unavailable",
     "selectDay": "Select a day to see its forecast.",
     "dataSource": "Data",
-    "expectedPrecipitation": "expected precipitation"
+    "expectedPrecipitation": "expected precipitation",
+    "forecast": "FORECAST",
+    "todayLabel": "Today",
+    "daysSource": "Days 1–4 : Open-Meteo · Days 5–7 : Chronos",
+    "predictedTemperature": "Predicted temperature",
+    "chronosUnavailable": "Chronos unavailable",
+    "avg": "Avg.",
+    "sourceLabel": "Source: {{source}}",
+    "expectedRain": "Expected precipitation:",
+    "estimatedMeanTemp": "Estimated average temperature: {{temp}}. Chronos does not forecast precipitation.",
+    "chronosTempsUnavailable": "Chronos temperatures are not available at the moment.",
+    "dataOpenMeteo": "Data: Open-Meteo",
+    "estimateChronos": "Estimate: Chronos"
+  },
+
+  "advicePage": {
+    "backToWeather": "Back to weather",
+    "adviceOfDay": "Advice for today",
+    "adviceOfTheDay": "Advice for the day",
+    "date": "Date",
+    "time": "Time",
+    "type": "Type",
+    "forecastOfTheDay": "Day forecast",
+    "moment": "Moment",
+    "day": "Day",
+    "night": "Night",
+    "yourOutfit": "Your outfit",
+    "toPlan": "To plan",
+    "ourAdvice": "Our advice",
+    "onRoad": "On the road",
+    "vehicleQuestion": "Are you taking a vehicle?",
+    "vehicleHint": "Choose yours to see the precautions adapted to the conditions.",
+    "vehicleType": "Vehicle type",
+    "source": {
+      "tempAndWeather": "Temperature and weather type come from the Weather page.",
+      "tempOnly": "Temperature comes from the Weather page; the displayed weather type is simulated.",
+      "weatherOnly": "Weather type comes from the Weather page; the displayed temperature is simulated.",
+      "simulated": "Values are simulated from the city, date and time: this component does not access a live weather service."
+    },
+    "conditions": {
+      "soleil": "Sunny",
+      "nuageux": "Cloudy",
+      "pluie": "Rainy",
+      "orage": "Stormy",
+      "neige": "Snowy",
+      "brouillard": "Foggy"
+    },
+    "vehicle": {
+      "voiture": "Car",
+      "moto": "Motorbike",
+      "velo": "Bike"
+    },
+    "risk": {
+      "faible": "Rather favorable conditions",
+      "modere": "Stay alert",
+      "eleve": "Heightened caution"
+    },
+    "tips": {
+      "sunny": {
+        "1": "Apply sunscreen and sunglasses.",
+        "2": "Drink water regularly."
+      },
+      "cloudy": {
+        "1": "Take a light jacket just in case.",
+        "2": "Keep your sunglasses handy if the sky clears."
+      },
+      "rain": {
+        "1": "Bring an umbrella or waterproof jacket.",
+        "2": "Choose waterproof shoes."
+      },
+      "storm": {
+        "1": "Avoid exposed areas and forest outings.",
+        "2": "Take shelter during the storm."
+      },
+      "snow": {
+        "1": "Dress in layers, with hat and gloves.",
+        "2": "Watch out for slippery sidewalks."
+      },
+      "fog": {
+        "1": "Turn on your headlights.",
+        "2": "Wear highly visible clothing if walking."
+      },
+      "heat": "It is very hot: avoid exertion during the warmest hours.",
+      "cold": "It is cold: think about your coat and scarf.",
+      "night": "It is nighttime: stay highly visible if walking or cycling."
+    },
+    "outfit": {
+      "rain": "Think about protecting yourself from the rain.",
+      "snow": "Dress warmly and walk carefully.",
+      "heat": "Drink regularly.",
+      "cold": "A warm layer will be welcome.",
+      "default": "Adapt your outfit to the weather of the day."
+    },
+    "route": {
+      "grip": "Grip",
+      "gripDesc": "Reduce your speed and increase your safety distance.",
+      "visibility": "Visibility",
+      "visibilityDesc": "Make yourself visible and adapt your speed to the conditions.",
+      "night": "At night",
+      "nightDesc": "Check your lights before leaving.",
+      "equipment": "Equipment",
+      "motoDesc": "Wear protective gear and be particularly careful on wet roads.",
+      "bikeDesc": "Wear a helmet and make sure you are visible to other road users.",
+      "driving": "Driving",
+      "drivingDesc": "Keep a good distance from the vehicle in front of you."
+    },
+    "roadRules": "Vehicle advice follows the French road code."
   },
 
   "privacy-policy": {
@@ -105,7 +211,8 @@
 
   "footer": {
         "copyright": " 2N-Meteo. All rights reserved.",
-        "app-name": "2N-Meteo"
+        "app-name": "2N-Meteo",
+        "links": "Useful links"
     },
 
     "header": {
@@ -113,6 +220,7 @@
         "home": "Home",
         "meteo": "Weather",
         "about": "About",
+        
         "privacy": "Privacy Policy",
         "language": "Language",
         "theme": "Theme",
@@ -122,103 +230,36 @@
     },
 
     "information": {
-        "title": "Some information about you before continuing",
-        "subtitle": "Do these details suit you?",
-        "cta": "View my weather",
-        "source": "Data from Météo-France and open European models.",
-        "titre_formulaire": "Your location",
-        "sous_titre_formulaire": "We need your location to provide you with accurate weather forecasts tailored to your area.",
-        "placeholder": "Your city",
-        "label1": "YOUR LOCATION",
-        "bouton1": "Validate my location",
+        "title": "Your location",
+        "sous_titre_formulaire": "Choose your city or allow geolocation to get a forecast tailored to you.",
+        "label1": "YOUR CITY",
+        "bouton1": "Confirm my city",
         "bouton2": "Detect my location",
-        "fin_formulaire": "Your location is used solely to determine the city corresponding to your position and provide you with tailored weather forecasts. You can correct it if it does not match your actual location.",
-        "detection": "Detecting your location...",
-        "error": "An error occurred while retrieving your location. Please check your location settings and try again.",
-        "erreur1": "Geolocation is not supported by your browser. Please enter your city manually.",
-        "erreur2": "An error occurred while retrieving your location. Please check your location settings and try again.",
+        "placeholder": "Enter your city",
+        "detection": "Finding your location…",
+        "fin_formulaire": "Your location is used only to show the weather forecast for your city. You can enter or correct the city manually.",
+        "error": "Unable to determine your location. Try again or enter your city manually.",
+        "erreur1": "Geolocation is not supported by your browser. Enter your city manually.",
+        "erreur2": "Access to your location was denied. Allow it in your browser settings or enter your city.",
+        "erreurVille": "Please enter a city name.",
+        "erreurLocalisation": "Unable to retrieve your location. Try again or enter your city manually.",
+        "erreurCoordonnees": "The location coordinates are invalid.",
         "confirmation": "Location saved"
     },
-
-    "alerte": {
-        "title": "Weather alerts via email",
-        "subtitle": "Receive an email when the type of weather you have chosen is forecast for your city.",
-        "label_email": "Your email address",
-        "placeholder_email": "example@mail.com",
-        "label_types": "Weather types to monitor",
-        "types": {
-          "pluie": "Rain",
-          "orage": "Thunderstorm",
-          "neige": "Snow",
-          "verglas": "Freezing rain",
-          "brouillard": "Fog",
-          "soleil": "Clear sky"
-        },
-        "bouton_activer": "Activate my alerts",
-        "bouton_envoi": "Saving...",
-        "bouton_sauter": "No, skip this step",
-        "erreur_email": "Please enter a valid email address.",
-        "erreur_type": "Please select at least one weather type.",
-        "erreur_enregistrement": "Unable to save your alerts at the moment. Please try again.",
-        "confirmation": "Alerts activated for {{email}}",
-        "etape_ignoree": "Step skipped. You can activate alerts later.",
-        "note": "Your email address is used only to send you the weather alerts you have chosen. You can modify these choices at any time."
-    },
-
-    "home": {
-        "title": "The sky, without the noise.",
-        "subtitle": "A clear forecast for your city, readable in three seconds. No ads, no account creation, no trackers.",
-        "cta": "See my city",
-        "source": "Data from Météo-France and open European models."
-    },
-
     "settings": {
         "title": "Settings",
         "save": "Save",
-
-        "section1": {
-            "title": "Language",
-            "description": "Choose the language of the application."
-        },
-
-        "section2": {
-            "title": "Theme",
-            "description": "Choose your preferred display theme for the application."
-        },
-
-        "section3": {
-            "title": "Default City",
-            "description": "Define the city that will be displayed by default when opening the application.",
-            "placeholder": "Enter the name of your city",
-            "success": "Your default city has been updated successfully."
-        },
-
-        "section4": {
-            "title": "Data Management",
-            "description": "Manage your personal data and preferences.",
-            "emailSuccess": "Your email address has been updated successfully.",
-            "deleteSuccess": "All your data has been deleted.",
-            "updateEmail": "Update my email address"
-        },
-
-        "delete": {
-            "title": "Delete my data",
-            "desc": "Delete all your personal data and preferences stored locally.",
-            "button": "Delete my data"
-        },
-
-        "history": {
-            "title": "Clear search history",
-            "desc": "Delete the search history of locations you have looked up in the application.",
-            "clear": "Delete my history",
-            "cleared": "Your search history has been cleared."
-        },
-
-        "modal": {
-            "title": "Delete all my data",
-            "desc": "This action will permanently delete all your locally stored data. It cannot be undone. Do you want to continue?",
-            "cancel": "Cancel",
-            "confirm": "Delete"
-        }
+        "section1": { "title": "Language", "description": "Choose the display language for the application." },
+        "section2": { "title": "Theme", "description": "Choose your preferred display theme." },
+        "section4": { "title": "Data management", "description": "Manage your personal data and preferences.", "emailSuccess": "Your email address has been updated successfully.", "deleteSuccess": "All your data has been deleted.", "updateEmail": "Update my email address" },
+        "history": { "title": "Clear search history", "desc": "Delete the history of cities searched in the application.", "clear": "Clear my history", "cleared": "Your search history has been cleared." },
+        "delete": { "title": "Delete my data", "desc": "Delete all personal data and preferences stored locally.", "button": "Delete my data" },
+        "modal": { "title": "Delete all my data", "desc": "This will permanently delete locally stored data. Do you want to continue?", "cancel": "Cancel", "confirm": "Delete" }
+    },
+    "home": {
+        "title": "The sky, without the noise.",
+        "subtitle": "A clear forecast for your city, readable in three seconds. No ads, no account creation, no trackers.",
+        "cta": "See my weather",
+        "source": "Data from Météo-France and open European models."
     }
 }

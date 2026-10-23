@@ -78,10 +78,114 @@
         "forecastDataUnavailable": "Données indisponibles",
         "selectDay": "Sélectionnez un jour pour voir ses prévisions.",
         "dataSource": "Données",
-        "expectedPrecipitation": "précipitations prévues"
+        "expectedPrecipitation": "précipitations prévues",
+        "forecast": "PRÉVISION",
+        "todayLabel": "Aujourd’hui",
+        "daysSource": "Jours 1–4 : Open-Meteo · Jours 5–7 : Chronos",
+        "predictedTemperature": "Température prédite",
+        "chronosUnavailable": "Chronos indisponible",
+        "avg": "Moy.",
+        "sourceLabel": "Source : {{source}}",
+        "expectedRain": "Précipitations prévues :",
+        "estimatedMeanTemp": "Température moyenne estimée : {{temp}}. Chronos ne prédit pas les précipitations.",
+        "chronosTempsUnavailable": "Les températures Chronos ne sont pas disponibles pour le moment.",
+        "dataOpenMeteo": "Données : Open-Meteo",
+        "estimateChronos": "Estimation : Chronos"
     },
-
-    "privacy-policy" : {
+    "advicePage": {
+        "backToWeather": "Retour à la météo",
+        "adviceOfDay": "Conseils du jour",
+        "adviceOfTheDay": "Conseils de la journée",
+        "date": "Date",
+        "time": "Heure",
+        "type": "Type",
+        "forecastOfTheDay": "Prévision de la journée",
+        "moment": "Moment",
+        "day": "Jour",
+        "night": "Nuit",
+        "yourOutfit": "Votre tenue",
+        "toPlan": "À prévoir",
+        "ourAdvice": "Nos conseils",
+        "onRoad": "Sur la route",
+        "vehicleQuestion": "Vous prenez un véhicule ?",
+        "vehicleHint": "Choisissez le vôtre pour voir les précautions adaptées.",
+        "vehicleType": "Type de véhicule",
+        "source": {
+            "tempAndWeather": "La température et le type de temps proviennent de la page Météo.",
+            "tempOnly": "La température provient de la page Météo ; le type de temps affiché est simulé.",
+            "weatherOnly": "Le type de temps provient de la page Météo ; la température affichée est simulée.",
+            "simulated": "Les valeurs sont simulées à partir de la ville, de la date et de l'heure : ce composant n'accède pas à un service météo en direct."
+        },
+        "conditions": {
+            "soleil": "Ensoleillé",
+            "nuageux": "Nuageux",
+            "pluie": "Pluvieux",
+            "orage": "Orageux",
+            "neige": "Neigeux",
+            "brouillard": "Brumeux"
+        },
+        "vehicle": {
+            "voiture": "Voiture",
+            "moto": "Moto",
+            "velo": "Vélo"
+        },
+        "risk": {
+            "faible": "Conditions plutôt favorables",
+            "modere": "Restez vigilant",
+            "eleve": "Prudence renforcée"
+        },
+        "tips": {
+            "sunny": {
+                "1": "Mettez de la crème solaire et des lunettes de soleil.",
+                "2": "Buvez régulièrement de l'eau."
+            },
+            "cloudy": {
+                "1": "Prenez une petite veste, au cas où.",
+                "2": "Gardez vos lunettes à portée si le ciel se dégage."
+            },
+            "rain": {
+                "1": "Emportez un parapluie ou un imperméable.",
+                "2": "Choisissez des chaussures étanches."
+            },
+            "storm": {
+                "1": "Évitez les zones dégagées et les sorties en forêt.",
+                "2": "Mettez-vous à l'abri pendant l'orage."
+            },
+            "snow": {
+                "1": "Habillez-vous en plusieurs couches, avec bonnet et gants.",
+                "2": "Attention aux trottoirs glissants."
+            },
+            "fog": {
+                "1": "Allumez vos feux de croisement.",
+                "2": "Portez un vêtement visible si vous marchez."
+            },
+            "heat": "Il fait très chaud : évitez les efforts aux heures les plus chaudes.",
+            "cold": "Il fait froid : pensez au manteau et à l'écharpe.",
+            "night": "Il fait nuit : soyez bien visible si vous êtes à pied ou à vélo."
+        },
+        "outfit": {
+            "rain": "Pensez à vous protéger de la pluie.",
+            "snow": "Couvrez-vous bien et marchez prudemment.",
+            "heat": "Pensez à boire régulièrement.",
+            "cold": "Une couche chaude sera la bienvenue.",
+            "default": "Adaptez votre tenue à la météo du jour."
+        },
+        "route": {
+            "grip": "Adhérence",
+            "gripDesc": "Réduisez votre vitesse et augmentez les distances de sécurité.",
+            "visibility": "Visibilité",
+            "visibilityDesc": "Rendez-vous visible et adaptez votre allure aux conditions.",
+            "night": "De nuit",
+            "nightDesc": "Vérifiez votre éclairage avant de partir.",
+            "equipment": "Équipement",
+            "motoDesc": "Portez un équipement protecteur et restez particulièrement prudent sur chaussée humide.",
+            "bikeDesc": "Portez un casque et assurez-vous d'être visible des autres usagers.",
+            "driving": "Conduite",
+            "drivingDesc": "Gardez une bonne distance avec le véhicule qui vous précède."
+        },
+        "roadRules": "Les conseils véhicule suivent le code de la route français."
+    },
+    "privacy-policy": {
         "title": "Politique et Confidentialité",
         "introduction": "Politique de confidentialité",
         "content": "Bienvenue sur notre application de prévisions météorologiques en France. La protection de vos données personnelles est une priorité. Cette politique de confidentialité explique comment nous collectons, utilisons et protégeons vos informations.",
@@ -102,12 +206,11 @@
         "rights": "Vos droits",
         "rights-content": "Conformément à la réglementation en vigueur (RGPD), vous disposez d'un droit d'accès, de rectification, de suppression et d'opposition concernant vos données personnelles. Vous pouvez exercer ces droits en nous contactant via l'application."
     },
-
     "footer": {
         "copyright": " 2N-Météo. Tous droits réservés.",
-        "app-name": "2N-Météo"
+        "app-name": "2N-Météo",
+        "links": "Liens utiles"
     },
-
     "header": {
         "app-name": "2N-Météo",
         "home": "Accueil",
@@ -121,105 +224,37 @@
         "dark": "Sombre",
         "settings": "Paramètres"
     },
-
-    "home": {
-        "title": "Le ciel, sans le bruit.",
-        "subtitle": "Une prévision claire pour votre ville, lisible en trois secondes. Sans publicité, sans compte à créer, sans traceur.",
-        "cta": "Voir ma ville",
-        "source": "Données Météo-France et modèles ouverts européens."
-    },
-
     "information": {
-        "title": "Quelques informations sur vous avant de continuer",
-        "subtitle": "Ces informations vous conviennent-elles ?",
-        "cta": "Voir ma météo",
-        "source": "Données Météo-France et modèles ouverts européens.",
-        "titre_formulaire": "Votre localisation",
-        "sous_titre_formulaire": "Nous avons besoin de votre localisation pour vous fournir des prévisions météorologiques précises et adaptées à votre localisation.",
-        "placeholder": "Votre ville",
-        "label1": "VOTRE LOCALISATION",
-        "bouton1": "Valider ma localisation",
+        "title": "Votre localisation",
+        "sous_titre_formulaire": "Choisissez votre ville ou autorisez la géolocalisation pour obtenir des prévisions adaptées.",
+        "label1": "VOTRE VILLE",
+        "bouton1": "Valider ma ville",
         "bouton2": "Détecter ma localisation",
-        "fin_formulaire": "Votre localisation est utilisée uniquement pour déterminer la ville correspondant à votre position et vous proposer des prévisions météo adaptées. Vous pouvez la corriger si elle ne correspond pas à votre position réelle.",
-        "detection": "Détection de votre localisation...",
-        "error": "Une erreur est survenue lors de la récupération de votre géolocalisation. Veuillez vérifier vos paramètres de localisation et réessayer.",
-        "erreur1": "La géolocalisation n'est pas prise en charge par votre navigateur. Saisissez votre ville manuellement.",
-        "erreur2": "Une erreur est survenue lors de la récupération de votre localisation. Veuillez vérifier vos paramètres de localisation et réessayer.",
+        "placeholder": "Saisissez le nom de votre ville",
+        "detection": "Recherche de votre localisation…",
+        "fin_formulaire": "Votre localisation sert uniquement à afficher les prévisions météo de votre ville. Vous pouvez saisir ou corriger la ville manuellement.",
+        "error": "Impossible de déterminer votre localisation. Réessayez ou saisissez votre ville manuellement.",
+        "erreur1": "La géolocalisation n’est pas prise en charge par votre navigateur. Saisissez votre ville manuellement.",
+        "erreur2": "L’accès à votre localisation a été refusé. Autorisez-le dans les paramètres du navigateur ou saisissez votre ville.",
+        "erreurVille": "Veuillez saisir le nom d’une ville.",
+        "erreurLocalisation": "Impossible de récupérer votre localisation. Réessayez ou saisissez votre ville manuellement.",
+        "erreurCoordonnees": "Les coordonnées de localisation sont invalides.",
         "confirmation": "Localisation enregistrée"
     },
-
-    "alerte": {
-        "title": "Alertes météo par e-mail",
-        "subtitle": "Recevez un e-mail lorsque le type de météo que vous avez choisi est prévu pour votre ville.",
-        "label_email": "Votre adresse e-mail",
-        "placeholder_email": "exemple@mail.com",
-        "label_types": "Types de météo à surveiller",
-        "types": {
-            "pluie": "Pluie",
-            "orage": "Orage",
-            "neige": "Neige",
-            "verglas": "Pluie verglaçante",
-            "brouillard": "Brouillard",
-            "soleil": "Ciel dégagé"
-        },
-        "bouton_activer": "Activer mes alertes",
-        "bouton_envoi": "Enregistrement...",
-        "bouton_sauter": "Non, sauter cette étape",
-        "erreur_email": "Veuillez saisir une adresse e-mail valide.",
-        "erreur_type": "Veuillez sélectionner au moins un type de météo.",
-        "erreur_enregistrement": "Impossible d'enregistrer vos alertes pour le moment. Veuillez réessayer.",
-        "confirmation": "Alertes activées pour {{email}}",
-        "etape_ignoree": "Étape ignorée. Vous pourrez activer les alertes plus tard.",
-        "note": "Votre adresse e-mail est utilisée uniquement pour vous envoyer les alertes météo que vous avez choisies. Vous pouvez modifier ces choix à tout moment."
-    },
-
     "settings": {
         "title": "Paramètres",
         "save": "Enregistrer",
-
-        "section1": {
-            "title": "Langue",
-            "description": "Choisissez la langue d'affichage de l'application."
-        },
-
-        "section2": {
-            "title": "Thème",
-            "description": "Choisissez votre thème d'affichage de préférence de l'application."
-        },
-
-        "section3": {
-            "title": "Ville par défaut",
-            "description": "Définissez la ville qui s'affichera par défaut à l'ouverture de l'application.",
-            "placeholder": "Entrez le nom de votre ville",
-            "success": "Votre ville par défaut a été mise à jour avec succès."
-        },
-
-        "section4": {
-            "title": "Gestion des données",
-            "description": "Gérez vos données personnelles et vos préférences.",
-            "emailSuccess": "Votre adresse e-mail a été mise à jour avec succès.",
-            "deleteSuccess": "Toutes vos données ont été supprimées.",
-            "updateEmail": "Modifier mon adresse e-mail"
-        },
-
-        "delete": {
-            "title": "Supprimer mes données",
-            "desc": "Supprimez toutes vos données personnelles et vos préférences stockées localement.",
-            "button": "Supprimer mes données"
-        },
-
-        "history": {
-            "title": "Effacer l'historique des recherches",
-            "desc": "Supprimez l'historique des localisations que vous avez recherchées dans l'application.",
-            "clear": "Supprimer mon historique",
-            "cleared": "Votre historique de recherches a été effacé."
-        },
-
-        "modal": {
-            "title": "Suppression de toutes mes données",
-            "desc": "Cette action supprimera définitivement toutes vos données stockées localement. Elle ne peut pas être annulée. Continuez-vous ?",
-            "cancel": "Annuler",
-            "confirm": "Supprimer"
-        }
+        "section1": { "title": "Langue", "description": "Choisissez la langue d’affichage de l’application." },
+        "section2": { "title": "Thème", "description": "Choisissez votre thème d’affichage préféré." },
+        "section4": { "title": "Gestion des données", "description": "Gérez vos données personnelles et vos préférences.", "emailSuccess": "Votre adresse e-mail a été mise à jour avec succès.", "deleteSuccess": "Toutes vos données ont été supprimées.", "updateEmail": "Modifier mon adresse e-mail" },
+        "history": { "title": "Effacer l’historique des recherches", "desc": "Supprimez l’historique des villes recherchées dans l’application.", "clear": "Effacer mon historique", "cleared": "Votre historique de recherches a été effacé." },
+        "delete": { "title": "Supprimer mes données", "desc": "Supprimez toutes vos données personnelles et préférences stockées localement.", "button": "Supprimer mes données" },
+        "modal": { "title": "Supprimer toutes mes données", "desc": "Cette action supprimera définitivement les données stockées localement. Voulez-vous continuer ?", "cancel": "Annuler", "confirm": "Supprimer" }
+    },
+    "home": {
+        "title": "Le ciel, sans le bruit.",
+        "subtitle": "Une prévision claire pour votre ville, lisible en trois secondes. Sans publicité, sans compte à créer, sans traceur.",
+        "cta": "Voir ma méteo",
+        "source": "Données Météo-France et modèles ouverts européens."
     }
 }
